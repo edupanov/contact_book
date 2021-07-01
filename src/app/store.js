@@ -1,5 +1,6 @@
 import {applyMiddleware, compose, createStore} from "redux";
 import thunk from "redux-thunk";
+import {userReducer} from "../components/mainForm/user/user-reducer";
 
 const {combineReducers} = require("redux");
 
@@ -9,7 +10,7 @@ const devtoolMiddleware =
 
 
 const rootReducer = combineReducers({
-    // user: userReducer
+    user: userReducer
 })
 
 export const store = createStore(
