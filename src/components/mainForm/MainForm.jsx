@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {Component} from 'react';
 import style from "./MainForm.module.scss"
+import User from "./User";
 
-class MainForm extends React.Component {
+class MainForm extends Component {
     render() {
-        return (
-            <div>
 
+
+        return (
+            <div className={style.wrapper}>
+                <User/>
+                <User/>
+                <User/>
             </div>
         );
     }
