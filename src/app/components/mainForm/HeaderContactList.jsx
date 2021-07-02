@@ -3,12 +3,12 @@ import {Button, Grid, IconButton, Typography, withStyles} from "@material-ui/cor
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SearchIcon from '@material-ui/icons/Search';
-import styles from './HeaderMainForm.module.scss'
-import UserLIst from "./user/UserLIst.jsx";
+import styles from './HeaderContactList.module.scss'
 import MainFormBottom from "./MainFormBottom";
+import ContactLIst from "../contactList/ContactList";
 
 
-class HeaderMainForm extends React.Component {
+class HeaderContactList extends React.Component {
 
 
     render() {
@@ -59,11 +59,11 @@ class HeaderMainForm extends React.Component {
                         </Button>
                     </div>
                 </Grid>
-                <UserLIst/>
+                <ContactLIst/>
                 <MainFormBottom/>
             </div>
         );
     }
 }
 
-export default HeaderMainForm
+export default HeaderContactList

@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 70,
+        minWidth: 50,
     },
     wrapper: {
         display: 'flex'
@@ -25,7 +25,7 @@ export default function ControlledOpenSelect() {
     const [age, setAge] = React.useState('');
     const [open, setOpen] = React.useState(false);
 
-    const handleChange = (event) => {
+    const handleChange = (event: any) => {
         setAge(event.target.value);
     };
 
@@ -43,7 +43,7 @@ export default function ControlledOpenSelect() {
                 Строк на странице
             </Button>
             <FormControl className={classes.formControl}>
-                <InputLabel id="demo-controlled-open-select-label">Age</InputLabel>
+                <InputLabel id="demo-controlled-open-select-label"></InputLabel>
                 <Select
                     labelId="demo-controlled-open-select-label"
                     id="demo-controlled-open-select"
@@ -53,11 +53,8 @@ export default function ControlledOpenSelect() {
                     value={age}
                     onChange={handleChange}
                 >
-                    <MenuItem value="">
-                        <em>10</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={20}>20</MenuItem>
                 </Select>
             </FormControl>
         </div>
