@@ -2,26 +2,30 @@ import React, {useEffect} from 'react';
 import style from "./ContactList.module.scss"
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
+import ContactListItem from "./chunks/ContactListItem";
+import {ContactInterface} from "./types/contact.interface";
+import {CircularProgress} from "@material-ui/core";
 
 
 const ContactLIst = () => {
 
     const {getContacts} = useActions()
-    const {isLoading} = useTypeSelector(state => state.contacts)
-    // useEffect(() => {
-    //     getContacts(10, 1)
-    //         .then(()=>{})
-    // }, [getContacts]) // eslint-disable-line react-hooks/exhaustive-deps
+    const {isLoading, data} = useTypeSelector(state => state.contacts)
+    useEffect(() => {
+        getContacts(10, 1)
+    }, [])
 
-    console.log(isLoading)
+    if (isLoading) {
+        return <CircularProgress color="secondary"/>
+    }
 
     return (
         <div className={style.wrapper}>
-            {/*{*/}
-            {/*    this.props.userList ? this.props.userList.map((user, index) => {*/}
-            {/*        return <UserListItem  user={user} key={index + 'userList'} />*/}
-            {/*    }) : null*/}
-            {/*}*/}
+            {
+                data?.map((user: ContactInterface, index: number) => {
+                    return <ContactListItem user={user} key={index + 'userList'}/>
+                })
+            }
         </div>
     );
 

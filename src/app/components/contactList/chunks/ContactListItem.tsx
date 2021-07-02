@@ -3,10 +3,13 @@ import {Checkbox} from "@material-ui/core";
 import style from "../../mainForm/user/User.module.scss";
 import {ContactInterface} from "../types/contact.interface";
 
+interface ContactListProps {
+    user: ContactInterface
+}
 
-const ContactListItem = (props: ContactInterface) => {
+const ContactListItem = ({user}: ContactListProps) => {
 
-    const {name, surname, patronymic} = props.user;
+    const {name, surname, patronymic} = user;
 
     return (
         <div className={style.user}>

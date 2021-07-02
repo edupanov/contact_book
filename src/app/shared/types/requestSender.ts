@@ -1,12 +1,12 @@
 export interface HttpClient {
-    get(url: string, headers?: {}): Promise<Request>
+   get<T>(url: string, headers?: {}): Promise<Request>
 
-    post(url: string, body: {}, headers?: {}): Promise<Request>
+    post<T>(url: string, body: {}, headers?: {}): Promise<Request>
 
-    put(url: string, body: {}, headers?: {}): Promise<Request>
+    put<T>(url: string, body: {}, headers?: {}): Promise<Request>
 
-    delete(url: string, body: {}, headers?: {}): Promise<Request>
+    delete<T>(url: string, body: {}, headers?: {}): Promise<Request>
 
-    postFormData(url: string, body: FormData, headers?: {},): Promise<Request>
+    postFormData<T>(url: string, body: FormData, headers?: {},): Promise<Request>
 }
 

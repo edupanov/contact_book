@@ -34,6 +34,6 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('/api/users', usersRoutes)
+app.use('/api/contacts', usersRoutes)
 
 module.exports = app

@@ -13,8 +13,13 @@ module.exports = {
                     }
                 })
                 res.status(200).json({
+                    code: 200,
+                    isSuccess: true,
                     message: 'Users fetched successfully!',
-                    users
+                    currentPage: 1,
+                    totalPages: 5,
+                    totalItems: 10,
+                    data: users
                 })
             })
             .catch(error => {

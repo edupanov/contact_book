@@ -6,9 +6,14 @@ export const RequestSender: HttpClient = {
             method: 'GET',
             headers: {...defaultHeaders, ...headers}
         }
-
         return await fetch(url, options)
-            .then(response => errorHandler(response))
+            .then(response => {
+                console.log(response)
+                return errorHandler(response)
+            }).catch(err => {
+                console.log(err)
+                return err
+            })
     },
 
     async post(url, body, headers): Promise<Request> {
@@ -64,5 +69,5 @@ const errorHandler = (res: any): Promise<Request> => {
 
 const defaultHeaders = {
     "Accept": "application/json",
-    "ContentType": "application/json"
+    "Content-Type": "application/json"
 }

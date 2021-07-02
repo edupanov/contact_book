@@ -1,22 +1,28 @@
 import {Dispatch} from "redux";
-import {ContactActionTypes} from "../actionTypes/actiontypes";
+import {ContactActionTypes, ContactsActionType} from "../actionTypes/actiontypes";
 import {RequestSender} from "../../../../shared/services/requestSenderService/requestSender";
 import {ContactsUrls} from "../../../../../urls/contactsUrls";
 import {RootState} from "../../../../store/rootReducer";
+import {DefaultPagedResponse} from "../../../../shared/types/defaultPagedResponse";
+import {ContactInterface} from "../../types/contact.interface";
 
-export const getContacts = async (pageSize: number, currentPage: number) =>
-     (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
-         console.log('cddcd')
-        dispatch(ContactActionTypes.GET_CONTACTS)
+export const getContacts = (pageSize: number, currentPage: number) =>
+    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
+        dispatch({type: ContactActionTypes.GET_CONTACTS})
 
-        const fullUrl = 'localhost:8080' + ContactsUrls.GET_CONTACTS_URL
+        const fullUrl = 'http://localhost:8080/api' + ContactsUrls.GET_CONTACTS_URL
 
-        return RequestSender.get(fullUrl)
-            .then(response => {
-                console.log(response)
-                dispatch(ContactActionTypes.GET_CONTACTS_SUCCESS)
+        await RequestSender.get<DefaultPagedResponse<Array<ContactInterface>>>(fullUrl)
+            .then(async response => {
+                const result = await response.json()
+                if (result.isSuccess) {
+                    dispatch({
+                        type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+                        payload: result?.data as Array<ContactInterface>
+                    })
+                }
             })
             .catch(error => {
-                dispatch(ContactActionTypes.GET_CONTACTS_FAILURE)
+                dispatch({type: ContactActionTypes.GET_CONTACTS_FAILURE, errors: error})
             })
     }

@@ -2,7 +2,8 @@ import {History} from "history";
 import thunk from "redux-thunk";
 import {routerMiddleware} from "connected-react-router";
 import {createRootReducer, RootState} from "./rootReducer";
-import {applyMiddleware, compose, createStore} from "redux";
+import {applyMiddleware, createStore} from "redux";
+import {composeWithDevTools} from "redux-devtools-extension";
 
 
 export const configureStore = (history: History, initialState?: RootState) => {
@@ -22,6 +23,6 @@ export const configureStore = (history: History, initialState?: RootState) => {
     return createStore(
         rootReducer,
         initialState,
-        compose(applyMiddleware(...middleware), ...enhancers)
+        composeWithDevTools(applyMiddleware(...middleware), ...enhancers)
     )
 }
