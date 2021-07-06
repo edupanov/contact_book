@@ -3,6 +3,7 @@ import {ContactActionTypes, ContactListStateInterface, ContactsActionType} from 
 const initialState: ContactListStateInterface = {
     isLoading: false,
     data: null,
+    maxUsers: 0,
     errors: {}
 }
 
@@ -18,7 +19,8 @@ export const contactsReducer = (state: ContactListStateInterface = initialState,
             return {
                 ...state,
                 isLoading: false,
-                data: action.payload
+                data: action.payload.users,
+                maxUsers: action.payload.maxUsers
             }
 
         case ContactActionTypes.GET_CONTACTS_FAILURE:

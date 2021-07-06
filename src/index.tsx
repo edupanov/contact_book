@@ -7,7 +7,7 @@ import {Provider} from "react-redux";
 import {createBrowserHistory} from "history";
 import {configureStore} from "./app/store/configureStore";
 
-const baseUrl = 'https://localhost:8080'
+const baseUrl = '/'
 const history = createBrowserHistory({basename: baseUrl})
 
 const store = configureStore(history)

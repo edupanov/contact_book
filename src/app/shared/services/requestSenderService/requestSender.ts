@@ -8,7 +8,6 @@ export const RequestSender: HttpClient = {
         }
         return await fetch(url, options)
             .then(response => {
-                console.log(response)
                 return errorHandler(response)
             }).catch(err => {
                 console.log(err)
@@ -24,7 +23,7 @@ export const RequestSender: HttpClient = {
         }
 
         return await fetch(url, options)
-            .then(response => errorHandler(response))//можно передать метод для обработки ошибок
+            .then(response => errorHandler(response))
     },
 
     async put(url, body, headers): Promise<Request> {

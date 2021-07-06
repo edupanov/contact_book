@@ -6,11 +6,14 @@ import {RootState} from "../../../../store/rootReducer";
 import {DefaultPagedResponse} from "../../../../shared/types/defaultPagedResponse";
 import {ContactInterface} from "../../types/contact.interface";
 
-export const getContacts = (pageSize: number, currentPage: number) =>
+export const getContacts = (pageSize: string = '3', currentPage: string = '1') =>
     async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
         dispatch({type: ContactActionTypes.GET_CONTACTS})
 
-        const fullUrl = 'http://localhost:8080/api' + ContactsUrls.GET_CONTACTS_URL
+        const BASE_URL = "http://localhost:8080/api"
+
+        const fullUrl = `${BASE_URL}${ContactsUrls.GET_CONTACTS_URL}/page/${currentPage}/take/${pageSize}`
+        console.log(fullUrl)
 
         await RequestSender.get<DefaultPagedResponse<Array<ContactInterface>>>(fullUrl)
             .then(async response => {
@@ -18,7 +21,10 @@ export const getContacts = (pageSize: number, currentPage: number) =>
                 if (result.isSuccess) {
                     dispatch({
                         type: ContactActionTypes.GET_CONTACTS_SUCCESS,
-                        payload: result?.data as Array<ContactInterface>
+                        payload: {
+                            users: result?.data as Array<ContactInterface>,
+                            maxUsers: result?.maxUsers
+                        }
                     })
                 }
             })

@@ -2,6 +2,7 @@ const User = require('../models/user')
 
 module.exports = {
     getUsers: (req, res, next) => {
+        console.log(req.params)
         const pageSize = +req.params.take
         const currentPage = +req.params.page
         const usersQuery = User.find()
