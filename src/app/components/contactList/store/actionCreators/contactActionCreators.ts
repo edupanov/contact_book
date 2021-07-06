@@ -13,7 +13,6 @@ export const getContacts = (pageSize: string = '3', currentPage: string = '1') =
         const BASE_URL = "http://localhost:8080/api"
 
         const fullUrl = `${BASE_URL}${ContactsUrls.GET_CONTACTS_URL}/page/${currentPage}/take/${pageSize}`
-        console.log(fullUrl)
 
         await RequestSender.get<DefaultPagedResponse<Array<ContactInterface>>>(fullUrl)
             .then(async response => {

@@ -13,11 +13,9 @@ const history = createBrowserHistory({basename: baseUrl})
 const store = configureStore(history)
 
 ReactDOM.render(
-    <React.StrictMode>
         <Provider store={store}>
             <App history={history}/>
-        </Provider>
-    </React.StrictMode>,
+        </Provider>,
     document.getElementById('root')
 );
 

@@ -12,52 +12,6 @@ function MainForm() {
 
     return (
         <div>
-            <Grid
-                className={styles.headerWrapper}
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-            >
-                <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => {
-                        alert('clicked')
-                    }}>
-                    Создать новый контакт
-                </Button>
-                <div className={""}>
-                    <IconButton aria-label="delete" onClick={() => {
-                        console.log('delete')
-                    }}>
-                        <DeleteIcon/>
-                    </IconButton>
-                    <IconButton aria-label="edit" onClick={() => {
-                        console.log('edit')
-                    }}>
-                        <EditIcon/>
-                    </IconButton>
-                    <IconButton aria-label="edit" onClick={() => {
-                        console.log('search')
-                    }}>
-                        <SearchIcon/>
-                    </IconButton>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        color="primary"
-                        target="_top"
-                        rel="noopener noreferrer"
-                        href={``}
-                    >
-                        <Typography variant="button" style={{ fontSize: '0.79rem' }}>
-                            Отправить E-mail
-                        </Typography>
-                    </Button>
-
-                </div>
-            </Grid>
             <ContactList/>
             <MainFormBottom/>
         </div>

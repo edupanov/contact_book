@@ -1,46 +1,61 @@
-import React from 'react';
-import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import React, {useEffect} from 'react';
+import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useFormik} from "formik";
+import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
+import {useActions} from "../../../store/hooks/useActions";
+import {useParams} from "react-router";
+
+type ParamsType= {
+    email: string
+    password: string
+}
 
 type FormikErrorType = {
-    name?: string
-    surname?: string
+    email?: string
     password?: string
 }
 
 const LoginForm: React.FC = () => {
 
+    const {isLoading, data} = useTypeSelector(state => state.login )
+    const{getLogin} = useActions()
 
     const formik = useFormik({
         initialValues: {
-            name: '',
-            surname: '',
+            email: '',
             password: '',
         },
         validate: (values) => {
 
             const errors: FormikErrorType = {};
-
-            if (!values.name) {
-                errors.name = 'Required';
-            }
-
-            if (!values.surname) {
-                errors.surname = 'Required';
+            if (!values.email) {
+                errors.email = 'Required';
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Invalid email address';
             }
 
             if (!values.password) {
                 errors.password = 'Password is required';
             }
-
             return errors;
         },
-        onSubmit: values => console.log(values)
+        onSubmit: values => {
+            getLogin(values.email, values.password)
+        }
 
     })
 
 
-    return (
+    useEffect(() => {
+        getLogin(data.email, data.password)
+        console.log(formik.values)
+    }, [])
+
+    if (isLoading || !data) {
+        return <CircularProgress color="secondary"/>
+    }
+
+       return (
         <div>
             <Grid container justify="center">
                 <Grid item xs={4}>
@@ -48,17 +63,11 @@ const LoginForm: React.FC = () => {
                         <FormControl>
                             <FormGroup>
                                 <TextField
-                                    label="Name"
+                                    label="Email"
                                     margin="normal"
-                                    {...formik.getFieldProps("name")}
+                                    {...formik.getFieldProps("email")}
                                 />
-                                {formik.errors.name ? <div>{formik.errors.name}</div> : null}
-                                <TextField
-                                    label="Surname"
-                                    margin="normal"
-                                    {...formik.getFieldProps("surname")}
-                                />
-                                {formik.errors.surname ? <div>{formik.errors.surname}</div> : null}
+                                {formik.errors.email ? <div>{formik.errors.email}</div> : null}
                                 <TextField
                                     type="password"
                                     label="Password"
