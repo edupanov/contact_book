@@ -2,10 +2,28 @@ const User = require('../models/user')
 
 module.exports = {
     getUsers: (req, res, next) => {
-        console.log(req.params)
-        const pageSize = +req.params.take
-        const currentPage = +req.params.page
-        const usersQuery = User.find()
+        const pageSize = req.body.take
+        const currentPage = req.body.page
+
+        const searchParams = {}
+
+        const name = req.body.name
+        const surname = req.body.surname
+        const patronymic = req.body.patronymic
+
+        if (name) {
+            searchParams.name = name
+        }
+
+        if (surname) {
+            searchParams.surname = surname
+        }
+
+        if (patronymic) {
+            searchParams.patronymic = patronymic
+        }
+
+        const usersQuery = User.find(searchParams)
         let fetchedUsers
         if (pageSize && currentPage) {
             usersQuery
@@ -66,7 +84,7 @@ module.exports = {
             {name: 'Name25', surname: 'Surname25', patronymic: 'Patronymic25'}
         ]
 
-            User.create(users)
+        User.create(users)
             .then(documents => {
                 res.status(200).json({
                     code: 200,

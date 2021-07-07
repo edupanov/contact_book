@@ -4,6 +4,8 @@ export interface ContactListStateInterface {
     isLoading: boolean
     errors: object
     maxUsers: number
+    page: number
+    take: number
     data: Array<ContactInterface> | null
 }
 
@@ -11,7 +13,8 @@ export enum ContactActionTypes {
     GET_CONTACTS = '[Contact List] Get Contacts',
     GET_CONTACTS_SUCCESS = '[Contact List] Get Contacts Success',
     GET_CONTACTS_FAILURE = '[Contact List] Get Contacts Failure',
-    SET_CONTACTS_PAGE = '[Contact List] Set Page Contacts'
+    SET_CONTACTS_PAGE = '[Contact List] Set Contacts Page',
+    SET_CONTACTS_TAKE = '[Contact List] Set Contacts Take'
 }
 
 interface getContacts {
@@ -33,7 +36,12 @@ interface getContactsFailure {
 
 interface setContactPage {
     type: ContactActionTypes.SET_CONTACTS_PAGE,
-    payload: number
+    page: number
 }
 
-export type ContactsActionType = getContacts | getContactsSuccess | getContactsFailure | setContactPage
+interface setContactTake {
+    type: ContactActionTypes.SET_CONTACTS_TAKE,
+    take: number
+}
+
+export type ContactsActionType = getContacts | getContactsSuccess | getContactsFailure | setContactPage | setContactTake

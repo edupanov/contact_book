@@ -4,6 +4,8 @@ const initialState: ContactListStateInterface = {
     isLoading: false,
     data: null,
     maxUsers: 0,
+    page: 1,
+    take: 5,
     errors: {}
 }
 
@@ -27,6 +29,18 @@ export const contactsReducer = (state: ContactListStateInterface = initialState,
             return {
                 ...state,
                 errors: {}
+            }
+
+        case ContactActionTypes.SET_CONTACTS_PAGE:
+            return {
+                ...state,
+                page: action.page
+            }
+
+        case ContactActionTypes.SET_CONTACTS_TAKE:
+            return {
+                ...state,
+                take: action.take
             }
 
         default:

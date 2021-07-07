@@ -3,12 +3,6 @@ import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from 
 import {useFormik} from "formik";
 import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 import {useActions} from "../../../store/hooks/useActions";
-import {useParams} from "react-router";
-
-type ParamsType= {
-    email: string
-    password: string
-}
 
 type FormikErrorType = {
     email?: string
@@ -42,14 +36,15 @@ const LoginForm: React.FC = () => {
         onSubmit: values => {
             getLogin(values.email, values.password)
         }
-
     })
+    console.log(formik.values)
+    console.log(data)
 
 
-    useEffect(() => {
-        getLogin(data.email, data.password)
-        console.log(formik.values)
-    }, [])
+    // useEffect(() => {
+    //     getLogin(data.email, data.password)
+    //     console.log(formik.values)
+    // }, [])
 
     if (isLoading || !data) {
         return <CircularProgress color="secondary"/>
