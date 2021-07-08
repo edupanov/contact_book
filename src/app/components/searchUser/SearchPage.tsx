@@ -26,10 +26,6 @@ const SearchPanel: FC = () => {
         })
     }
 
-    const inputProps = {
-
-    }
-
     const onSubmit = () => {
         setPage(1)
         setSearchParams(search)
@@ -56,7 +52,6 @@ const SearchPanel: FC = () => {
                                                name={"name"}
                                                type="search"
                                                onChange={changeHandler}
-                                               inputProps={{'pattern': 'text'}}
                                     />
                                     <TextField className={style.input}
                                                label="Фамилия"
