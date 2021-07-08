@@ -13,14 +13,14 @@ import SearchUser from "../searchUser/SearchUser";
 const ContactList = () => {
 
     const columns: GridColDef[] = [
-        {field: 'name', headerName: 'Имя', width: 160},
-        {field: 'surname', headerName: 'Фамилия', width: 160},
-        {field: 'patronymic', headerName: 'Отчество', width: 160},
-        {field: 'birthDate', headerName: 'Дата рождения', width: 170},
-        {field: 'gender', headerName: 'Пол', width: 160},
-        {field: 'family', headerName: 'Семейное положение', width: 160},
-        {field: 'nationality', headerName: 'Гражданство', width: 160},
-        {field: 'address', headerName: 'Адрес', width: 160},
+        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false},
+        {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false},
+        {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false},
+        {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
+        {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false},
+        {field: 'family', headerName: 'Семейное положение', width: 210, filterable: false, sortable: false},
+        {field: 'nationality', headerName: 'Гражданство', width: 140, filterable: false, sortable: false},
+        {field: 'address', headerName: 'Адрес', width: 160, filterable: false, sortable: false},
     ];
 
     const [toggle, setToggle] = useState<Boolean>(false)

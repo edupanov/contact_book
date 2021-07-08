@@ -4,7 +4,7 @@ export interface ContactInterface {
     patronymic: string
     birthDate: string
     gender: string
-    family: string
+    maritalStatus: string
     nationality: string
     address: {
         fullAddress: string

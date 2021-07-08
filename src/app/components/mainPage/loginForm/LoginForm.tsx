@@ -37,9 +37,6 @@ const LoginForm: React.FC = () => {
             getLogin(values.email, values.password)
         }
     })
-    console.log(formik.values)
-    console.log(data)
-
 
     // useEffect(() => {
     //     getLogin(data.email, data.password)
