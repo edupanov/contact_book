@@ -6,11 +6,11 @@ import {RootState} from "../../../../store/rootReducer";
 import {DefaultPagedResponse} from "../../../../shared/types/defaultPagedResponse";
 import {ContactInterface} from "../../types/contact.interface";
 
-export const getContacts = (pageSize: string = '3', currentPage: string = '1') =>
-    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
+export const getContacts = (pageSize: string = '3', currentPage: string = '1') => // передаем то что хотим поменять
+    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => { // передаем наш диспатч
         dispatch({type: ContactActionTypes.GET_CONTACTS})
 
-        const {searchParams} = getState().search
+        const {searchParams} = getState().search  //получаем парметры из текущего стейта
         const {take, page} = getState().contacts
 
         const search = {

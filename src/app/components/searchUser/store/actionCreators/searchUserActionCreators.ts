@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import {SearchPageActionType, SearchUserActionTypes} from "../actionTypes/searchUserActionTypes";
-import {SearchParamsInterface} from "../../../contactList/types/searcParams.interface";
+import {SearchParamsInterface} from "../../types/searcParams.interface";
 
 
 export const setSearchParams = (searchParams: SearchParamsInterface) => (dispatch: Dispatch<SearchPageActionType>) => {

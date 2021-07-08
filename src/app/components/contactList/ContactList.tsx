@@ -12,9 +12,21 @@ import SearchUser from "../searchUser/SearchUser";
 
 const ContactList = () => {
 
+    const columns: GridColDef[] = [
+        {field: 'name', headerName: 'Имя', width: 160},
+        {field: 'surname', headerName: 'Фамилия', width: 160},
+        {field: 'patronymic', headerName: 'Отчество', width: 160},
+        {field: 'birthDate', headerName: 'Дата рождения', width: 170},
+        {field: 'gender', headerName: 'Пол', width: 160},
+        {field: 'family', headerName: 'Семейное положение', width: 160},
+        {field: 'nationality', headerName: 'Гражданство', width: 160},
+        {field: 'address', headerName: 'Адрес', width: 160},
+    ];
+
+    const [toggle, setToggle] = useState<Boolean>(false)
+
     const {getContacts, setPage, setTake} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
-
 
     useEffect(() => {
         getContacts()
@@ -24,18 +36,11 @@ const ContactList = () => {
         return <CircularProgress color="secondary"/>
     }
 
-    const columns: GridColDef[] = [
-        {field: 'name', headerName: 'First name', width: 160},
-        {field: 'surname', headerName: 'Last name', width: 160},
-        {field: 'patronymic', headerName: 'Patronymic', width: 160},
-    ];
-
     const handlePaginationChange = ({page, pageSize}: GridPageChangeParams) => {
         setPage(page + 1)
         setTake(pageSize)
         getContacts()
     };
-
 
 
     return (
@@ -66,9 +71,7 @@ const ContactList = () => {
                     }}>
                         <EditIcon/>
                     </IconButton>
-                    <IconButton aria-label="edit" onClick={() => {
-                        console.log('search')
-                    }}>
+                    <IconButton aria-label="search" onClick={() => setToggle(!toggle)}>
                         <SearchIcon/>
                     </IconButton>
 
@@ -84,10 +87,12 @@ const ContactList = () => {
                             Отправить E-mail
                         </Typography>
                     </Button>
-
                 </div>
             </Grid>
-            <SearchUser/>
+
+            {
+                toggle ? <SearchUser/> : null
+            }
 
             <DataGrid rows={data}
                       columns={columns}
@@ -101,7 +106,6 @@ const ContactList = () => {
                       onPageSizeChange={handlePaginationChange}
                       checkboxSelection
                       sortingMode={'server'}
-
             />
         </div>
     );

@@ -3,7 +3,7 @@ import {
     SearchUserActionTypes,
     SearchUserStateInterface
 } from "../actionTypes/searchUserActionTypes";
-import {SearchParamsInterface} from "../../../contactList/types/searcParams.interface";
+import {SearchParamsInterface} from "../../types/searcParams.interface";
 
 const initialState: SearchUserStateInterface = {
     searchParams: {} as SearchParamsInterface

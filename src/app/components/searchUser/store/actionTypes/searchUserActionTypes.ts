@@ -1,4 +1,4 @@
-import {SearchParamsInterface} from "../../../contactList/types/searcParams.interface";
+import {SearchParamsInterface} from "../../types/searcParams.interface";
 
 export interface SearchUserStateInterface {
     searchParams: SearchParamsInterface

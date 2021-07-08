@@ -1,6 +1,27 @@
 .searchPanel   {
- max-width: 100%;
-  .qwe {
+  margin-bottom: 20px;
+
+  .form {
     width: 100%;
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+    }
+
+    .input {
+      width: 170px;
+      margin: 10px;
+    }
+    .searchButton {
+      margin: 10px;
+      width: 100px;
+      height: 40px;
+    }
   }
+}
+
+.MuiFormGroup-root {
+  display: flex !important;
 }
