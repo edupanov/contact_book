@@ -1,7 +1,8 @@
 const User = require('../models/user')
+const Address = require('../models/address')
 
 module.exports = {
-    getUsers: (req, res, next) => {
+    getUsers: async (req, res, next) => {
         const pageSize = req.body.take
         const currentPage = req.body.page
 
@@ -23,14 +24,14 @@ module.exports = {
             searchParams.patronymic = patronymic
         }
 
-        const usersQuery = User.find(searchParams)
+        const usersQuery = User.find(searchParams).populate('address')
         let fetchedUsers
         if (pageSize && currentPage) {
             usersQuery
                 .skip(pageSize * (currentPage - 1))
                 .limit(pageSize)
         }
-        usersQuery
+        await usersQuery
             .then(documents => {
                 fetchedUsers = documents
                 return User.countDocuments()
@@ -41,63 +42,79 @@ module.exports = {
                         id: user._id,
                         name: user.name,
                         surname: user.surname,
-                        patronymic: user.patronymic
+                        patronymic: user.patronymic,
+                        birthDate: user.birthDate,
+                        gender: user.gender,
+                        maritalStatus: user.maritalStatus,
+                        nationality: user.nationality,
+                        address: {
+                            city: user.address[0].city,
+                            country: user.address[0].country,
+                            street: user.address[0].street,
+                            building: user.address[0].building,
+                            flat: user.address[0].flat,
+                            zipCode: user.address[0].zipCode,
+                            fullAddress: user.address[0].fullAddress
+                        }
                     }
                 })
                 res.status(200).json({
                     code: 200,
                     isSuccess: true,
-                    message: 'Users fetched successfully!',
+                    message: 'Contacts fetched successfully!',
                     maxUsers: count,
                     data: users
                 })
             })
             .catch(error => {
                 res.status(500).json({
-                    message: 'Fetching users failed!',
+                    message: 'Fetching contacts failed!',
                     error
                 })
             })
     },
 
-    setUsers: (req, res, next) => {
-        const users = [
-            {name: 'Name6', surname: 'Surname6', patronymic: 'Patronymic6'},
-            {name: 'Name7', surname: 'Surname7', patronymic: 'Patronymic7'},
-            {name: 'Name8', surname: 'Surname8', patronymic: 'Patronymic8'},
-            {name: 'Name9', surname: 'Surname9', patronymic: 'Patronymic9'},
-            {name: 'Name10', surname: 'Surname10', patronymic: 'Patronymic10'},
-            {name: 'Name11', surname: 'Surname11', patronymic: 'Patronymic11'},
-            {name: 'Name12', surname: 'Surname12', patronymic: 'Patronymic12'},
-            {name: 'Name13', surname: 'Surname13', patronymic: 'Patronymic13'},
-            {name: 'Name14', surname: 'Surname14', patronymic: 'Patronymic14'},
-            {name: 'Name15', surname: 'Surname15', patronymic: 'Patronymic15'},
-            {name: 'Name16', surname: 'Surname16', patronymic: 'Patronymic16'},
-            {name: 'Name17', surname: 'Surname17', patronymic: 'Patronymic17'},
-            {name: 'Name18', surname: 'Surname18', patronymic: 'Patronymic18'},
-            {name: 'Name19', surname: 'Surname19', patronymic: 'Patronymic19'},
-            {name: 'Name20', surname: 'Surname20', patronymic: 'Patronymic20'},
-            {name: 'Name21', surname: 'Surname21', patronymic: 'Patronymic21'},
-            {name: 'Name22', surname: 'Surname22', patronymic: 'Patronymic22'},
-            {name: 'Name23', surname: 'Surname23', patronymic: 'Patronymic23'},
-            {name: 'Name24', surname: 'Surname24', patronymic: 'Patronymic24'},
-            {name: 'Name25', surname: 'Surname25', patronymic: 'Patronymic25'}
-        ]
+    setUsers: async (req, res, next) => {
 
-        User.create(users)
-            .then(documents => {
-                res.status(200).json({
-                    code: 200,
-                    isSuccess: true,
-                    message: 'Users created successfully!',
-                    data: documents
-                })
-            })
-            .catch(error => {
-                res.status(500).json({
-                    message: 'Creating users failed!',
-                    error
-                })
-            })
+        // let i = 0
+        //
+        // while (i <= 20) {
+        //     const user = new User({
+        //         name: `Имя${i}`,
+        //         surname: `Фамилия${i}`,
+        //         patronymic: `Отчество${i}`,
+        //         birthDate: '01.01.1990',
+        //         gender: `${i % 2 === 0 ? 'мужской' : 'женский'}`,
+        //         maritalStatus: `${i % 2 === 0 ? 'женат' : 'замужем'}`,
+        //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`
+        //     })
+        //
+        //     await user.save()
+        //         .then(async user => {
+        //             const address = new Address({
+        //                 city: 'Гомель',
+        //                 country: 'Беларусь',
+        //                 street: `${i % 2 === 0 ? 'Ленина' : 'Советская'}`,
+        //                 building: `${i + 5}`,
+        //                 flat: `${i + 9}`,
+        //                 zipCode: `${i + 240016}`,
+        //                 fullAddress: `${i + 240016} Беларусь, Гомель ${i % 2 === 0 ? 'Ленина' : 'Советская'} ${i + 5} кв.${i + 9}`
+        //             })
+        //
+        //             await address.save()
+        //                 .then(async address => {
+        //                     user.address.push(address)
+        //                     await user.save()
+        //                 })
+        //
+        //         }).catch(error => console.log(error))
+        //
+        //     i++
+        // }
+
+        // User.find().populate('address').then(documents => res.json({users: documents}))
+
+        // User.deleteMany({})
+        // Address.deleteMany({})
     }
 }
