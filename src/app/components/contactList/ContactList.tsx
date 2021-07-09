@@ -2,12 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
-import {DataGrid, GridColDef, GridPageChangeParams} from "@material-ui/data-grid";
+import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams} from "@material-ui/data-grid";
 import styles from "../mainForm/HeaderContactList.module.scss";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import SearchUser from "../searchUser/SearchPage";
+import {ContactInterface} from "./types/contact.interface";
 
 
 const ContactList = () => {
@@ -24,7 +25,11 @@ const ContactList = () => {
             field: 'address',
             headerName: 'Адрес',
             width: 160,
+            resizable: true,
             filterable: false,
+            renderCell: (params: GridCellParams) => {
+                return <span>{params.row.address.fullAddress}</span>
+            }
         },
     ];
 
@@ -40,8 +45,9 @@ const ContactList = () => {
 
 
     if (data) {
-        data.map((item: { address: string }) => {
-            item.address = Object.values(item.address).join('')
+        const updatedData = [...data]
+        updatedData.map((item: ContactInterface) => {
+            item.address.fullAddress = Object.values(item.address).join(' ')
         })
     }
 
