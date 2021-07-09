@@ -11,6 +11,10 @@ module.exports = {
         const name = req.body.name
         const surname = req.body.surname
         const patronymic = req.body.patronymic
+        const birthDate = req.body.birthDate
+        const gender = req.body.gender
+        const maritalStatus = req.body.maritalStatus
+        const nationality = req.body.nationality
 
         if (name) {
             searchParams.name = name
@@ -20,9 +24,22 @@ module.exports = {
             searchParams.surname = surname
         }
 
+        if (birthDate) {
+            searchParams.birthDate = birthDate
+        }
+        if (gender) {
+            searchParams.gender = gender
+        }
+        if (maritalStatus) {
+            searchParams.maritalStatus = maritalStatus
+        }
+        if (nationality) {
+            searchParams.nationality = nationality
+        }
         if (patronymic) {
             searchParams.patronymic = patronymic
         }
+
 
         const usersQuery = User.find(searchParams).populate('address')
         let fetchedUsers

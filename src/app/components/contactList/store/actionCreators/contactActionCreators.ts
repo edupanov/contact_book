@@ -34,6 +34,7 @@ export const getContacts = (pageSize: string = '3', currentPage: string = '1') =
                         }
                     })
                 }
+                console.log(result.users.address)
             })
             .catch(error => {
                 dispatch({type: ContactActionTypes.GET_CONTACTS_FAILURE, errors: error})
