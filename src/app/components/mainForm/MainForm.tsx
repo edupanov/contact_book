@@ -4,7 +4,6 @@ import ContactList from "../contactList/ContactList";
 
 
 function MainForm() {
-
     return (
         <div>
             <ContactList/>

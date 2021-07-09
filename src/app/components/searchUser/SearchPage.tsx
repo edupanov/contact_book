@@ -16,13 +16,19 @@ const SearchPanel: FC = () => {
 
     const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        console.log(event.target.value)
+
+        const dateFrom = target.name === 'dateFrom'
+        const dateTo = target.name === 'dateTo'
+        const isDate = dateFrom || dateTo
+
+
         const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
-        console.log(replaceStr)
 
         setSearch({
             ...search,
-            [target.name]: target.value
+            [dateFrom ? 'dateFrom' :
+                dateTo ? 'dateTo' :
+                    target.name]: isDate ? replaceStr : target.value,
         })
     }
 
@@ -33,7 +39,6 @@ const SearchPanel: FC = () => {
     }
 
     console.log(search)
-
 
     return (
         <div className={style.searchPanel}
@@ -65,12 +70,22 @@ const SearchPanel: FC = () => {
                                                type="search"
                                                onChange={changeHandler}
                                     />
-                                    <TextField className={style.input}
-                                               helperText="Дата рождения"
-                                               name={"birthDate"}
-                                               type="date"
-                                               onChange={changeHandler}
-                                    />
+                                    <div className={style.addressWrapper}>
+                                        <span className={style.address}>Возраст</span>
+                                        <TextField className={style.input}
+                                                   helperText="С"
+                                                   name={"dateFrom"}
+                                                   type="date"
+                                                   onChange={changeHandler}
+                                        />
+                                        <TextField className={style.input}
+                                                   helperText="По"
+                                                   name={"dateTo"}
+                                                   type="date"
+                                                   onChange={changeHandler}
+                                        />
+                                    </div>
+
                                     <TextField className={style.input}
                                                label="Пол"
                                                name={"gender"}

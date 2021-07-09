@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
-import {DataGrid, GridColDef, GridPageChangeParams, GridValueGetterParams} from "@material-ui/data-grid";
+import {DataGrid, GridColDef, GridPageChangeParams} from "@material-ui/data-grid";
 import styles from "../mainForm/HeaderContactList.module.scss";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -16,25 +16,17 @@ const ContactList = () => {
         {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false},
         {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false},
-        {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
+        {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: true},
         {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false},
-        {field: 'family', headerName: 'Семейное положение', width: 210, filterable: false, sortable: false},
+        {field: 'maritalStatus', headerName: 'Семейное положение', width: 210, filterable: false, sortable: false},
         {field: 'nationality', headerName: 'Гражданство', width: 140, filterable: false, sortable: false},
         {
             field: 'address',
             headerName: 'Адрес',
             width: 160,
             filterable: false,
-            sortable: false, valueGetter: setFullName
         },
     ];
-
-    function setFullName(params: GridValueGetterParams) {
-
-        return `${params.getValue(params.id, 'name') || ''} ${
-        params.getValue(params.id, 'surname') || ''
-      }`;
-    }
 
 
     const [toggle, setToggle] = useState<Boolean>(false)
@@ -46,6 +38,15 @@ const ContactList = () => {
         getContacts()
     }, [])
 
+
+    if (data) {
+        data.map((item: { address: string }) => {
+            item.address = Object.values(item.address).join('')
+        })
+    }
+
+    console.log(data)
+
     if (isLoading || !data) {
         return <CircularProgress color="secondary"/>
     }
@@ -55,17 +56,6 @@ const ContactList = () => {
         setTake(pageSize)
         getContacts()
     };
-
-    function getFullAddress() {
-
-        data.map((el: { address: any; }) => {
-            let fullAddress = Object.values(el.address)
-            console.log(fullAddress)
-
-        })
-    }
-
-    getFullAddress()
 
     return (
         <div style={{height: 400, width: '100%'}}>
@@ -114,9 +104,7 @@ const ContactList = () => {
                 </div>
             </Grid>
 
-            {
-                toggle ? <SearchUser/> : null
-            }
+            {toggle ? <SearchUser/> : null}
 
             <DataGrid rows={data}
                       columns={columns}
@@ -135,5 +123,6 @@ const ContactList = () => {
     );
 
 }
+
 
 export default ContactList
