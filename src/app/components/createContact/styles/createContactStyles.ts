@@ -1,6 +1,13 @@
 import {makeStyles} from "@material-ui/core";
 
 export const useStyles = makeStyles({
+    errorTitle: {
+        fontSize: '1.5em',
+        textAlign: "center",
+        color: "red",
+        margin: '0 auto',
+        padding: '20px 0'
+    },
     searchPanel: {
         marginBottom: 30
     },

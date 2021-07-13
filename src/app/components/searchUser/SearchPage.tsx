@@ -32,8 +32,6 @@ const SearchPanel: FC = () => {
                     target.name]: isDate ? replaceStr : target.value,
         })
     }
-    console.log(search)
-
     const onSubmit = () => {
         setPage(1)
         setSearchParams(search)

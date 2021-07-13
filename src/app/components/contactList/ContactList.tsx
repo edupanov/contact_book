@@ -15,7 +15,7 @@ import CreateContact from "../createContact/CreateContact";
 const ContactList = () => {
 
     const columns: GridColDef[] = [
-        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false,},
+        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false},
         {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false},
         {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
@@ -35,9 +35,9 @@ const ContactList = () => {
         },
     ];
 
-
     const [search, setSearch] = useState<Boolean>(false)
     const [add, setAdd] = useState<Boolean>(false)
+    const [item, setItem] = useState<ContactInterface>({} as ContactInterface)
 
 
     const {getContacts, setPage, setTake} = useActions()
@@ -47,7 +47,6 @@ const ContactList = () => {
         getContacts()
     }, [])
 
-
     if (data) {
         const updatedData = [...data]
         updatedData.map((item: ContactInterface) => {
@@ -56,7 +55,11 @@ const ContactList = () => {
     }
 
     if (isLoading || !data) {
-        return <CircularProgress color="secondary"/>
+        return <CircularProgress
+            className={styles.preloader}
+            size={60}
+            color="secondary"
+        />
     }
 
     const handlePaginationChange = ({page, pageSize}: GridPageChangeParams) => {
@@ -64,6 +67,12 @@ const ContactList = () => {
         setTake(pageSize)
         getContacts()
     };
+
+    const setCurrentContact = (id: string) => {
+        const contactsForUpdate = [...data]
+        const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
+        setItem(currentContact)
+    }
 
     return (
         <div style={{height: 400, width: '100%'}}>
@@ -108,7 +117,7 @@ const ContactList = () => {
             </Grid>
 
             {search ? <SearchUser/> : null}
-            {add ? <CreateContact/> : null}
+            {add ? <CreateContact item={item}/> : null}
 
             <DataGrid rows={data}
                       columns={columns}
@@ -121,7 +130,11 @@ const ContactList = () => {
                       onPageChange={handlePaginationChange}
                       onPageSizeChange={handlePaginationChange}
                       checkboxSelection
+                      disableSelectionOnClick
                       sortingMode={'server'}
+                      onRowSelected={(params) => setCurrentContact(params.data.id)}
+
+
             />
         </div>
     );
