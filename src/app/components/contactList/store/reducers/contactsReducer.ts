@@ -1,4 +1,4 @@
-import {ContactActionTypes, ContactListStateInterface, ContactsActionType} from "../actionTypes/actiontypes";
+import {ContactActionTypes, ContactListStateInterface, ContactsActionType} from "../actionTypes/contactListActiontypes";
 
 const initialState: ContactListStateInterface = {
     isLoading: false,

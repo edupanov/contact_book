@@ -16,14 +16,22 @@ module.exports = {
         const maritalStatus = req.body.maritalStatus
         const nationality = req.body.nationality
 
+        const city = req.body.city
+        const country = req.body.country
+        const street = req.body.street
+        const building = req.body.building
+        const flat = req.body.flat
+        const zipCode = req.body.zipCode
+
         if (name) {
             searchParams.name = name
         }
-
         if (surname) {
             searchParams.surname = surname
         }
-
+        if (patronymic) {
+            searchParams.patronymic = patronymic
+        }
         if (birthDate) {
             searchParams.birthDate = birthDate
         }
@@ -36,8 +44,24 @@ module.exports = {
         if (nationality) {
             searchParams.nationality = nationality
         }
-        if (patronymic) {
-            searchParams.patronymic = patronymic
+
+        if (city) {
+            searchParams.city = city
+        }
+        if (country) {
+            searchParams.country = country
+        }
+        if (street) {
+            searchParams.street = street
+        }
+        if (building) {
+            searchParams.patronymic = building
+        }
+        if (flat) {
+            searchParams.flat = flat
+        }
+        if (zipCode) {
+            searchParams.zipCode = zipCode
         }
 
 
@@ -114,8 +138,7 @@ module.exports = {
         //                 street: `${i % 2 === 0 ? 'Ленина' : 'Советская'}`,
         //                 building: `${i + 5}`,
         //                 flat: `${i + 9}`,
-        //                 zipCode: `${i + 240016}`,
-        //                 fullAddress: `${i + 240016} Беларусь, Гомель ${i % 2 === 0 ? 'Ленина' : 'Советская'} ${i + 5} кв.${i + 9}`
+        //                 zipCode: `${i + 240016}`
         //             })
         //
         //             await address.save()

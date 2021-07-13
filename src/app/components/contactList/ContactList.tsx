@@ -9,24 +9,26 @@ import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import SearchUser from "../searchUser/SearchPage";
 import {ContactInterface} from "./types/contact.interface";
+import CreateContact from "../createContact/CreateContact";
 
 
 const ContactList = () => {
 
     const columns: GridColDef[] = [
-        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false},
+        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false,},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false},
         {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false},
-        {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: true},
+        {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
         {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false},
-        {field: 'maritalStatus', headerName: 'Семейное положение', width: 210, filterable: false, sortable: false},
+        {field: 'maritalStatus', headerName: 'Семейное положение', width: 200, filterable: false, sortable: false},
         {field: 'nationality', headerName: 'Гражданство', width: 140, filterable: false, sortable: false},
         {
             field: 'address',
             headerName: 'Адрес',
             width: 160,
-            resizable: true,
             filterable: false,
+            flex: 1,
+            sortable: false,
             renderCell: (params: GridCellParams) => {
                 return <span>{params.row.address.fullAddress}</span>
             }
@@ -34,7 +36,9 @@ const ContactList = () => {
     ];
 
 
-    const [toggle, setToggle] = useState<Boolean>(false)
+    const [search, setSearch] = useState<Boolean>(false)
+    const [add, setAdd] = useState<Boolean>(false)
+
 
     const {getContacts, setPage, setTake} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
@@ -50,8 +54,6 @@ const ContactList = () => {
             item.address.fullAddress = Object.values(item.address).join(' ')
         })
     }
-
-    console.log(data)
 
     if (isLoading || !data) {
         return <CircularProgress color="secondary"/>
@@ -75,9 +77,7 @@ const ContactList = () => {
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={() => {
-                        alert('clicked')
-                    }}>
+                    onClick={() => setAdd(!add)}>
                     Создать новый контакт
                 </Button>
                 <div className={""}>
@@ -86,15 +86,12 @@ const ContactList = () => {
                     }}>
                         <DeleteIcon/>
                     </IconButton>
-                    <IconButton aria-label="edit" onClick={() => {
-                        console.log('edit')
-                    }}>
+                    <IconButton aria-label="edit" onClick={() => setAdd(!add)}>
                         <EditIcon/>
                     </IconButton>
-                    <IconButton aria-label="search" onClick={() => setToggle(!toggle)}>
+                    <IconButton aria-label="search" onClick={() => setSearch(!search)}>
                         <SearchIcon/>
                     </IconButton>
-
                     <Button
                         variant="contained"
                         size="large"
@@ -110,7 +107,8 @@ const ContactList = () => {
                 </div>
             </Grid>
 
-            {toggle ? <SearchUser/> : null}
+            {search ? <SearchUser/> : null}
+            {add ? <CreateContact/> : null}
 
             <DataGrid rows={data}
                       columns={columns}
@@ -127,8 +125,6 @@ const ContactList = () => {
             />
         </div>
     );
-
 }
-
 
 export default ContactList

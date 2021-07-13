@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../store/hooks/useActions";
-import style from './searchUser.module.scss'
+import {useStyles} from "../createContact/styles/createContactStyles";
 
 type TargetType = {
     name: string
@@ -9,6 +9,7 @@ type TargetType = {
 }
 
 const SearchPanel: FC = () => {
+    const classes = useStyles()
 
     const {getContacts, setSearchParams, setPage} = useActions()
 
@@ -31,6 +32,7 @@ const SearchPanel: FC = () => {
                     target.name]: isDate ? replaceStr : target.value,
         })
     }
+    console.log(search)
 
     const onSubmit = () => {
         setPage(1)
@@ -38,109 +40,108 @@ const SearchPanel: FC = () => {
         getContacts()
     }
 
-    console.log(search)
-
     return (
-        <div className={style.searchPanel}
-
-        >
-            <Grid
-                container justify="center"
-            >
+        <div className={classes.searchPanel}>
+            <h2 className={classes.title}>Поиск контакта</h2>
+            <Grid container justify="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
-                        <FormControl className={style.form}>
-                            <FormGroup className={style.row}>
+                        <FormControl className={classes.form}>
+                            <FormGroup className={classes.row}>
                                 <div>
-                                    <TextField className={style.input}
-                                               label="Имя"
-                                               name={"name"}
-                                               type="search"
-                                               onChange={changeHandler}
-                                    />
-                                    <TextField className={style.input}
-                                               label="Фамилия"
-                                               name={"surname"}
-                                               type="search"
-                                               onChange={changeHandler}
-                                    />
-                                    <TextField className={style.input}
-                                               label="Отчество"
-                                               name={"patronymic"}
-                                               type="search"
-                                               onChange={changeHandler}
-                                    />
-                                    <div className={style.addressWrapper}>
-                                        <span className={style.address}>Возраст</span>
-                                        <TextField className={style.input}
-                                                   helperText="С"
-                                                   name={"dateFrom"}
-                                                   type="date"
+                                    <div className={classes.period}>
+                                        <TextField className={classes.input}
+                                                   label="Имя"
+                                                   name={"name"}
+                                                   type="search"
                                                    onChange={changeHandler}
                                         />
-                                        <TextField className={style.input}
-                                                   helperText="По"
-                                                   name={"dateTo"}
-                                                   type="date"
+                                        <TextField className={classes.input}
+                                                   label="Фамилия"
+                                                   name={"surname"}
+                                                   type="search"
+                                                   onChange={changeHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Отчество"
+                                                   name={"patronymic"}
+                                                   type="search"
+                                                   onChange={changeHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Пол"
+                                                   name={"gender"}
+                                                   type="search"
+                                                   onChange={changeHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Семейное положение"
+                                                   name={"maritalStatus"}
+                                                   type="search"
+                                                   onChange={changeHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Гражданство"
+                                                   name={"nationality"}
+                                                   type="search"
                                                    onChange={changeHandler}
                                         />
                                     </div>
-
-                                    <TextField className={style.input}
-                                               label="Пол"
-                                               name={"gender"}
-                                               type="search"
-                                               onChange={changeHandler}
-                                    />
-                                    <TextField className={style.input}
-                                               label="Семейное положение"
-                                               name={"family"}
-                                               type="search"
-                                               onChange={changeHandler}
-                                    />
-                                    <TextField className={style.input}
-                                               label="Гражданство"
-                                               name={"nationality"}
-                                               type="search"
-                                               onChange={changeHandler}
-                                    />
-                                    <div className={style.addressWrapper}>
-                                        <span className={style.address}>Адрес</span>
-                                        <br/><TextField className={style.input}
+                                    <div className={classes.dateWrapper}>
+                                        <div>
+                                            <h3 className={classes.title}>Возраст</h3>
+                                        </div>
+                                        <div className={classes.period}>
+                                            <TextField className={classes.date}
+                                                       helperText="С"
+                                                       name={"dateFrom"}
+                                                       type="date"
+                                                       onChange={changeHandler}
+                                            />
+                                            <TextField className={classes.date}
+                                                       helperText="По"
+                                                       name={"dateTo"}
+                                                       type="date"
+                                                       onChange={changeHandler}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 className={classes.title}>Адрес</h3>
+                                        <br/><TextField className={classes.input}
                                                         label="Страна"
                                                         name={"country"}
                                                         type="search"
                                                         onChange={changeHandler}
                                     />
-                                        <TextField className={style.input}
+                                        <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
                                                    onChange={changeHandler}
                                         />
-                                        <TextField className={style.input}
+                                        <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
                                                    onChange={changeHandler}
                                         />
-                                        <TextField className={style.input}
+                                        <TextField className={classes.input}
                                                    label="Номер дома"
                                                    name={"building"}
                                                    type="number"
                                                    onChange={changeHandler}
                                         />
-                                        <TextField className={style.input}
+                                        <TextField className={classes.input}
                                                    label="Номер квартиры"
                                                    name={"flat"}
                                                    type="number"
                                                    onChange={changeHandler}
                                         />
-                                        <TextField className={style.input}
+                                        <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
                                                    type="number"
-
                                                    onChange={changeHandler}
                                         />
                                     </div>
@@ -148,7 +149,7 @@ const SearchPanel: FC = () => {
                                 </div>
                                 <div>
                                     <Button type={'submit'} variant={'contained'} color={'primary'}
-                                            className={style.searchButton}>Поиск</Button>
+                                            className={classes.button}>Поиск</Button>
                                 </div>
                             </FormGroup>
                         </FormControl>

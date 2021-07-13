@@ -4,6 +4,6 @@ export interface DefaultPagedResponse<T> {
     isSuccess: boolean
     totalPages: number
     currentPage: number
-    totalItems: number
+    maxUsers: number
     data: T
 }

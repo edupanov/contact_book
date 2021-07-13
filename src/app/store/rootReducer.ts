@@ -4,6 +4,7 @@ import {CombinedState, combineReducers} from "redux";
 import {contactsReducer} from "../components/contactList/store/reducers/contactsReducer";
 import {LoginReducer} from "../components/mainPage/loginForm/store/reducers/loginReducer";
 import {searchUserReducer} from "../components/searchUser/store/reducers/searchUserReducer";
+import {createUserReducer} from "../components/createContact/store/reducers/createContactReducer";
 
 let rootState = {} as CombinedState<any>
 
@@ -14,7 +15,8 @@ export const createRootReducer = (history: History) => {
         router: connectRouter(history),
         contacts: contactsReducer,
         login: LoginReducer,
-        search: searchUserReducer
+        search: searchUserReducer,
+        createUser: createUserReducer
     })
 
     return rootState
