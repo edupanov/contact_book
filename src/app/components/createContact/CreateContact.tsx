@@ -1,10 +1,13 @@
-import React, {useRef, useState} from 'react';
-import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import React, {ChangeEvent, useState} from 'react';
+import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../store/hooks/useActions";
 import {useStyles} from "./styles/createContactStyles";
 import {ContactInterface} from "../contactList/types/contact.interface";
+import {TargetType} from "../searchUser/SearchPage";
 
 const CreateContact = (props: { item: ContactInterface }) => {
+
+    const [contact, setContact] = useState({})
 
     const {item} = props
 
@@ -12,16 +15,21 @@ const CreateContact = (props: { item: ContactInterface }) => {
 
     const {getContacts} = useActions()
 
-    const changeHandler = () => {
-
+    const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const target: TargetType = (event.target)
+        setContact({
+            ...item,
+            [target.name]: target.value,
+        })
     }
+    console.log(contact)
 
     const onSubmit = () => {
         getContacts()
     }
 
     if (Object.keys(item).length === 0) {
-         return <p className={classes.errorTitle}>Выберите пользователя из списка</p>
+        return <p className={classes.errorTitle}>Выберите пользователя из списка</p>
     }
 
     return (
@@ -38,49 +46,49 @@ const CreateContact = (props: { item: ContactInterface }) => {
                                                name={"name"}
                                                type="search"
                                                onChange={changeHandler}
-                                               value={props.item.name ? props.item.name : ''}
+                                               defaultValue={props.item.name ? props.item.name : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Фамилия"
                                                name={"surname"}
                                                type="search"
                                                onChange={changeHandler}
-                                               value={props.item.surname ? props.item.surname : ''}
+                                               defaultValue={props.item.surname ? props.item.surname : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Отчество"
                                                name={"patronymic"}
                                                type="search"
                                                onChange={changeHandler}
-                                               value={props.item.patronymic ? props.item.patronymic : ''}
+                                               defaultValue={props.item.patronymic ? props.item.patronymic : ''}
                                     />
                                     <TextField className={classes.date}
                                                helperText="Дата рождения"
                                                name={"birthDate"}
                                                type="date"
                                                onChange={changeHandler}
-                                               value={props.item.birthDate ? props.item.birthDate : ''}
+                                               defaultValue={props.item.birthDate ? props.item.birthDate : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Пол"
                                                name={"gender"}
                                                type="search"
                                                onChange={changeHandler}
-                                               value={props.item.gender ? props.item.gender : ''}
+                                               defaultValue={props.item.gender ? props.item.gender : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Семейное положение"
                                                name={"maritalStatus"}
                                                type="search"
                                                onChange={changeHandler}
-                                               value={props.item.maritalStatus ? props.item.maritalStatus : ''}
+                                               defaultValue={props.item.maritalStatus ? props.item.maritalStatus : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Гражданство"
                                                name={"nationality"}
                                                type="search"
                                                onChange={changeHandler}
-                                               value={props.item.nationality ? props.item.nationality : ''}
+                                               defaultValue={props.item.nationality ? props.item.nationality : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Текущее место работы"
@@ -107,42 +115,42 @@ const CreateContact = (props: { item: ContactInterface }) => {
                                                         name={"country"}
                                                         type="search"
                                                         onChange={changeHandler}
-                                                        value={props.item?.address!.country! ? props.item.address.country : ''}
+                                                        defaultValue={props.item?.address!.country! ? props.item.address.country : ''}
                                     />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
                                                    onChange={changeHandler}
-                                                   value={props.item?.address.city! ? props.item.address.city : ''}
+                                                   defaultValue={props.item?.address.city! ? props.item.address.city : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
                                                    onChange={changeHandler}
-                                                   value={props.item?.address.street ? props.item.address.street : ''}
+                                                   defaultValue={props.item?.address.street ? props.item.address.street : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер дома"
                                                    name={"building"}
                                                    type="number"
                                                    onChange={changeHandler}
-                                                   value={props.item?.address.building! ? props.item.address.building : ''}
+                                                   defaultValue={props.item?.address.building! ? props.item.address.building : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер квартиры"
                                                    name={"flat"}
                                                    type="number"
                                                    onChange={changeHandler}
-                                                   value={props.item?.address.flat! ? props.item.address.flat : ''}
+                                                   defaultValue={props.item?.address.flat! ? props.item.address.flat : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
                                                    type="number"
                                                    onChange={changeHandler}
-                                                   value={props.item?.address.zipCode! ? props.item.address.zipCode : ''}
+                                                   defaultValue={props.item?.address.zipCode! ? props.item.address.zipCode : ''}
                                         />
                                     </div>
                                 </div>

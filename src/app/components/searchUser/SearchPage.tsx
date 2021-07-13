@@ -3,7 +3,7 @@ import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core
 import {useActions} from "../../store/hooks/useActions";
 import {useStyles} from "../createContact/styles/createContactStyles";
 
-type TargetType = {
+export type TargetType = {
     name: string
     value: string
 }
