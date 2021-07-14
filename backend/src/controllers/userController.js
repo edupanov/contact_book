@@ -1,21 +1,57 @@
-const User = require('../models/user')
-const Address = require('../models/address')
+const User = require('../models/user').User
+const Address = require('../models/address').Address
 
 module.exports = {
+
+    createContact: async (req, res, next) => {
+        let newContact = req.body.contact
+        const newContactId = newContact.id
+
+        await User.findById({_id: newContactId})
+            .then(async document => {
+                if (document._id) {
+                    res.status(400).json({
+                        message: 'Ошибка, контакт с данным ID уже существует, проверьте правильность данных'
+                    })
+                }
+                newContact = {
+                    _id: newContactId,
+                    ...newContact
+                }
+                await User.create(newContact)
+                    .then(user => {
+                        if (user._id) {
+                            res.status(200).json({
+                                message: 'Contact was created successfully!'
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        res.status(500).json({
+                            message: 'Fetching contacts failed!',
+                            error
+                        })
+                    })
+            })
+    },
+
     getUsers: async (req, res, next) => {
         const pageSize = req.body.take
         const currentPage = req.body.page
+        const isPaging = pageSize && currentPage
 
         const searchParams = {}
 
+        //info
         const name = req.body.name
         const surname = req.body.surname
         const patronymic = req.body.patronymic
-        const birthDate = req.body.birthDate
+        const dateFrom = req.body.dateFrom
+        const dateTo = req.body.dateTo
         const gender = req.body.gender
         const maritalStatus = req.body.maritalStatus
         const nationality = req.body.nationality
-
+        //address
         const city = req.body.city
         const country = req.body.country
         const street = req.body.street
@@ -32,8 +68,11 @@ module.exports = {
         if (patronymic) {
             searchParams.patronymic = patronymic
         }
-        if (birthDate) {
-            searchParams.birthDate = birthDate
+        if (dateFrom || dateTo) {
+            searchParams.birthDate = {
+                $gte: dateFrom,
+                $lt: dateTo
+            }
         }
         if (gender) {
             searchParams.gender = gender
@@ -46,39 +85,31 @@ module.exports = {
         }
 
         if (city) {
-            searchParams.city = city
+            searchParams['addresses.city'] = city
         }
         if (country) {
-            searchParams.country = country
+            searchParams['addresses.country'] = country
         }
         if (street) {
-            searchParams.street = street
+            searchParams['addresses.street'] = street
         }
         if (building) {
-            searchParams.patronymic = building
+            searchParams['addresses.building'] = building
         }
         if (flat) {
-            searchParams.flat = flat
+            searchParams['addresses.flat'] = flat
         }
         if (zipCode) {
-            searchParams.zipCode = zipCode
+            searchParams['addresses.zipCode'] = zipCode
         }
 
-
-        const usersQuery = User.find(searchParams).populate('address')
-        let fetchedUsers
-        if (pageSize && currentPage) {
-            usersQuery
-                .skip(pageSize * (currentPage - 1))
-                .limit(pageSize)
-        }
-        await usersQuery
-            .then(documents => {
-                fetchedUsers = documents
-                return User.countDocuments()
-            })
-            .then(count => {
-                const users = fetchedUsers.map(user => {
+        await User.find(searchParams)
+            .populate('addresses')
+            .skip(isPaging ? pageSize * (currentPage - 1) : 0)
+            .limit(isPaging ? pageSize : 0)
+            .then(async documents => {
+                const contactsCount = await User.countDocuments()
+                const users = documents.map(user => {
                     return {
                         id: user._id,
                         name: user.name,
@@ -88,22 +119,14 @@ module.exports = {
                         gender: user.gender,
                         maritalStatus: user.maritalStatus,
                         nationality: user.nationality,
-                        address: {
-                            city: user.address[0].city,
-                            country: user.address[0].country,
-                            street: user.address[0].street,
-                            building: user.address[0].building,
-                            flat: user.address[0].flat,
-                            zipCode: user.address[0].zipCode,
-                            fullAddress: user.address[0].fullAddress
-                        }
+                        address: user.addresses[0]
                     }
                 })
                 res.status(200).json({
                     code: 200,
                     isSuccess: true,
                     message: 'Contacts fetched successfully!',
-                    maxUsers: count,
+                    maxUsers: contactsCount,
                     data: users
                 })
             })
@@ -119,12 +142,12 @@ module.exports = {
 
         // let i = 0
         //
-        // while (i <= 20) {
+        // while (i <= 50) {
         //     const user = new User({
         //         name: `Имя${i}`,
         //         surname: `Фамилия${i}`,
         //         patronymic: `Отчество${i}`,
-        //         birthDate: '01.01.1990',
+        //         birthDate: `01.01.${2007 + i}`,
         //         gender: `${i % 2 === 0 ? 'мужской' : 'женский'}`,
         //         maritalStatus: `${i % 2 === 0 ? 'женат' : 'замужем'}`,
         //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`
@@ -143,7 +166,7 @@ module.exports = {
         //
         //             await address.save()
         //                 .then(async address => {
-        //                     user.address.push(address)
+        //                     user.addresses.push(address)
         //                     await user.save()
         //                 })
         //
@@ -152,9 +175,9 @@ module.exports = {
         //     i++
         // }
 
-        // User.find().populate('address').then(documents => res.json({users: documents}))
+        // User.find().populate('addresses').then(documents => res.json({users: documents}))
 
-        // User.deleteMany({})
-        // Address.deleteMany({})
+        // User.deleteMany({}).then(result =>  res.json({deleted: result}))
+        // Address.deleteMany({}).then(result =>  res.json({deleted: result}))
     }
 }
