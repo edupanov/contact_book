@@ -51,7 +51,8 @@ const ContactList = () => {
     if (data) {
         const updatedData = [...data]
         updatedData.map((item: ContactInterface) => {
-            item.address.fullAddress = Object.values(item.address).join(' ')
+            item.address.fullAddress =
+                `${item.address.zipCode} ${item.address.country}, г. ${item.address.city}, ул. ${item.address.street} ${item.address.building}/${item.address.flat}`
         })
     }
 

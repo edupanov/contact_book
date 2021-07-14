@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
+const AddressSchema = require('./address').addressSchema
 
-const UserSchema = new Schema({
+const userSchema = new Schema({
     name: {type: String, require: true},
     surname: {type: String, require: true},
     patronymic: {type: String, require: true},
@@ -9,10 +10,9 @@ const UserSchema = new Schema({
     gender: {type: String, require: true},
     maritalStatus: {type: String, require: true},
     nationality: {type: String, require: true},
-    address: [{
-        type: Schema.Types.ObjectId,
-        ref: "Address"
-    }]
+    addresses: [AddressSchema]
 }, {timestamps: true})
 
-module.exports = mongoose.model('User', UserSchema)
+const User = mongoose.model('User', userSchema)
+
+module.exports = {userSchema, User}
