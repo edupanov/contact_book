@@ -11,27 +11,18 @@ const AddPage = () => {
 
     const classes = useStyles()
 
-    const {addContact} = useActions()
-
     const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
 
-        const dateFrom = target.name === 'dateFrom'
-        const dateTo = target.name === 'dateTo'
-        const isDate = dateFrom || dateTo
 
-
-        const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
-        //
-        // setSearch({
-        //     ...search,
-        //     [dateFrom ? 'dateFrom' :
-        //         dateTo ? 'dateTo' :
-        //             target.name]: isDate ? replaceStr : target.value,
-        // })
+        setAdd({
+            ...add,
+            [target.name]: target.value,
+        })
     }
 
     const onSubmit = () => {
+
     }
 
 
@@ -48,50 +39,60 @@ const AddPage = () => {
                                                label="Имя"
                                                name={"name"}
                                                type="search"
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Фамилия"
                                                name={"surname"}
                                                type="search"
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Отчество"
                                                name={"patronymic"}
                                                type="search"
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.date}
                                                helperText="Дата рождения"
                                                name={"birthDate"}
                                                type="date"
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Пол"
                                                name={"gender"}
                                                type="search"
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Семейное положение"
                                                name={"maritalStatus"}
                                                type="search"
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Гражданство"
                                                name={"nationality"}
                                                type="search"
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Текущее место работы"
                                                name={"job"}
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Web site"
                                                name={"webSite"}
                                                type="search"
+                                                onChange={changeHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Email"
                                                name={"email"}
                                                type="search"
+                                                onChange={changeHandler}
                                     />
                                     <div>
                                         <h3 className={classes.title}>Адрес</h3>
@@ -99,31 +100,37 @@ const AddPage = () => {
                                                         label="Страна"
                                                         name={"country"}
                                                         type="search"
+                                                         onChange={changeHandler}
                                     />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
+                                                    onChange={changeHandler}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
+                                                    onChange={changeHandler}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер дома"
                                                    name={"building"}
                                                    type="number"
+                                                    onChange={changeHandler}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер квартиры"
                                                    name={"flat"}
                                                    type="number"
+                                                    onChange={changeHandler}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
                                                    type="number"
+                                                    onChange={changeHandler}
                                         />
                                     </div>
                                 </div>

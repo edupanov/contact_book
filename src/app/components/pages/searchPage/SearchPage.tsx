@@ -7,7 +7,7 @@ export type TargetType = {
     name: string
     value: string
 }
-
+// убрать очищение формы при submit
 const SearchPanel: FC = () => {
     const classes = useStyles()
 
