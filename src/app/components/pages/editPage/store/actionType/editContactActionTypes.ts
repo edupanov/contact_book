@@ -1,9 +1,9 @@
-import {CreateContactInterface} from "../../types/createContact.interface";
+import {EditContactInterface} from "../../types/editContact.interface";
 
 export interface CreateUserStateInterface {
     isLoading: boolean
     errors: object
-    data: CreateContactInterface
+    data: EditContactInterface
 }
 
 export enum CreateUserActionTypes {
@@ -18,7 +18,7 @@ interface setUser {
 
 interface setUserSuccess {
     type: CreateUserActionTypes.SET_USER_SUCCESS
-    payload: CreateContactInterface
+    payload: EditContactInterface
 }
 interface setUSerFailure {
     type: CreateUserActionTypes.SET_USER_FAILURE

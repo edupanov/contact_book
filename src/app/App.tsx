@@ -1,7 +1,7 @@
 import './App.css';
 import {History} from 'history'
 import {ConnectedRouter} from "connected-react-router";
-import MainPage from "./components/mainPage/MainPage";
+import MainPage from "./components/pages/mainPage/MainPage";
 import React from "react";
 
 interface AppHistory {

@@ -2,14 +2,21 @@ import React, {useEffect, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
-import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams} from "@material-ui/data-grid";
+import {
+    DataGrid,
+    GridCellParams,
+    GridColDef,
+    GridPageChangeParams,
+    GridRowId,
+    GridSelectionModelChangeParams
+} from "@material-ui/data-grid";
 import styles from "../mainForm/HeaderContactList.module.scss";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
-import SearchUser from "../searchUser/SearchPage";
+import SearchUser from "../pages/searchPage/SearchPage";
 import {ContactInterface} from "./types/contact.interface";
-import CreateContact from "../createContact/CreateContact";
+import EditPage from "../pages/editPage/EditPage";
 
 
 const ContactList = () => {
@@ -36,8 +43,11 @@ const ContactList = () => {
     ];
 
     const [search, setSearch] = useState<Boolean>(false)
+    const [edit, setEdit] = useState<Boolean>(false)
     const [add, setAdd] = useState<Boolean>(false)
     const [item, setItem] = useState<ContactInterface>({} as ContactInterface)
+    const [items, setItems] = useState<ContactInterface[]>([])
+    const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
 
 
     const {getContacts, setPage, setTake} = useActions()
@@ -45,14 +55,17 @@ const ContactList = () => {
 
     useEffect(() => {
         getContacts()
+        if (data && data.length > 0) {
+            const updatedData = [...data]
+            updatedData.map((item: ContactInterface) => {
+                item.address.fullAddress = Object.values(item.address).join(' ')
+            })
+
+            setItems(updatedData)
+        }
     }, [])
 
-    if (data) {
-        const updatedData = [...data]
-        updatedData.map((item: ContactInterface) => {
-            item.address.fullAddress = Object.values(item.address).join(' ')
-        })
-    }
+
 
     if (isLoading || !data) {
         return <CircularProgress
@@ -70,9 +83,28 @@ const ContactList = () => {
 
     const setCurrentContact = (id: string) => {
         const contactsForUpdate = [...data]
+        console.log(data)
         const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
         setItem(currentContact)
     }
+
+
+    // отменяет мультивыбор строк
+    const CancelMultiSelection = (selection: GridSelectionModelChangeParams) => {
+        const newSelectionModel = selection.selectionModel;
+
+        if (newSelectionModel.length > 1) {
+            const selectionSet = new Set(selectionModel);
+            const result = newSelectionModel.filter(
+                (s) => !selectionSet.has(s)
+            );
+
+            setSelectionModel(result);
+        } else {
+            setSelectionModel(newSelectionModel);
+        }
+    }
+
 
     return (
         <div style={{height: 400, width: '100%'}}>
@@ -95,7 +127,7 @@ const ContactList = () => {
                     }}>
                         <DeleteIcon/>
                     </IconButton>
-                    <IconButton aria-label="edit" onClick={() => setAdd(!add)}>
+                    <IconButton aria-label="edit" onClick={() => setEdit(!edit)}>
                         <EditIcon/>
                     </IconButton>
                     <IconButton aria-label="search" onClick={() => setSearch(!search)}>
@@ -117,9 +149,10 @@ const ContactList = () => {
             </Grid>
 
             {search ? <SearchUser/> : null}
-            {add ? <CreateContact item={item}/> : null}
+            {edit ? <EditPage item={item} setItem={setItem}/> : null}
 
-            <DataGrid rows={data}
+
+            <DataGrid rows={items}
                       columns={columns}
                       pageSize={take}
                       page={page - 1 || 0}
@@ -129,12 +162,12 @@ const ContactList = () => {
                       rowsPerPageOptions={[5, 10, 25]}
                       onPageChange={handlePaginationChange}
                       onPageSizeChange={handlePaginationChange}
-                      checkboxSelection
-                      disableSelectionOnClick
                       sortingMode={'server'}
                       onRowSelected={(params) => setCurrentContact(params.data.id)}
-
-
+                      checkboxSelection
+                      disableSelectionOnClick
+                      selectionModel={selectionModel}
+                      onSelectionModelChange={CancelMultiSelection}
             />
         </div>
     );

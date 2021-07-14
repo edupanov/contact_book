@@ -1,31 +1,25 @@
-import React, {ChangeEvent, useState} from 'react';
+import React from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {useActions} from "../../store/hooks/useActions";
-import {useStyles} from "./styles/createContactStyles";
-import {ContactInterface} from "../contactList/types/contact.interface";
-import {TargetType} from "../searchUser/SearchPage";
+import {useActions} from "../../../store/hooks/useActions";
+import {useStyles} from "./styles/editContactStyles";
+import {ContactInterface} from "../../contactList/types/contact.interface";
+import {addContact} from "./store/actionCreators/editContactActionCreator";
 
-const CreateContact = (props: { item: ContactInterface }) => {
+type CreateContactType = {
+    item: ContactInterface  ,
+    setItem: Function
+}
 
-    const [contact, setContact] = useState({})
+const EditPage = (props: CreateContactType) => {
 
-    const {item} = props
+    const {item, setItem} = props
 
     const classes = useStyles()
 
-    const {getContacts} = useActions()
-
-    const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const target: TargetType = (event.target)
-        setContact({
-            ...item,
-            [target.name]: target.value,
-        })
-    }
-    console.log(contact)
+    const {addContact} = useActions()
 
     const onSubmit = () => {
-        getContacts()
+        addContact(item)
     }
 
     if (Object.keys(item).length === 0) {
@@ -34,7 +28,7 @@ const CreateContact = (props: { item: ContactInterface }) => {
 
     return (
         <div className={classes.searchPanel}>
-            <h2 className={classes.title}>Создание и редактирование контакта </h2>
+            <h2 className={classes.title}>Редактирование контакта </h2>
             <Grid container justify="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
@@ -45,68 +39,69 @@ const CreateContact = (props: { item: ContactInterface }) => {
                                                label="Имя"
                                                name={"name"}
                                                type="search"
-                                               onChange={changeHandler}
-                                               defaultValue={props.item.name ? props.item.name : ''}
+                                               onChange={(e) => setItem({...item, name: e.target.value })}
+                                               value={item.name ? item.name : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Фамилия"
                                                name={"surname"}
                                                type="search"
-                                               onChange={changeHandler}
-                                               defaultValue={props.item.surname ? props.item.surname : ''}
+                                               onChange={(e) => setItem({...item, surname: e.target.value })}
+                                               value={item.surname ? item.surname : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Отчество"
                                                name={"patronymic"}
                                                type="search"
-                                               onChange={changeHandler}
-                                               defaultValue={props.item.patronymic ? props.item.patronymic : ''}
+                                               onChange={(e) => setItem({...item, patronymic: e.target.value })}
+                                               value={item.patronymic ? item.patronymic : ''}
                                     />
                                     <TextField className={classes.date}
                                                helperText="Дата рождения"
                                                name={"birthDate"}
                                                type="date"
-                                               onChange={changeHandler}
-                                               defaultValue={props.item.birthDate ? props.item.birthDate : ''}
+                                               onChange={(e) => setItem({...item, birthDate: e.target.value })}
+                                               value={item.birthDate ? item.birthDate : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Пол"
                                                name={"gender"}
                                                type="search"
-                                               onChange={changeHandler}
-                                               defaultValue={props.item.gender ? props.item.gender : ''}
+                                               onChange={(e) => setItem({...item, gender: e.target.value })}
+                                               value={item.gender ? item.gender : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Семейное положение"
                                                name={"maritalStatus"}
                                                type="search"
-                                               onChange={changeHandler}
-                                               defaultValue={props.item.maritalStatus ? props.item.maritalStatus : ''}
+                                               onChange={(e) => setItem({...item, maritalStatus: e.target.value })}
+                                               value={item.maritalStatus ? item.maritalStatus : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Гражданство"
                                                name={"nationality"}
                                                type="search"
-                                               onChange={changeHandler}
-                                               defaultValue={props.item.nationality ? props.item.nationality : ''}
+                                               onChange={(e) => setItem({...item, nationality: e.target.value })}
+                                               value={item.nationality ? item.nationality : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Текущее место работы"
                                                name={"job"}
                                                type="search"
-                                               onChange={changeHandler}
+                                               onChange={(e) => setItem({...item, job: e.target.value })}
+
                                     />
                                     <TextField className={classes.input}
                                                label="Web site"
                                                name={"webSite"}
                                                type="search"
-                                               onChange={changeHandler}
+                                               onChange={(e) => setItem({...item, webSite: e.target.value })}
                                     />
                                     <TextField className={classes.input}
                                                label="Email"
                                                name={"email"}
                                                type="search"
-                                               onChange={changeHandler}
+                                               onChange={(e) => setItem({...item, email: e.target.value })}
                                     />
                                     <div>
                                         <h3 className={classes.title}>Адрес</h3>
@@ -114,43 +109,43 @@ const CreateContact = (props: { item: ContactInterface }) => {
                                                         label="Страна"
                                                         name={"country"}
                                                         type="search"
-                                                        onChange={changeHandler}
-                                                        defaultValue={props.item?.address!.country! ? props.item.address.country : ''}
+                                                        onChange={(e) => setItem({...item, address:{...item.address, country: e.target.value} })}
+                                                        value={item.address.country ? item.address.country : ''}
                                     />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
-                                                   onChange={changeHandler}
-                                                   defaultValue={props.item?.address.city! ? props.item.address.city : ''}
+                                                   onChange={(e) => setItem({...item, address:{...item.address, city: e.target.value} })}
+                                                   value={item.address.city! ? item.address.city : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
-                                                   onChange={changeHandler}
-                                                   defaultValue={props.item?.address.street ? props.item.address.street : ''}
+                                                   onChange={(e) => setItem({...item, address:{...item.address, street: e.target.value} })}
+                                                   value={item.address.street ? item.address.street : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер дома"
                                                    name={"building"}
                                                    type="number"
-                                                   onChange={changeHandler}
-                                                   defaultValue={props.item?.address.building! ? props.item.address.building : ''}
+                                                   onChange={(e) => setItem({...item, address:{...item.address, building: e.target.value} })}
+                                                   value={item.address.building ? item.address.building : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер квартиры"
                                                    name={"flat"}
                                                    type="number"
-                                                   onChange={changeHandler}
-                                                   defaultValue={props.item?.address.flat! ? props.item.address.flat : ''}
+                                                   onChange={(e) => setItem({...item, address:{...item.address, flat: e.target.value} })}
+                                                   value={item.address.flat ? item.address.flat : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
                                                    type="number"
-                                                   onChange={changeHandler}
-                                                   defaultValue={props.item?.address.zipCode! ? props.item.address.zipCode : ''}
+                                                   onChange={(e) => setItem({...item, address:{...item.address, zipCode: e.target.value} })}
+                                                   value={item.address.zipCode ? item.address.zipCode : ''}
                                         />
                                     </div>
                                 </div>
@@ -172,4 +167,4 @@ const CreateContact = (props: { item: ContactInterface }) => {
     );
 };
 
-export default CreateContact;
+export default EditPage;

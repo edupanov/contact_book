@@ -1,8 +1,8 @@
-import {CreateContactInterface} from "../types/createContact.interface";
-import {ContactsUrls} from "../../../../urls/contactsUrls";
-import {RequestSender} from "../../../shared/services/requestSenderService/requestSender";
+import {EditContactInterface} from "../types/editContact.interface";
+import {ContactsUrls} from "../../../../../urls/contactsUrls";
+import {RequestSender} from "../../../../shared/services/requestSenderService/requestSender";
 
-export const getContact = async (contact: CreateContactInterface) => {
+export const getContact = async (contact: EditContactInterface) => {
     const BASE_URL = "http://localhost:8080/api"
 
     const fullUrl = `${BASE_URL}${ContactsUrls.SET_USER_URL}`
@@ -12,7 +12,7 @@ export const getContact = async (contact: CreateContactInterface) => {
     return result.json()
 }
 
-export const addContact = async (contact: CreateContactInterface) => {
+export const addContact = async (contact: EditContactInterface) => {
     const BASE_URL = "http://localhost:8080/api"
 
     const fullUrl = `${BASE_URL}${ContactsUrls.SET_USER_URL}`

@@ -2,7 +2,7 @@ import React from 'react';
 import HeaderMainPage from "./HeaderMainPage";
 import {Container} from "@material-ui/core";
 import {Route} from "react-router-dom";
-import MainForm from "../mainForm/MainForm";
+import MainForm from "../../mainForm/MainForm";
 import style from './mainPage.module.scss'
 
 const MainPage = () => {

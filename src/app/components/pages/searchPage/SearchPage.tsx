@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {useActions} from "../../store/hooks/useActions";
-import {useStyles} from "../createContact/styles/createContactStyles";
+import {useActions} from "../../../store/hooks/useActions";
+import {useStyles} from "../editPage/styles/editContactStyles";
 
 export type TargetType = {
     name: string

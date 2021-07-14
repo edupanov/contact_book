@@ -1,9 +1,9 @@
 import {Dispatch} from "redux";
 import {LoginActionType, LoginActionTypes} from "../ActionTypes/loginActionTypes";
-import {RootState} from "../../../../../store/rootReducer";
-import {ContactsUrls} from "../../../../../../urls/contactsUrls";
-import {RequestSender} from "../../../../../shared/services/requestSenderService/requestSender";
-import {DefaultPagedResponse} from "../../../../../shared/types/defaultPagedResponse";
+import {RootState} from "../../../../../../store/rootReducer";
+import {ContactsUrls} from "../../../../../../../urls/contactsUrls";
+import {RequestSender} from "../../../../../../shared/services/requestSenderService/requestSender";
+import {DefaultPagedResponse} from "../../../../../../shared/types/defaultPagedResponse";
 import {LoginInterface} from "../../types/login.interface";
 
 

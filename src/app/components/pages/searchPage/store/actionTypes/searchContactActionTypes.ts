@@ -4,12 +4,12 @@ export interface SearchUserStateInterface {
     searchParams: SearchParamsInterface
 }
 
-export enum SearchUserActionTypes {
+export enum SearchContactActionTypes {
     SET_SEARCH_PARAMS = '[Search panel] Set Search Params',
 }
 
 interface setSearchParams {
-    type: SearchUserActionTypes.SET_SEARCH_PARAMS,
+    type: SearchContactActionTypes.SET_SEARCH_PARAMS,
     payload: SearchParamsInterface
 }
 

@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useFormik} from "formik";
-import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
-import {useActions} from "../../../store/hooks/useActions";
+import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
+import {useActions} from "../../../../store/hooks/useActions";
 
 type FormikErrorType = {
     email?: string

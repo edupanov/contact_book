@@ -1,14 +1,14 @@
 import {Dispatch} from "redux";
-import {CreateUserActionType, CreateUserActionTypes} from "../actionType/createContactActionTypes";
-import {CreateContactInterface} from "../../types/createContact.interface";
-import {RootState} from "../../../../store/rootReducer";
+import {CreateUserActionType, CreateUserActionTypes} from "../actionType/editContactActionTypes";
+import {EditContactInterface} from "../../types/editContact.interface";
+import {RootState} from "../../../../../store/rootReducer";
 import * as ContactRequests from '../../requests/contactRequests'
-import * as ContactListRequests from '../../../contactList/requests/contactListRequests'
-import {ContactActionTypes, ContactsActionType} from "../../../contactList/store/actionTypes/contactListActiontypes";
-import {ContactInterface} from "../../../contactList/types/contact.interface";
+import * as ContactListRequests from '../../../../contactList/requests/contactListRequests'
+import {ContactActionTypes, ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
+import {ContactInterface} from "../../../../contactList/types/contact.interface";
 
 
-export const addContact = (contact: CreateContactInterface) =>
+export const addContact = (contact: EditContactInterface) =>
     async (dispatch: Dispatch<CreateUserActionType | ContactsActionType>, getState: () => RootState) => {
         dispatch({type: CreateUserActionTypes.SET_USER})
 

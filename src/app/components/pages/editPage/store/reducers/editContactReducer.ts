@@ -1,4 +1,4 @@
-import {CreateUserActionType, CreateUserStateInterface, CreateUserActionTypes} from "../actionType/createContactActionTypes";
+import {CreateUserActionType, CreateUserStateInterface, CreateUserActionTypes} from "../actionType/editContactActionTypes";
 
 const initialState: CreateUserStateInterface = {
    isLoading: false,

@@ -1,17 +1,17 @@
 import {
     SearchPageActionType,
-    SearchUserActionTypes,
+    SearchContactActionTypes,
     SearchUserStateInterface
-} from "../actionTypes/searchUserActionTypes";
+} from "../actionTypes/searchContactActionTypes";
 import {SearchParamsInterface} from "../../types/searcParams.interface";
 
 const initialState: SearchUserStateInterface = {
     searchParams: {} as SearchParamsInterface
 }
 
-export const searchUserReducer = (state: SearchUserStateInterface = initialState, action: SearchPageActionType): SearchUserStateInterface => {
+export const searchContactReducer = (state: SearchUserStateInterface = initialState, action: SearchPageActionType): SearchUserStateInterface => {
     switch (action.type) {
-        case SearchUserActionTypes.SET_SEARCH_PARAMS:
+        case SearchContactActionTypes.SET_SEARCH_PARAMS:
             return {
                 ...state,
                 searchParams: action.payload
