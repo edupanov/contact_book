@@ -12,28 +12,28 @@ export const addContact = (contact: EditContactInterface) =>
     async (dispatch: Dispatch<CreateUserActionType | ContactsActionType>, getState: () => RootState) => {
         dispatch({type: CreateUserActionTypes.SET_USER})
 
-        await ContactRequests.addContact(contact) // вынесли логику в файл contactListRequest, для переиспользования
-            .then(async response => {
-                if (response.isSuccess) {
-                    const {searchParams} = getState().search  //получаем парметры из текущего стейта
-                    const {take, page} = getState().contacts
-
-                    const search = {
-                        ...searchParams,
-                        page, take
-                    }
-                    await ContactListRequests.getContact(search)
-                        .then(response => {
-                            dispatch({
-                                type: ContactActionTypes.GET_CONTACTS_SUCCESS,
-                                payload: {
-                                    users: response?.data as Array<ContactInterface>,
-                                    maxUsers: response?.totalItems
-                                }
-                            })
-                        })
-                }
-            })
-            .catch()
+        // await ContactRequests.addContact(contact) // вынесли логику в файл contactListRequest, для переиспользования
+        //     .then(async response => {
+        //         if (response.isSuccess) {
+        //             const {searchParams} = getState().search  //получаем парметры из текущего стейта
+        //             const {take, page} = getState().contacts
+        //
+        //             const search = {
+        //                 ...searchParams,
+        //                 page, take
+        //             }
+        //             await ContactListRequests.getContact(search)
+        //                 .then(response => {
+        //                     dispatch({
+        //                         type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+        //                         payload: {
+        //                             users: response?.data as Array<ContactInterface>,
+        //                             maxUsers: response?.totalItems
+        //                         }
+        //                     })
+        //                 })
+        //         }
+        //     })
+        //     .catch()
 
     }

@@ -1,10 +1,10 @@
-import { connectRouter } from "connected-react-router";
+import {connectRouter} from "connected-react-router";
 import {History} from "history";
 import {CombinedState, combineReducers} from "redux";
 import {contactsReducer} from "../components/contactList/store/reducers/contactsReducer";
 import {LoginReducer} from "../components/pages/mainPage/loginForm/store/reducers/loginReducer";
 import {searchContactReducer} from "../components/pages/searchPage/store/reducers/searchContactReducer";
-import {createUserReducer} from "../components/pages/editPage/store/reducers/editContactReducer";
+import {createContactReducer} from "../components/pages/addPage/store/reducers/addContactReducer";
 
 let rootState = {} as CombinedState<any>
 
@@ -16,7 +16,7 @@ export const createRootReducer = (history: History) => {
         contacts: contactsReducer,
         login: LoginReducer,
         search: searchContactReducer,
-        createUser: createUserReducer
+        createUser: createContactReducer
     })
 
     return rootState

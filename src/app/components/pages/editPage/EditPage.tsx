@@ -1,31 +1,51 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {ContactInterface} from "../../contactList/types/contact.interface";
-import {addContact} from "./store/actionCreators/editContactActionCreator";
+import {TargetType} from "../searchPage/SearchPage";
 
-type CreateContactType = {
-    item: ContactInterface  ,
-    setItem: Function
+type UpdateContactType = {
+    updateContact: ContactInterface,
+    setUpdateContact: Function
 }
 
-const EditPage = (props: CreateContactType) => {
+const EditPage = (props: UpdateContactType) => {
 
-    const {item, setItem} = props
+    const {updateContact, setUpdateContact} = props
 
     const classes = useStyles()
 
-    const {addContact} = useActions()
+    const {} = useActions()
+
+    const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const target: TargetType = (event.target)
+        const isDate = target.name === 'birthDate'
+        const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
+
+
+        setUpdateContact({
+            ...updateContact,
+            [target.name]: isDate ? replaceStr : target.value,
+        })
+    }
+
+   const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
+       const target: TargetType = (event.target)
+       setUpdateContact({
+           ...updateContact,
+           address: {...updateContact.address, [target.name]: target.value}
+       })
+   }
 
     const onSubmit = () => {
-        addContact(item)
+
     }
 
-    if (Object.keys(item).length === 0) {
+    if (Object.keys(updateContact).length === 0) {
         return <p className={classes.errorTitle}>Выберите пользователя из списка</p>
     }
-
+    console.log(updateContact)
     return (
         <div className={classes.searchPanel}>
             <h2 className={classes.title}>Редактирование контакта </h2>
@@ -39,69 +59,50 @@ const EditPage = (props: CreateContactType) => {
                                                label="Имя"
                                                name={"name"}
                                                type="search"
-                                               onChange={(e) => setItem({...item, name: e.target.value })}
-                                               value={item.name ? item.name : ''}
+                                               onChange={changeContactInfoHandler}
+                                               value={updateContact.name ? updateContact.name : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Фамилия"
                                                name={"surname"}
                                                type="search"
-                                               onChange={(e) => setItem({...item, surname: e.target.value })}
-                                               value={item.surname ? item.surname : ''}
+                                               onChange={changeContactInfoHandler}
+                                               value={updateContact.surname ? updateContact.surname : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Отчество"
                                                name={"patronymic"}
                                                type="search"
-                                               onChange={(e) => setItem({...item, patronymic: e.target.value })}
-                                               value={item.patronymic ? item.patronymic : ''}
+                                               onChange={changeContactInfoHandler}
+                                               value={updateContact.patronymic ? updateContact.patronymic : ''}
                                     />
                                     <TextField className={classes.date}
                                                helperText="Дата рождения"
                                                name={"birthDate"}
                                                type="date"
-                                               onChange={(e) => setItem({...item, birthDate: e.target.value })}
-                                               value={item.birthDate ? item.birthDate : ''}
+                                               onChange={changeContactInfoHandler}
+                                               value={updateContact.birthDate ? updateContact.birthDate.split('.').reverse().join('-') : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Пол"
                                                name={"gender"}
                                                type="search"
-                                               onChange={(e) => setItem({...item, gender: e.target.value })}
-                                               value={item.gender ? item.gender : ''}
+                                               onChange={changeContactInfoHandler}
+                                               value={updateContact.gender ? updateContact.gender : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Семейное положение"
                                                name={"maritalStatus"}
                                                type="search"
-                                               onChange={(e) => setItem({...item, maritalStatus: e.target.value })}
-                                               value={item.maritalStatus ? item.maritalStatus : ''}
+                                               onChange={changeContactInfoHandler}
+                                               value={updateContact.maritalStatus ? updateContact.maritalStatus : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Гражданство"
                                                name={"nationality"}
                                                type="search"
-                                               onChange={(e) => setItem({...item, nationality: e.target.value })}
-                                               value={item.nationality ? item.nationality : ''}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Текущее место работы"
-                                               name={"job"}
-                                               type="search"
-                                               onChange={(e) => setItem({...item, job: e.target.value })}
-
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Web site"
-                                               name={"webSite"}
-                                               type="search"
-                                               onChange={(e) => setItem({...item, webSite: e.target.value })}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Email"
-                                               name={"email"}
-                                               type="search"
-                                               onChange={(e) => setItem({...item, email: e.target.value })}
+                                               onChange={changeContactInfoHandler}
+                                               value={updateContact.nationality ? updateContact.nationality : ''}
                                     />
                                     <div>
                                         <h3 className={classes.title}>Адрес</h3>
@@ -109,43 +110,43 @@ const EditPage = (props: CreateContactType) => {
                                                         label="Страна"
                                                         name={"country"}
                                                         type="search"
-                                                        onChange={(e) => setItem({...item, address:{...item.address, country: e.target.value} })}
-                                                        value={item.address.country ? item.address.country : ''}
+                                                        onChange={changeContactAddressHandler}
+                                                        value={updateContact.address.country ? updateContact.address.country : ''}
                                     />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
-                                                   onChange={(e) => setItem({...item, address:{...item.address, city: e.target.value} })}
-                                                   value={item.address.city! ? item.address.city : ''}
+                                                   onChange={changeContactAddressHandler}
+                                                   value={updateContact.address.city! ? updateContact.address.city : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
-                                                   onChange={(e) => setItem({...item, address:{...item.address, street: e.target.value} })}
-                                                   value={item.address.street ? item.address.street : ''}
+                                                   onChange={changeContactAddressHandler}
+                                                   value={updateContact.address.street ? updateContact.address.street : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер дома"
                                                    name={"building"}
                                                    type="number"
-                                                   onChange={(e) => setItem({...item, address:{...item.address, building: e.target.value} })}
-                                                   value={item.address.building ? item.address.building : ''}
+                                                   onChange={changeContactAddressHandler}
+                                                   value={updateContact.address.building ? updateContact.address.building : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер квартиры"
                                                    name={"flat"}
                                                    type="number"
-                                                   onChange={(e) => setItem({...item, address:{...item.address, flat: e.target.value} })}
-                                                   value={item.address.flat ? item.address.flat : ''}
+                                                   onChange={changeContactAddressHandler}
+                                                   value={updateContact.address.flat ? updateContact.address.flat : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
                                                    type="number"
-                                                   onChange={(e) => setItem({...item, address:{...item.address, zipCode: e.target.value} })}
-                                                   value={item.address.zipCode ? item.address.zipCode : ''}
+                                                   onChange={changeContactAddressHandler}
+                                                   value={updateContact.address.zipCode ? updateContact.address.zipCode : ''}
                                         />
                                     </div>
                                 </div>

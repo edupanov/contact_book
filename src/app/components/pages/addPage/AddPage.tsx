@@ -1,146 +1,160 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, FC, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
-import {useStyles} from "../editPage/styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
+import {useStyles} from "../editPage/styles/editContactStyles";
 
-const AddPage = () => {
-
-    const [add, setAdd] = useState({})
-
-
+export type AddPage = {
+    name: string
+    value: string
+}
+const AddPage: FC = () => {
     const classes = useStyles()
 
-    const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const {newContact, getContacts} = useActions()
+
+    const [contactInfo, setContactInfo] = useState({})
+    const [contactAddress, setContactAddress] = useState({})
+
+    const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
+
+        const target: TargetType = (event.target)
+        const isDate = target.name === 'birthDate'
+        const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
+
+
+        setContactInfo({
+            ...contactInfo,
+            [target.name]: isDate ? replaceStr : target.value,
+        })
+    }
+
+    const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
+
         const target: TargetType = (event.target)
 
-
-        setAdd({
-            ...add,
+        setContactAddress({
+            ...contactAddress,
             [target.name]: target.value,
         })
     }
 
     const onSubmit = () => {
-
+        const contact = {
+           contact: {
+               ...contactInfo,
+               address: contactAddress
+           }
+        }
+        newContact(contact)
+        getContacts()
     }
-
-
+    console.log(contactInfo)
     return (
         <div className={classes.searchPanel}>
-            <h2 className={classes.title}>Редактирование контакта </h2>
+            <h2 className={classes.title}>Добавление нового контакта</h2>
             <Grid container justify="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
-                        <FormControl>
-                            <FormGroup>
+                        <FormControl className={classes.form}>
+                            <FormGroup className={classes.row}>
                                 <div>
-                                    <TextField className={classes.input}
-                                               label="Имя"
-                                               name={"name"}
-                                               type="search"
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Фамилия"
-                                               name={"surname"}
-                                               type="search"
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Отчество"
-                                               name={"patronymic"}
-                                               type="search"
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.date}
-                                               helperText="Дата рождения"
-                                               name={"birthDate"}
-                                               type="date"
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Пол"
-                                               name={"gender"}
-                                               type="search"
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Семейное положение"
-                                               name={"maritalStatus"}
-                                               type="search"
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Гражданство"
-                                               name={"nationality"}
-                                               type="search"
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Текущее место работы"
-                                               name={"job"}
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Web site"
-                                               name={"webSite"}
-                                               type="search"
-                                                onChange={changeHandler}
-                                    />
-                                    <TextField className={classes.input}
-                                               label="Email"
-                                               name={"email"}
-                                               type="search"
-                                                onChange={changeHandler}
-                                    />
+                                    <div className={classes.period}>
+                                        <TextField className={classes.input}
+                                                   label="Имя"
+                                                   name={"name"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Фамилия"
+                                                   name={"surname"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Отчество"
+                                                   name={"patronymic"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Пол"
+                                                   name={"gender"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Семейное положение"
+                                                   name={"maritalStatus"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Гражданство"
+                                                   name={"nationality"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                        />
+                                    </div>
+                                    <div className={classes.dateWrapper}>
+                                        <div>
+                                            <h3 className={classes.title}>Возраст</h3>
+                                        </div>
+                                        <div className={classes.period}>
+                                            <TextField className={classes.date}
+                                                       helperText="Дата рождения"
+                                                       name={"birthDate"}
+                                                       type="date"
+                                                       onChange={changeContactInfoHandler}
+                                            />
+
+                                        </div>
+                                    </div>
                                     <div>
                                         <h3 className={classes.title}>Адрес</h3>
                                         <br/><TextField className={classes.input}
                                                         label="Страна"
                                                         name={"country"}
                                                         type="search"
-                                                         onChange={changeHandler}
+                                                        onChange={changeContactAddressHandler}
                                     />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
-                                                    onChange={changeHandler}
+                                                   onChange={changeContactAddressHandler}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
-                                                    onChange={changeHandler}
+                                                   onChange={changeContactAddressHandler}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер дома"
                                                    name={"building"}
                                                    type="number"
-                                                    onChange={changeHandler}
+                                                   onChange={changeContactAddressHandler}
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер квартиры"
                                                    name={"flat"}
                                                    type="number"
-                                                    onChange={changeHandler}
+                                                   onChange={changeContactAddressHandler}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
                                                    type="number"
-                                                    onChange={changeHandler}
+                                                   onChange={changeContactAddressHandler}
                                         />
                                     </div>
+
                                 </div>
                                 <div>
-                                    <Button
-                                        className={classes.button}
-                                        type={'submit'}
-                                        variant={'contained'}
-                                        color={'primary'}
-                                    >Сохранить изменения</Button>
+                                    <Button type={'submit'} variant={'contained'} color={'primary'}
+                                            className={classes.button}>Создать новый контак</Button>
                                 </div>
                             </FormGroup>
                         </FormControl>
@@ -148,7 +162,6 @@ const AddPage = () => {
                 </Grid>
             </Grid>
         </div>
-
     );
 };
 

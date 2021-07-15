@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
@@ -17,6 +17,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import SearchUser from "../pages/searchPage/SearchPage";
 import {ContactInterface} from "./types/contact.interface";
 import EditPage from "../pages/editPage/EditPage";
+import AddPage from "../pages/addPage/AddPage";
 
 
 const ContactList = () => {
@@ -42,6 +43,14 @@ const ContactList = () => {
         },
     ];
 
+    const usePrevious = (value: any) => {
+        const ref = useRef();
+        useEffect(() => {
+            ref.current = value;
+        });
+        return ref.current;
+    }
+
     const [search, setSearch] = useState<Boolean>(false)
     const [edit, setEdit] = useState<Boolean>(false)
     const [add, setAdd] = useState<Boolean>(false)
@@ -53,26 +62,35 @@ const ContactList = () => {
     const {getContacts, setPage, setTake} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
 
-    useEffect(() => {
-        getContacts()
+    const prevVal = usePrevious(data)
 
-        if (data && data.length > 0) {
-            const updatedData = [...data]
-            updatedData.map((item: ContactInterface) => {
-                item.address.fullAddress = `${item.address.zipCode} ${item.address.country}, г. ${item.address.city}, ул. ${item.address.street} ${item.address.building}/${item.address.flat}`
-            })
-
-            setItems(updatedData)
-        }
-    }, [])
-
-
-    if (data) {
+    const updateFullAddress = (data: ContactInterface[]) => {
         const updatedData = [...data]
         updatedData.map((item: ContactInterface) => {
             item.address.fullAddress = `${item.address.zipCode} ${item.address.country}, г. ${item.address.city}, ул. ${item.address.street} ${item.address.building}/${item.address.flat}`
         })
+
+        setItems(updatedData)
+
     }
+
+    useEffect(() => {
+        getContacts()
+        if (data && data.length > 0) {
+            updateFullAddress(data)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            if (data !== prevVal) {
+                updateFullAddress(data)
+            }
+        } else {
+            setItems([])
+        }
+    }, [data])
+
 
     if (isLoading || !data) {
         return <CircularProgress
@@ -90,7 +108,6 @@ const ContactList = () => {
 
     const setCurrentContact = (id: string) => {
         const contactsForUpdate = [...data]
-        console.log(data)
         const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
         setItem(currentContact)
     }
@@ -111,7 +128,6 @@ const ContactList = () => {
             setSelectionModel(newSelectionModel);
         }
     }
-
 
     return (
         <div style={{height: 400, width: '100%'}}>
@@ -156,7 +172,8 @@ const ContactList = () => {
             </Grid>
 
             {search ? <SearchUser/> : null}
-            {edit ? <EditPage item={item} setItem={setItem}/> : null}
+            {edit ? <EditPage updateContact={item} setUpdateContact={setItem}/> : null}
+            {add ? <AddPage/> : null}
 
 
             <DataGrid rows={items}

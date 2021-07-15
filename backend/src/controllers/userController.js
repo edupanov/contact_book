@@ -5,8 +5,35 @@ module.exports = {
 
     createContact: async (req, res, next) => {
         let newContact = req.body.contact
-        const newContactId = newContact.id
 
+        console.log(newContact)
+        await User.create(newContact)
+            .then(async user => {
+                if (user._id) {
+                    await Address.create(newContact.address).then(address => {
+                        if (address._id) {
+                            user.addresses.push(address)
+                            user.save()
+                            res.status(200).json({
+                                message: 'Contact was created successfully!'
+                            })
+
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                res.status(500).json({
+                    message: 'Fetching contacts failed!',
+                    error
+                })
+            })
+    },
+
+    updateContact: async (req, res, next) => {
+        let newContact = req.body.contact
+        const newContactId = newContact.id
+        console.log(newContact)
         await User.findById({_id: newContactId})
             .then(async document => {
                 if (document._id) {
@@ -68,11 +95,17 @@ module.exports = {
         if (patronymic) {
             searchParams.patronymic = patronymic
         }
-        if (dateFrom || dateTo) {
+        if (dateFrom && dateTo) {
             searchParams.birthDate = {
                 $gte: dateFrom,
                 $lt: dateTo
             }
+        }
+        if (dateTo) {
+            searchParams.birthDate = {$gte: dateFrom}
+        }
+        if (dateFrom) {
+            searchParams.birthDate = { $lt: dateTo}
         }
         if (gender) {
             searchParams.gender = gender
