@@ -18,6 +18,8 @@ import SearchUser from "../pages/searchPage/SearchPage";
 import {ContactInterface} from "./types/contact.interface";
 import EditPage from "../pages/editPage/EditPage";
 import AddPage from "../pages/addPage/AddPage";
+import {NavLink, Route, Switch} from 'react-router-dom';
+import Routes from "../../routes/Routes";
 
 const ContactList = () => {
 
@@ -127,33 +129,42 @@ const ContactList = () => {
             setSelectionModel(newSelectionModel);
         }
     }
-    console.log(items)
+
     return (
+
         <div style={{height: 400, width: '100%'}}>
+
             <Grid
                 className={styles.headerWrapper}
                 container
                 direction="row"
                 justify="space-between"
                 alignItems="center"
-            >
+            > <NavLink className={styles.link} to={'/contacts/create'}>
                 <Button
                     variant="outlined"
                     color="primary"
                     onClick={() => setAdd(!add)}>
                     Создать новый контакт
                 </Button>
-                <div className={""}>
+            </NavLink>
+
+                <div>
                     <IconButton aria-label="delete" onClick={() => {
                         console.log('delete')
                     }}>
                         <DeleteIcon/>
+
                     </IconButton>
                     <IconButton aria-label="edit" onClick={() => setEdit(!edit)}>
-                        <EditIcon/>
+                        <NavLink to={'/contacts/edit'}>
+                            <EditIcon/>
+                        </NavLink>
                     </IconButton>
                     <IconButton aria-label="search" onClick={() => setSearch(!search)}>
-                        <SearchIcon/>
+                        <NavLink to={'/contacts/search'}>
+                            <SearchIcon/>
+                        </NavLink>
                     </IconButton>
                     <Button
                         variant="contained"
@@ -166,14 +177,17 @@ const ContactList = () => {
                         <Typography variant="button" style={{fontSize: '0.79rem'}}>
                             Отправить E-mail
                         </Typography>
+
                     </Button>
                 </div>
             </Grid>
-
-            {search ? <SearchUser/> : null}
-            {edit ? <EditPage contact={item} setContact={setItem}/> : null}
-            {add ? <AddPage/> : null}
-
+<Routes search={search} edit={edit} item={item} setItem={setItem} add={add}/>
+            {/*<Switch>*/}
+            {/*    <Route exact path="/contacts/search" render={() => search ? <SearchUser/> : null}/>*/}
+            {/*    <Route exact path="/contacts/edit"*/}
+            {/*           render={() => edit ? <EditPage contact={item} setContact={setItem}/> : null}/>*/}
+            {/*    <Route exact path="/contacts/create" render={() => add ? <AddPage/> : null}/>*/}
+            {/*</Switch>*/}
 
             <DataGrid rows={items}
                       columns={columns}
@@ -192,7 +206,9 @@ const ContactList = () => {
                       selectionModel={selectionModel}
                       onSelectionModelChange={CancelMultiSelection}
             />
+
         </div>
+
     );
 }
 
