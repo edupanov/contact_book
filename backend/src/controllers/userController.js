@@ -107,6 +107,12 @@ module.exports = {
         if (dateFrom) {
             searchParams.birthDate = { $lt: dateTo}
         }
+        if (dateFrom) {
+            searchParams.birthDate = {$gte: dateFrom}
+        }
+        if (dateTo) {
+            searchParams.birthDate = { $lt: dateTo}
+        }
         if (gender) {
             searchParams.gender = gender
         }
