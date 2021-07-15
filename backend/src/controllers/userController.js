@@ -36,18 +36,18 @@ module.exports = {
         let contactForUpdate = req.body.contact
         const id = contactForUpdate.id
 
-        console.log(contactForUpdate)
-
         await User.findByIdAndUpdate(id, contactForUpdate)
             .then(async updatedUser => {
                 if (updatedUser._id) {
+                    console.log(updatedUser)
                     await Address.findByIdAndUpdate(updatedUser.addresses._id, contactForUpdate.address)
                         .then(updatedAddress => {
                             if (updatedAddress._id) {
-                                updatedUser.sddresses.push(updatedAddress)
+                                updatedUser.addresses.push(updatedAddress)
                                 updatedUser.save()
                                     .then(user => {
                                         if (user._id) {
+                                            console.log(user)
                                             res.status(200).json({
                                                 message: 'Contact was updated successfully!',
                                                 updatedContact: user

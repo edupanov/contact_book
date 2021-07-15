@@ -19,7 +19,6 @@ import {ContactInterface} from "./types/contact.interface";
 import EditPage from "../pages/editPage/EditPage";
 import AddPage from "../pages/addPage/AddPage";
 
-
 const ContactList = () => {
 
     const columns: GridColDef[] = [
@@ -128,7 +127,7 @@ const ContactList = () => {
             setSelectionModel(newSelectionModel);
         }
     }
-
+    console.log(items)
     return (
         <div style={{height: 400, width: '100%'}}>
             <Grid
@@ -172,7 +171,7 @@ const ContactList = () => {
             </Grid>
 
             {search ? <SearchUser/> : null}
-            {edit ? <EditPage updateContact={item} setUpdateContact={setItem}/> : null}
+            {edit ? <EditPage contact={item} setContact={setItem}/> : null}
             {add ? <AddPage/> : null}
 
 

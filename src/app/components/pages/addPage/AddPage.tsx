@@ -4,14 +4,10 @@ import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
 import {useStyles} from "../editPage/styles/editContactStyles";
 
-export type AddPage = {
-    name: string
-    value: string
-}
 const AddPage: FC = () => {
     const classes = useStyles()
 
-    const {newContact, getContacts} = useActions()
+    const {addContact, getContacts} = useActions()
 
     const [contactInfo, setContactInfo] = useState({})
     const [contactAddress, setContactAddress] = useState({})
@@ -46,7 +42,7 @@ const AddPage: FC = () => {
                address: contactAddress
            }
         }
-        newContact(contact)
+        addContact(contact)
         getContacts()
     }
     console.log(contactInfo)

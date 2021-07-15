@@ -5,6 +5,6 @@ const router = express.Router()
 
 router.post('',  UserController.getUsers)
 router.post('/create',  UserController.createContact)
-router.post('/update',  UserController.updateContact)
+router.put('/update',  UserController.updateContact)
 
 module.exports = router
