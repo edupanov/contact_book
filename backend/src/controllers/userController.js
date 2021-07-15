@@ -6,7 +6,6 @@ module.exports = {
     createContact: async (req, res, next) => {
         let newContact = req.body.contact
 
-        console.log(newContact)
         await User.create(newContact)
             .then(async user => {
                 if (user._id) {
@@ -14,10 +13,13 @@ module.exports = {
                         if (address._id) {
                             user.addresses.push(address)
                             user.save()
-                            res.status(200).json({
-                                message: 'Contact was created successfully!'
-                            })
-
+                                .then(user => {
+                                    if (user._id) {
+                                        res.status(200).json({
+                                            message: 'Contact was created successfully!'
+                                        })
+                                    }
+                                })
                         }
                     })
                 }
@@ -31,34 +33,36 @@ module.exports = {
     },
 
     updateContact: async (req, res, next) => {
-        let newContact = req.body.contact
-        const newContactId = newContact.id
-        console.log(newContact)
-        await User.findById({_id: newContactId})
-            .then(async document => {
-                if (document._id) {
-                    res.status(400).json({
-                        message: 'Ошибка, контакт с данным ID уже существует, проверьте правильность данных'
-                    })
-                }
-                newContact = {
-                    _id: newContactId,
-                    ...newContact
-                }
-                await User.create(newContact)
-                    .then(user => {
-                        if (user._id) {
-                            res.status(200).json({
-                                message: 'Contact was created successfully!'
-                            })
-                        }
-                    })
-                    .catch(error => {
-                        res.status(500).json({
-                            message: 'Fetching contacts failed!',
-                            error
+        let contactForUpdate = req.body.contact
+        const id = contactForUpdate.id
+
+        console.log(contactForUpdate)
+
+        await User.findByIdAndUpdate(id, contactForUpdate)
+            .then(async updatedUser => {
+                if (updatedUser._id) {
+                    await Address.findByIdAndUpdate(updatedUser.addresses._id, contactForUpdate.address)
+                        .then(updatedAddress => {
+                            if (updatedAddress._id) {
+                                updatedUser.sddresses.push(updatedAddress)
+                                updatedUser.save()
+                                    .then(user => {
+                                        if (user._id) {
+                                            res.status(200).json({
+                                                message: 'Contact was updated successfully!',
+                                                updatedContact: user
+                                            })
+                                        }
+                                    })
+                            }
                         })
-                    })
+                }
+            })
+            .catch(error => {
+                res.status(500).json({
+                    message: 'Fetching contacts failed!',
+                    error
+                })
             })
     },
 
@@ -105,13 +109,13 @@ module.exports = {
             searchParams.birthDate = {$gte: dateFrom}
         }
         if (dateFrom) {
-            searchParams.birthDate = { $lt: dateTo}
+            searchParams.birthDate = {$lt: dateTo}
         }
         if (dateFrom) {
             searchParams.birthDate = {$gte: dateFrom}
         }
         if (dateTo) {
-            searchParams.birthDate = { $lt: dateTo}
+            searchParams.birthDate = {$lt: dateTo}
         }
         if (gender) {
             searchParams.gender = gender
