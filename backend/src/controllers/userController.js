@@ -36,22 +36,35 @@ module.exports = {
         let contactForUpdate = req.body.contact
         const id = contactForUpdate.id
 
-        await User.findByIdAndUpdate(id, contactForUpdate)
-            .then(async updatedUser => {
-                if (updatedUser._id) {
-                    console.log(updatedUser)
-                    await Address.findByIdAndUpdate(updatedUser.addresses._id, contactForUpdate.address)
-                        .then(updatedAddress => {
-                            if (updatedAddress._id) {
-                                updatedUser.addresses.push(updatedAddress)
-                                updatedUser.save()
-                                    .then(user => {
-                                        if (user._id) {
-                                            console.log(user)
-                                            res.status(200).json({
-                                                message: 'Contact was updated successfully!',
-                                                updatedContact: user
-                                            })
+        await User.findById({_id: id})
+            .then(async contact => {
+                if (contact._id) {
+                    console.log(contact)
+                    await contact.updateOne(contactForUpdate)
+                        .then(async updatedContact => {
+                            console.log(updatedContact)
+                            if (updatedContact._id) {
+                                await Address.findById(updatedContact.addresses._id)
+                                    .then(async address => {
+                                        console.log(address)
+                                        if (address._id) {
+                                            await address.updateOne(contactForUpdate.address)
+                                                .then(async updatedAddress => {
+                                                    console.log(updatedAddress)
+                                                    if (updatedAddress._id) {
+                                                        updatedContact.addresses.push(updatedAddress)
+                                                        await updatedContact.updateOne()
+                                                            .then(document => {
+                                                                console.log(document)
+                                                                if (document._id) {
+                                                                    res.status(200).json({
+                                                                        message: 'Contact was updated successfully!',
+                                                                        updatedContact: document
+                                                                    })
+                                                                }
+                                                            })
+                                                    }
+                                                })
                                         }
                                     })
                             }
