@@ -2,7 +2,8 @@ export interface SearchParamsInterface {
    name?: string
    surname?: string
    patronymic?: string
-   birthDate?: string
+   dateFrom?: string
+   dateTo?: string
    gender?: string
    maritalStatus?: string
    nationality?: string

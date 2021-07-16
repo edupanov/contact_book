@@ -6,6 +6,7 @@ import AddPage from "../components/pages/addPage/AddPage";
 import {ContactInterface} from "../components/contactList/types/contact.interface";
 
 export const PATH = {
+    HOME: '/contacts',
     CREATE: '/contacts/create',
     EDIT: '/contacts/edit',
     SEARCH: '/contacts/search',
@@ -24,6 +25,7 @@ const Routes = (props:RouteType) => {
     return (
         <div>
             <Switch>
+                <Route exact path={PATH.HOME}/>
                 <Route exact path={PATH.CREATE} render={() => add ? <AddPage/> : null}/>
                 <Route exact path={PATH.EDIT}
                        render={() => edit ? <EditPage contact={item} setContact={setItem}/> : null}/>

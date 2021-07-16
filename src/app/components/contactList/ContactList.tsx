@@ -116,10 +116,6 @@ const ContactList = () => {
             setItem(currentContact)
     }
 
-
-    console.log(item)
-    console.log(selectionModel.length === 0)
-
     // отменяет мультивыбор строк
     const CancelMultiSelection = (selection: GridSelectionModelChangeParams) => {
         const newSelectionModel = selection.selectionModel;
@@ -138,9 +134,7 @@ const ContactList = () => {
 
 
     return (
-
         <div style={{height: 400, width: '100%'}}>
-
             <Grid
                 className={styles.headerWrapper}
                 container

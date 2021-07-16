@@ -48,14 +48,13 @@ const EditPage = (props: UpdateContactType) => {
     if (Object.keys(contact).length === 0) {
         return <p className={classes.errorTitle}>Выберите пользователя из списка</p>
     }
-    console.log(contact)
 
     return (
         <div className={classes.searchPanel}>
             <h2 className={classes.title}>Редактирование контакта </h2>
             <Grid container justify="center">
                 <Grid item xs={10}>
-                    <form onSubmit={(event) => onSubmit(event)}>
+                    <form onSubmit={onSubmit}>
                         <FormControl>
                             <FormGroup>
                                 <div>
