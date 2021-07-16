@@ -43,7 +43,6 @@ const AddPage: FC = () => {
            }
         }
         addContact(contact)
-        getContacts()
     }
     console.log(contactInfo)
     return (

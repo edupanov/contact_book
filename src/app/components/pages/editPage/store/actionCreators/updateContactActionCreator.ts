@@ -16,14 +16,14 @@ export const updateContact = (contact: {contact: ContactInterface}) =>
             .then( async response => {
                 if(response.isSuccess) {
                     console.log('jkhh')
-                    // const updatedContacts = await ContactListRequests.getContact({})
-                    // dispatch({
-                    //     type: ContactActionTypes.GET_CONTACTS,
-                    //     payload: {
-                    //         users: updatedContacts?.data as Array<ContactInterface>,
-                    //         maxUsers: response?.maxUsers
-                    //     }
-                    // })
+                    const updatedContacts = await ContactListRequests.getContact({})
+                    dispatch({
+                        type: ContactActionTypes.GET_CONTACTS,
+                        payload: {
+                            users: updatedContacts?.data as Array<ContactInterface>,
+                            maxUsers: response?.maxUsers
+                        }
+                    })
                 }
             })
             .catch(error => {

@@ -14,11 +14,8 @@ import styles from "../mainForm/HeaderContactList.module.scss";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
-import SearchUser from "../pages/searchPage/SearchPage";
 import {ContactInterface} from "./types/contact.interface";
-import EditPage from "../pages/editPage/EditPage";
-import AddPage from "../pages/addPage/AddPage";
-import {NavLink, Route, Switch} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import Routes from "../../routes/Routes";
 
 const ContactList = () => {
@@ -70,9 +67,7 @@ const ContactList = () => {
         updatedData.map((item: ContactInterface) => {
             item.address.fullAddress = `${item.address.zipCode} ${item.address.country}, г. ${item.address.city}, ул. ${item.address.street} ${item.address.building}/${item.address.flat}`
         })
-
         setItems(updatedData)
-
     }
 
     useEffect(() => {
@@ -81,6 +76,14 @@ const ContactList = () => {
             updateFullAddress(data)
         }
     }, [])
+
+    useEffect(() => {        // убирает данные из формы редактирования при неактивном чебоксе
+            if(selectionModel.length === 0) {
+                const emptyItem = {} as ContactInterface
+                setItem(emptyItem)
+            }
+    }, [selectionModel]);
+
 
     useEffect(() => {
         if (data && data.length > 0) {
@@ -108,11 +111,14 @@ const ContactList = () => {
     };
 
     const setCurrentContact = (id: string) => {
-        const contactsForUpdate = [...data]
-        const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
-        setItem(currentContact)
+            const contactsForUpdate = [...data]
+            const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
+            setItem(currentContact)
     }
 
+
+    console.log(item)
+    console.log(selectionModel.length === 0)
 
     // отменяет мультивыбор строк
     const CancelMultiSelection = (selection: GridSelectionModelChangeParams) => {
@@ -129,6 +135,7 @@ const ContactList = () => {
             setSelectionModel(newSelectionModel);
         }
     }
+
 
     return (
 
@@ -181,13 +188,8 @@ const ContactList = () => {
                     </Button>
                 </div>
             </Grid>
-<Routes search={search} edit={edit} item={item} setItem={setItem} add={add}/>
-            {/*<Switch>*/}
-            {/*    <Route exact path="/contacts/search" render={() => search ? <SearchUser/> : null}/>*/}
-            {/*    <Route exact path="/contacts/edit"*/}
-            {/*           render={() => edit ? <EditPage contact={item} setContact={setItem}/> : null}/>*/}
-            {/*    <Route exact path="/contacts/create" render={() => add ? <AddPage/> : null}/>*/}
-            {/*</Switch>*/}
+
+            <Routes search={search} edit={edit} item={item} setItem={setItem} add={add}/>
 
             <DataGrid rows={items}
                       columns={columns}
@@ -206,9 +208,7 @@ const ContactList = () => {
                       selectionModel={selectionModel}
                       onSelectionModelChange={CancelMultiSelection}
             />
-
         </div>
-
     );
 }
 

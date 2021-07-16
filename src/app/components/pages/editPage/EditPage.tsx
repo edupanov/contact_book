@@ -18,7 +18,8 @@ const EditPage = (props: UpdateContactType) => {
 
     const classes = useStyles()
 
-    const {updateContact} = useActions()
+    const {updateContact, getContacts} = useActions()
+
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -42,7 +43,12 @@ const EditPage = (props: UpdateContactType) => {
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         updateContact({contact})
+        // getContacts()
     }
+    if (Object.keys(contact).length === 0) {
+        return <p className={classes.errorTitle}>Выберите пользователя из списка</p>
+    }
+    console.log(contact)
 
     return (
         <div className={classes.searchPanel}>

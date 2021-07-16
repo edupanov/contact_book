@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, FormEvent, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "../editPage/styles/editContactStyles";
@@ -32,7 +32,8 @@ const SearchPanel: FC = () => {
                     target.name]: isDate ? replaceStr : target.value,
         })
     }
-    const onSubmit = () => {
+    const onSubmit = (event: FormEvent) => {
+        event.preventDefault()
         setPage(1)
         setSearchParams(search)
         getContacts()
@@ -43,7 +44,7 @@ const SearchPanel: FC = () => {
             <h2 className={classes.title}>Поиск контакта</h2>
             <Grid container justify="center">
                 <Grid item xs={10}>
-                    <form onSubmit={onSubmit}>
+                    <form onSubmit={(event) => onSubmit(event)}>
                         <FormControl className={classes.form}>
                             <FormGroup className={classes.row}>
                                 <div>

@@ -24,10 +24,10 @@ const Routes = (props:RouteType) => {
     return (
         <div>
             <Switch>
-                <Route exact path="/contacts/search" render={() => search ? <SearchUser/> : null}/>
-                <Route exact path="/contacts/edit"
+                <Route exact path={PATH.CREATE} render={() => add ? <AddPage/> : null}/>
+                <Route exact path={PATH.EDIT}
                        render={() => edit ? <EditPage contact={item} setContact={setItem}/> : null}/>
-                <Route exact path="/contacts/create" render={() => add ? <AddPage/> : null}/>
+                <Route exact path={PATH.SEARCH} render={() => search ? <SearchUser/> : null}/>
             </Switch>
         </div>
     );
