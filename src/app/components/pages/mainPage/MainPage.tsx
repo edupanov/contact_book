@@ -14,6 +14,7 @@ const MainPage = () => {
                 className={style.container}
                 fixed>
                 <Route path={"/contacts"} component={MainForm}/>
+
             </Container>
 
         </div>

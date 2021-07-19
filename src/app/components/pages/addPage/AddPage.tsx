@@ -1,8 +1,10 @@
 import React, {ChangeEvent, FC, useState} from 'react';
-import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
 import {useStyles} from "../editPage/styles/editContactStyles";
+import { NavLink } from 'react-router-dom';
+import {GridCloseIcon} from "@material-ui/data-grid";
 
 const AddPage: FC = () => {
     const classes = useStyles()
@@ -44,10 +46,15 @@ const AddPage: FC = () => {
         }
         addContact(contact)
     }
-    console.log(contactInfo)
+
     return (
         <div className={classes.searchPanel}>
             <h2 className={classes.title}>Добавление нового контакта</h2>
+            <NavLink className={classes.close} to={'/contacts'} exact >
+                <IconButton aria-label="close">
+                    <GridCloseIcon/>
+                </IconButton>
+            </NavLink>
             <Grid container justify="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>

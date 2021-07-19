@@ -1,7 +1,10 @@
-import React, {ChangeEvent, FC, FormEvent, useState} from 'react';
-import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from 'react';
+import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "../editPage/styles/editContactStyles";
+import {SearchParamsInterface} from "./types/searcParams.interface";
+import {NavLink} from "react-router-dom";
+import {GridCloseIcon} from "@material-ui/data-grid";
 
 export type TargetType = {
     name: string
@@ -9,19 +12,21 @@ export type TargetType = {
 }
 // убрать очищение формы при submit
 const SearchPanel: FC = () => {
+
+
     const classes = useStyles()
 
     const {getContacts, setSearchParams, setPage} = useActions()
 
-    const [search, setSearch] = useState({})
+    const savedSearch: SearchParamsInterface = JSON.parse(sessionStorage.getItem('search') || '{}');
+    const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
 
-    const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
 
         const dateFrom = target.name === 'dateFrom'
         const dateTo = target.name === 'dateTo'
         const isDate = dateFrom || dateTo
-
 
         const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
 
@@ -32,19 +37,37 @@ const SearchPanel: FC = () => {
                     target.name]: isDate ? replaceStr : target.value,
         })
     }
+    const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const target: TargetType = (event.target)
+        setSearch({
+            ...search,
+            address: {...search.address, [target.name]: target.value}
+        })
+    }
 
-    const onSubmit = (event: FormEvent) => {
-        event.preventDefault()
+    const onSubmit = () => {
+        sessionStorage.setItem('search', JSON.stringify(search));
         setPage(1)
         setSearchParams(search)
+        getContacts()
+    }
+
+    const discharge = () => {
+        sessionStorage.clear()
+        setSearch({})
     }
 
     return (
         <div className={classes.searchPanel}>
             <h2 className={classes.title}>Поиск контакта</h2>
+            <NavLink className={classes.close} to={'/contacts'} exact >
+                <IconButton aria-label="close">
+                    <GridCloseIcon/>
+                </IconButton>
+            </NavLink>
             <Grid container justify="center">
                 <Grid item xs={10}>
-                    <form onSubmit={(event) => onSubmit(event)}>
+                    <form onSubmit={onSubmit}>
                         <FormControl className={classes.form}>
                             <FormGroup className={classes.row}>
                                 <div>
@@ -53,37 +76,43 @@ const SearchPanel: FC = () => {
                                                    label="Имя"
                                                    name={"name"}
                                                    type="search"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.name}
                                         />
                                         <TextField className={classes.input}
                                                    label="Фамилия"
                                                    name={"surname"}
                                                    type="search"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.surname}
                                         />
                                         <TextField className={classes.input}
                                                    label="Отчество"
                                                    name={"patronymic"}
                                                    type="search"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.patronymic}
                                         />
                                         <TextField className={classes.input}
                                                    label="Пол"
                                                    name={"gender"}
                                                    type="search"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.gender}
                                         />
                                         <TextField className={classes.input}
                                                    label="Семейное положение"
                                                    name={"maritalStatus"}
                                                    type="search"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.maritalStatus}
                                         />
                                         <TextField className={classes.input}
                                                    label="Гражданство"
                                                    name={"nationality"}
                                                    type="search"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.nationality}
                                         />
                                     </div>
                                     <div className={classes.dateWrapper}>
@@ -95,13 +124,15 @@ const SearchPanel: FC = () => {
                                                        helperText="С"
                                                        name={"dateFrom"}
                                                        type="date"
-                                                       onChange={changeHandler}
+                                                       onChange={changeContactInfoHandler}
+                                                       defaultValue={savedSearch.dateFrom}
                                             />
                                             <TextField className={classes.date}
                                                        helperText="По"
                                                        name={"dateTo"}
                                                        type="date"
-                                                       onChange={changeHandler}
+                                                       onChange={changeContactInfoHandler}
+                                                       defaultValue={savedSearch.dateTo}
                                             />
                                         </div>
                                     </div>
@@ -111,37 +142,45 @@ const SearchPanel: FC = () => {
                                                         label="Страна"
                                                         name={"country"}
                                                         type="search"
-                                                        onChange={changeHandler}
+                                                        onChange={changeContactAddressHandler}
+                                                        defaultValue={savedSearch.address?.country}
                                     />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactAddressHandler}
+                                                   defaultValue={savedSearch.address?.city}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactAddressHandler}
+                                                   defaultValue={savedSearch.address?.street}
+
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер дома"
                                                    name={"building"}
                                                    type="number"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.address?.building}
+
                                         />
                                         <TextField className={classes.input}
                                                    label="Номер квартиры"
                                                    name={"flat"}
                                                    type="number"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.address?.flat}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
                                                    type="number"
-                                                   onChange={changeHandler}
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.address?.zipCode}
                                         />
                                     </div>
 
@@ -149,6 +188,9 @@ const SearchPanel: FC = () => {
                                 <div>
                                     <Button type={'submit'} variant={'contained'} color={'primary'}
                                             className={classes.button}>Поиск</Button>
+                                    <Button type={'submit'} variant={'contained'} color={'primary'}
+                                            className={classes.button} onClick={discharge}>Сбросить</Button>
+
                                 </div>
                             </FormGroup>
                         </FormControl>

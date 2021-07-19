@@ -1,10 +1,13 @@
 import React, {ChangeEvent, FormEvent} from 'react';
-import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
 import {updateContact} from "./store/actionCreators/updateContactActionCreator";
 import {ContactInterface} from "../../contactList/types/contact.interface";
+import {NavLink} from "react-router-dom";
+import EditIcon from "@material-ui/icons/Edit";
+import {GridCloseIcon} from "@material-ui/data-grid";
 
 type UpdateContactType = {
     contact: ContactInterface,
@@ -18,7 +21,7 @@ const EditPage = (props: UpdateContactType) => {
 
     const classes = useStyles()
 
-    const {updateContact, getContacts} = useActions()
+    const {updateContact} = useActions()
 
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,14 +50,18 @@ const EditPage = (props: UpdateContactType) => {
     if (Object.keys(contact).length === 0) {
         return <p className={classes.errorTitle}>Выберите пользователя из списка</p>
     }
-    console.log(contact)
 
     return (
         <div className={classes.searchPanel}>
             <h2 className={classes.title}>Редактирование контакта </h2>
+            <NavLink className={classes.close} to={'/contacts'} exact >
+                <IconButton aria-label="close">
+                        <GridCloseIcon/>
+                </IconButton>
+            </NavLink>
             <Grid container justify="center">
                 <Grid item xs={10}>
-                    <form onSubmit={(event) => onSubmit(event)}>
+                    <form onSubmit={onSubmit}>
                         <FormControl>
                             <FormGroup>
                                 <div>

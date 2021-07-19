@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
-import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
+import {Button, Checkbox, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
 import {
     DataGrid,
     GridCellParams,
@@ -16,14 +16,20 @@ import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
 import {NavLink} from 'react-router-dom';
-import Routes from "../../routes/Routes";
+import Routes from '../../routes/Routes';
 
 const ContactList = () => {
 
     const columns: GridColDef[] = [
-        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false},
-        {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false},
-        {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false},
+        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true},
+        {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false, hide: true},
+        {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false, hide: true},
+        {
+            field: 'fullName', headerName: 'ФИО', width: 250, filterable: false, sortable: false,
+            renderCell: (params: GridCellParams) => {
+                return <span>{`${params.row.name} ${params.row.surname} ${params.row.patronymic}`}</span>
+            }
+        },
         {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
         {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false},
         {field: 'maritalStatus', headerName: 'Семейное положение', width: 200, filterable: false, sortable: false},
@@ -31,15 +37,28 @@ const ContactList = () => {
         {
             field: 'address',
             headerName: 'Адрес',
-            width: 160,
-            filterable: false,
             flex: 1,
+            width: 350,
+            filterable: false,
+
             sortable: false,
             renderCell: (params: GridCellParams) => {
                 return <span>{params.row.address.fullAddress}</span>
             }
         },
+        {
+            field: 'check', headerName: 'Удалить', width: 100, filterable: false, sortable: false,
+            renderCell: (el) =>
+            <Checkbox
+                id={String(el.id)}
+                onChange={contactChangeHandler}
+                color="primary"
+                inputProps={{'aria-label': 'secondary checkbox'}}
+            />
+
+        },
     ];
+
 
     const usePrevious = (value: any) => {
         const ref = useRef();
@@ -49,18 +68,16 @@ const ContactList = () => {
         return ref.current;
     }
 
-    const [search, setSearch] = useState<Boolean>(false)
-    const [edit, setEdit] = useState<Boolean>(false)
-    const [add, setAdd] = useState<Boolean>(false)
     const [item, setItem] = useState<ContactInterface>({} as ContactInterface)
     const [items, setItems] = useState<ContactInterface[]>([])
     const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
-
+    const [changeContact, setChangeContact] = useState<ContactInterface>({} as ContactInterface)
 
     const {getContacts, setPage, setTake} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
 
     const prevVal = usePrevious(data)
+
 
     const updateFullAddress = (data: ContactInterface[]) => {
         const updatedData = [...data]
@@ -78,10 +95,10 @@ const ContactList = () => {
     }, [])
 
     useEffect(() => {        // убирает данные из формы редактирования при неактивном чебоксе
-            if(selectionModel.length === 0) {
-                const emptyItem = {} as ContactInterface
-                setItem(emptyItem)
-            }
+        if (selectionModel.length === 0) {
+            const emptyItem = {} as ContactInterface
+            setItem(emptyItem)
+        }
     }, [selectionModel]);
 
 
@@ -111,14 +128,21 @@ const ContactList = () => {
     };
 
     const setCurrentContact = (id: string) => {
-            const contactsForUpdate = [...data]
-            const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
-            setItem(currentContact)
+        const contactsForUpdate = [...data]
+        const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
+        setItem(currentContact)
     }
 
+    const contactChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const target = (event.target)
+        const checked = target.checked
+        const currentId = target.id
+        console.log(currentId)
 
-    console.log(item)
-    console.log(selectionModel.length === 0)
+        const checkedContacts: Array<ContactInterface> = []
+
+
+    }
 
     // отменяет мультивыбор строк
     const CancelMultiSelection = (selection: GridSelectionModelChangeParams) => {
@@ -136,11 +160,8 @@ const ContactList = () => {
         }
     }
 
-
     return (
-
         <div style={{height: 400, width: '100%'}}>
-
             <Grid
                 className={styles.headerWrapper}
                 container
@@ -151,24 +172,22 @@ const ContactList = () => {
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={() => setAdd(!add)}>
+                >
                     Создать новый контакт
                 </Button>
             </NavLink>
-
                 <div>
                     <IconButton aria-label="delete" onClick={() => {
                         console.log('delete')
                     }}>
                         <DeleteIcon/>
-
                     </IconButton>
-                    <IconButton aria-label="edit" onClick={() => setEdit(!edit)}>
+                    <IconButton aria-label="edit">
                         <NavLink to={'/contacts/edit'}>
                             <EditIcon/>
                         </NavLink>
                     </IconButton>
-                    <IconButton aria-label="search" onClick={() => setSearch(!search)}>
+                    <IconButton aria-label="search">
                         <NavLink to={'/contacts/search'}>
                             <SearchIcon/>
                         </NavLink>
@@ -184,12 +203,11 @@ const ContactList = () => {
                         <Typography variant="button" style={{fontSize: '0.79rem'}}>
                             Отправить E-mail
                         </Typography>
-
                     </Button>
                 </div>
             </Grid>
 
-            <Routes search={search} edit={edit} item={item} setItem={setItem} add={add}/>
+            <Routes item={item} setItem={setItem}/>
 
             <DataGrid rows={items}
                       columns={columns}
