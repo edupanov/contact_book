@@ -32,11 +32,11 @@ const SearchPanel: FC = () => {
                     target.name]: isDate ? replaceStr : target.value,
         })
     }
+
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         setPage(1)
         setSearchParams(search)
-        getContacts()
     }
 
     return (

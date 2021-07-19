@@ -34,47 +34,50 @@ module.exports = {
 
     updateContact: async (req, res, next) => {
         let contactForUpdate = req.body.contact
-        const id = contactForUpdate.id
+        const contactId = contactForUpdate.id
+        const addressId = contactForUpdate.address.id
 
-        await User.findById({_id: id})
-            .then(async contact => {
-                if (contact._id) {
-                    console.log(contact)
-                    await contact.updateOne(contactForUpdate)
-                        .then(async updatedContact => {
-                            console.log(updatedContact)
-                            if (updatedContact._id) {
-                                await Address.findById(updatedContact.addresses._id)
-                                    .then(async address => {
-                                        console.log(address)
-                                        if (address._id) {
-                                            await address.updateOne(contactForUpdate.address)
-                                                .then(async updatedAddress => {
-                                                    console.log(updatedAddress)
-                                                    if (updatedAddress._id) {
-                                                        updatedContact.addresses.push(updatedAddress)
-                                                        await updatedContact.updateOne()
-                                                            .then(document => {
-                                                                console.log(document)
-                                                                if (document._id) {
-                                                                    res.status(200).json({
-                                                                        message: 'Contact was updated successfully!',
-                                                                        updatedContact: document
-                                                                    })
-                                                                }
-                                                            })
-                                                    }
-                                                })
-                                        }
-                                    })
-                            }
+        await User.findById({_id: contactId})
+            .then(user => {
+                if (user._id) {
+                    const index = user.addresses.findIndex(item => item._id.equals(addressId))
+
+                    user.name = contactForUpdate.name
+                    user.surname = contactForUpdate.surname
+                    user.patronymic = contactForUpdate.patronymic
+                    user.birthDate = contactForUpdate.birthDate
+                    user.gender = contactForUpdate.gender
+                    user.maritalStatus = contactForUpdate.maritalStatus
+                    user.nationality = contactForUpdate.nationality
+
+                    user.addresses[index].city = contactForUpdate.address.city
+                    user.addresses[index].country = contactForUpdate.address.country
+                    user.addresses[index].street = contactForUpdate.address.street
+                    user.addresses[index].building = contactForUpdate.address.building
+                    user.addresses[index].flat = contactForUpdate.address.flat
+                    user.addresses[index].zipCode = contactForUpdate.address.zipCode
+                    user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
+
+                    user.save()
+                        .then(() => {
+                            res.status(200).json({
+                                code: 200,
+                                isSuccess: true,
+                                message: 'Contact updated successfully!'
+                            })
+                        })
+                        .catch(err => {
+                            res.status(500).json({
+                                error: err,
+                                message: 'Ошибка сервера, не удалось обновить контакт'
+                            })
                         })
                 }
             })
-            .catch(error => {
+            .catch(err => {
                 res.status(500).json({
-                    message: 'Fetching contacts failed!',
-                    error
+                    error: err,
+                    message: 'Ошибка сервера, не удалось обновить контакт'
                 })
             })
     },
@@ -166,6 +169,16 @@ module.exports = {
             .then(async documents => {
                 const contactsCount = await User.countDocuments()
                 const users = documents.map(user => {
+                    const addr = {
+                        id: user.addresses[0]._id,
+                        city: user.addresses[0].city,
+                        country: user.addresses[0].country,
+                        street: user.addresses[0].street,
+                        building: user.addresses[0].building,
+                        flat: user.addresses[0].flat,
+                        zipCode: user.addresses[0].zipCode,
+                        fullAddress: user.addresses[0].fullAddress
+                    }
                     return {
                         id: user._id,
                         name: user.name,
@@ -175,7 +188,7 @@ module.exports = {
                         gender: user.gender,
                         maritalStatus: user.maritalStatus,
                         nationality: user.nationality,
-                        address: user.addresses[0]
+                        address: addr
                     }
                 })
                 res.status(200).json({

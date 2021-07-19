@@ -7,6 +7,7 @@ export interface ContactInterface {
     maritalStatus: string
     nationality: string
     address: {
+        id: string
         fullAddress: string
         city: string
         country: string

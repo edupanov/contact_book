@@ -36,14 +36,13 @@ const EditPage = (props: UpdateContactType) => {
         const target: TargetType = (event.target)
         setContact({
             ...contact,
-            address: {...contact.address, [target.name]: target.value}
+            address: {...contact.address, id: contact.address.id, [target.name]: target.value}
         })
     }
 
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         updateContact({contact})
-        // getContacts()
     }
     if (Object.keys(contact).length === 0) {
         return <p className={classes.errorTitle}>Выберите пользователя из списка</p>
