@@ -13,23 +13,19 @@ export const PATH = {
 }
 
 type RouteType = {
-    search: Boolean
-    edit: Boolean
     item: ContactInterface
     setItem: Function
-    add: Boolean
 }
 
 const Routes = (props:RouteType) => {
-    const {search, add, item, setItem, edit} = props
+    const {item, setItem} = props
     return (
         <div>
             <Switch>
                 <Route exact path={PATH.HOME}/>
-                <Route exact path={PATH.CREATE} render={() => add ? <AddPage/> : null}/>
-                <Route exact path={PATH.EDIT}
-                       render={() => edit ? <EditPage contact={item} setContact={setItem}/> : null}/>
-                <Route exact path={PATH.SEARCH} render={() => search ? <SearchUser/> : null}/>
+                <Route exact path={PATH.CREATE} component={AddPage}/>
+                <Route exact path={PATH.EDIT}  render={() => <EditPage contact={item} setContact={setItem}/> }/>
+                <Route exact path={PATH.SEARCH} component={SearchUser}/>
             </Switch>
         </div>
     );

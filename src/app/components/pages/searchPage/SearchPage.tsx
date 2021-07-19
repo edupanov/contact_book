@@ -1,8 +1,10 @@
 import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from 'react';
-import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "../editPage/styles/editContactStyles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
+import {NavLink} from "react-router-dom";
+import {GridCloseIcon} from "@material-ui/data-grid";
 
 export type TargetType = {
     name: string
@@ -18,7 +20,6 @@ const SearchPanel: FC = () => {
 
     const savedSearch: SearchParamsInterface = JSON.parse(sessionStorage.getItem('search') || '{}');
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
-console.log(savedSearch)
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -44,17 +45,26 @@ console.log(savedSearch)
         })
     }
 
-    const onSubmit = (event: FormEvent<EventTarget>) => {
+    const onSubmit = () => {
         sessionStorage.setItem('search', JSON.stringify(search));
-        event.preventDefault()
         setPage(1)
         setSearchParams(search)
         getContacts()
     }
 
+    const discharge = () => {
+        sessionStorage.clear()
+        setSearch({})
+    }
+
     return (
         <div className={classes.searchPanel}>
             <h2 className={classes.title}>Поиск контакта</h2>
+            <NavLink className={classes.close} to={'/contacts'} exact >
+                <IconButton aria-label="close">
+                    <GridCloseIcon/>
+                </IconButton>
+            </NavLink>
             <Grid container justify="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
@@ -67,42 +77,42 @@ console.log(savedSearch)
                                                    name={"name"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.name || search.name}
+                                                   defaultValue={savedSearch.name}
                                         />
                                         <TextField className={classes.input}
                                                    label="Фамилия"
                                                    name={"surname"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.surname || search.surname}
+                                                   defaultValue={savedSearch.surname}
                                         />
                                         <TextField className={classes.input}
                                                    label="Отчество"
                                                    name={"patronymic"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.patronymic || search.patronymic}
+                                                   defaultValue={savedSearch.patronymic}
                                         />
                                         <TextField className={classes.input}
                                                    label="Пол"
                                                    name={"gender"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.gender || search.gender}
+                                                   defaultValue={savedSearch.gender}
                                         />
                                         <TextField className={classes.input}
                                                    label="Семейное положение"
                                                    name={"maritalStatus"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.maritalStatus || search.maritalStatus}
+                                                   defaultValue={savedSearch.maritalStatus}
                                         />
                                         <TextField className={classes.input}
                                                    label="Гражданство"
                                                    name={"nationality"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.nationality || search.nationality}
+                                                   defaultValue={savedSearch.nationality}
                                         />
                                     </div>
                                     <div className={classes.dateWrapper}>
@@ -115,14 +125,14 @@ console.log(savedSearch)
                                                        name={"dateFrom"}
                                                        type="date"
                                                        onChange={changeContactInfoHandler}
-                                                       defaultValue={savedSearch.dateFrom || search.dateFrom}
+                                                       defaultValue={savedSearch.dateFrom}
                                             />
                                             <TextField className={classes.date}
                                                        helperText="По"
                                                        name={"dateTo"}
                                                        type="date"
                                                        onChange={changeContactInfoHandler}
-                                                       defaultValue={savedSearch.dateTo || search.dateTo}
+                                                       defaultValue={savedSearch.dateTo}
                                             />
                                         </div>
                                     </div>
@@ -133,21 +143,21 @@ console.log(savedSearch)
                                                         name={"country"}
                                                         type="search"
                                                         onChange={changeContactAddressHandler}
-                                                        defaultValue={savedSearch.address?.country || search.address?.country}
+                                                        defaultValue={savedSearch.address?.country}
                                     />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
                                                    onChange={changeContactAddressHandler}
-                                                   defaultValue={savedSearch.address?.city || search.address?.city}
+                                                   defaultValue={savedSearch.address?.city}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
                                                    onChange={changeContactAddressHandler}
-                                                   defaultValue={savedSearch.address?.street || search.address?.street}
+                                                   defaultValue={savedSearch.address?.street}
 
                                         />
                                         <TextField className={classes.input}
@@ -155,7 +165,7 @@ console.log(savedSearch)
                                                    name={"building"}
                                                    type="number"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.building || search.address?.building}
+                                                   defaultValue={savedSearch.address?.building}
 
                                         />
                                         <TextField className={classes.input}
@@ -163,14 +173,14 @@ console.log(savedSearch)
                                                    name={"flat"}
                                                    type="number"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.flat || search.address?.flat}
+                                                   defaultValue={savedSearch.address?.flat}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
                                                    type="number"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.zipCode || search.address?.zipCode}
+                                                   defaultValue={savedSearch.address?.zipCode}
                                         />
                                     </div>
 
@@ -178,6 +188,9 @@ console.log(savedSearch)
                                 <div>
                                     <Button type={'submit'} variant={'contained'} color={'primary'}
                                             className={classes.button}>Поиск</Button>
+                                    <Button type={'submit'} variant={'contained'} color={'primary'}
+                                            className={classes.button} onClick={discharge}>Сбросить</Button>
+
                                 </div>
                             </FormGroup>
                         </FormControl>

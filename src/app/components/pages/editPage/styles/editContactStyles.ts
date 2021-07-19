@@ -1,6 +1,13 @@
 import {makeStyles} from "@material-ui/core";
 
 export const useStyles = makeStyles({
+    close: {
+      textDecoration: "none",
+        position: "fixed",
+        right: 50,
+        fontSize: 32,
+    },
+
     errorTitle: {
         fontSize: '1.5em',
         textAlign: "center",

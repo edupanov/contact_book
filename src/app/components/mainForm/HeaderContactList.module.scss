@@ -9,4 +9,13 @@
   margin-right: -50%;
 }
 
+
+
+.nameLink:active, /* активная/посещенная ссылка */
+.nameLink:hover,  /* при наведении */
+.nameLink {
+  text-decoration: none;
+  color: #666;
+}
+
 .link { text-decoration: none}
