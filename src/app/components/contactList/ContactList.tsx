@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, MouseEventHandler, SyntheticEvent, useEffect, useRef, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, Checkbox, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
@@ -17,6 +17,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
 import {NavLink} from 'react-router-dom';
 import Routes from '../../routes/Routes';
+import {Delete} from "@material-ui/icons";
+import DeleteModal from "../pages/deleteModal/DeleteModal";
 
 const ContactList = () => {
 
@@ -47,16 +49,28 @@ const ContactList = () => {
             }
         },
         {
-            field: 'check', headerName: 'Удалить', width: 100, filterable: false, sortable: false,
-            renderCell: (el) =>
-            <Checkbox
+            field: 'edit', headerName: '', width: 100, filterable: false, sortable: false,
+            renderCell: (el) => <IconButton
+                aria-label="edit"
                 id={String(el.id)}
-                onChange={contactChangeHandler}
-                color="primary"
-                inputProps={{'aria-label': 'secondary checkbox'}}
-            />
-
+                onClick={contactClickHandler}
+            >
+                <NavLink to={'/contacts/edit'}>
+                    <EditIcon/>
+                </NavLink>
+            </IconButton>
         },
+        {
+            field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
+            renderCell: (el) =>  <IconButton
+                aria-label="edit"
+                id={String(el.id)}
+                onClick={contactClickHandler}
+            >
+                <NavLink to={'/contacts/delete'}>
+                    <Delete/>
+                </NavLink>
+            </IconButton>},
     ];
 
 
@@ -77,7 +91,6 @@ const ContactList = () => {
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
 
     const prevVal = usePrevious(data)
-
 
     const updateFullAddress = (data: ContactInterface[]) => {
         const updatedData = [...data]
@@ -100,7 +113,6 @@ const ContactList = () => {
             setItem(emptyItem)
         }
     }, [selectionModel]);
-
 
     useEffect(() => {
         if (data && data.length > 0) {
@@ -131,13 +143,14 @@ const ContactList = () => {
         const contactsForUpdate = [...data]
         const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
         setItem(currentContact)
+        return currentContact
     }
 
-    const contactChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const target = (event.target)
-        const checked = target.checked
-        const currentId = target.id
-        console.log(currentId)
+    const contactClickHandler = (event: SyntheticEvent) => {
+        const targetID = event.currentTarget.id
+        const contactsForUpdate = [...data]
+        const currentContact: ContactInterface = contactsForUpdate.find(target => target.id === targetID)
+        setItem(currentContact)
 
         const checkedContacts: Array<ContactInterface> = []
 
@@ -220,7 +233,7 @@ const ContactList = () => {
                       onPageChange={handlePaginationChange}
                       onPageSizeChange={handlePaginationChange}
                       sortingMode={'server'}
-                      onRowSelected={(params) => setCurrentContact(params.data.id)}
+                      // onRowSelected={(params) => setCurrentContact(params.data.id)}
                       checkboxSelection
                       disableSelectionOnClick
                       selectionModel={selectionModel}
