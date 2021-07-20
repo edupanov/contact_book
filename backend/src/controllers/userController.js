@@ -121,6 +121,7 @@ module.exports = {
                 $lt: dateTo
             }
         }
+
         if (dateTo) {
             searchParams.birthDate = {$gte: dateFrom}
         }
@@ -212,12 +213,8 @@ module.exports = {
 
         await User.deleteMany({_id: deleted})
             .then(count => {
-               res.status(200).json({count})
+                res.status(200).json({count})
             })
-
-        // deleted.map(async contactId => {
-        //     const res = await User.deleteOne({_id: contactId})
-        // })
     },
 
     setContacts: async (req, res, next) => {

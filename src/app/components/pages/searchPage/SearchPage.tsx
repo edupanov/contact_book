@@ -44,7 +44,8 @@ const SearchPanel: FC = () => {
         })
     }
 
-    const onSubmit = () => {
+    const onSubmit = (event: FormEvent) => {
+        event.preventDefault()
         sessionStorage.setItem('search', JSON.stringify(search));
         setPage(1)
         setSearchParams(search)
