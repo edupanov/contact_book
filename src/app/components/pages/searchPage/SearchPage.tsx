@@ -20,7 +20,7 @@ const SearchPanel: FC = () => {
 
     const savedSearch: SearchParamsInterface = JSON.parse(sessionStorage.getItem('search') || '{}');
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
-
+    console.log(search)
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
 

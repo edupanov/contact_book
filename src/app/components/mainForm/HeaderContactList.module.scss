@@ -9,7 +9,23 @@
   margin-right: -50%;
 }
 
+.deleteButton {
+  margin: 10px !important;
+}
+.searchButton {
+  display: inline-flex;
+  margin: 10px 20px 10px 10px !important;
+a {
+  text-decoration:  none;
+  svg{
+    position: relative;
+    margin-left: 5px;
+    padding: -5px;
+    top: 5px;
+  }
+}
 
+}
 
 .nameLink:active, /* активная/посещенная ссылка */
 .nameLink:hover,  /* при наведении */

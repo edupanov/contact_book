@@ -2,20 +2,20 @@ import {Dispatch} from "redux";
 import {ContactActionTypes, ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
 import {RootState} from "../../../../../store/rootReducer";
 import * as ContactListRequests from "../../../../contactList/requests/contactListRequests";
-import * as ContactRequests from "../../../../../components/pages/editPage/requests/updateContactRequests";
+import * as ContactRequests from "../../../../../components/pages/deleteModal/requests/deleteContactRequests";
 import {ContactInterface} from "../../../../contactList/types/contact.interface";
-import {UpdateContactActionType, UpdateContactActionTypes} from "../actionType/updateContactActionTypes";
+import {DeleteContactActionType, DeleteContactActionTypes} from "../actionType/deleteContactActionTypes";
 
 
-export const updateContact = (contact: {contact: ContactInterface}) =>
-    async (dispatch: Dispatch<UpdateContactActionType | ContactsActionType>, getState: () => RootState) => {
+export const deleteContact = (contact: [contact: ContactInterface]) =>
+    async (dispatch: Dispatch<DeleteContactActionType | ContactsActionType>, getState: () => RootState) => {
 
-        dispatch({type: UpdateContactActionTypes.UPDATE_CONTACT})
+        dispatch({type: DeleteContactActionTypes.DELETE_CONTACT})
 
-        await ContactRequests.updateContact(contact)
+        await ContactRequests.deleteContact(contact)
             .then( async response => {
                 if(response.isSuccess) {
-                    console.log('jkhh')
+
                     const updatedContacts = await ContactListRequests.getContact({})
                     dispatch({
                         type: ContactActionTypes.GET_CONTACTS_SUCCESS,
@@ -27,6 +27,6 @@ export const updateContact = (contact: {contact: ContactInterface}) =>
                 }
             })
             .catch(error => {
-                dispatch({type: UpdateContactActionTypes.UPDATE_CONTACT_FAILURE, errors: error})
+                dispatch({type: DeleteContactActionTypes.DELETE_CONTACT_FAILURE, errors: error})
             })
     }

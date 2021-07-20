@@ -1,7 +1,7 @@
-import React, {ChangeEvent, MouseEventHandler, SyntheticEvent, useEffect, useRef, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useRef, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
-import {Button, Checkbox, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
+import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
 import {
     DataGrid,
     GridCellParams,
@@ -11,14 +11,12 @@ import {
     GridSelectionModelChangeParams
 } from "@material-ui/data-grid";
 import styles from "../mainForm/HeaderContactList.module.scss";
-import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
 import {NavLink} from 'react-router-dom';
 import Routes from '../../routes/Routes';
 import {Delete} from "@material-ui/icons";
-import DeleteModal from "../pages/deleteModal/DeleteModal";
 
 const ContactList = () => {
     const [open, setOpen] = React.useState(false);
@@ -67,7 +65,7 @@ const ContactList = () => {
         },
         {
             field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
-            renderCell: (el) =>  <IconButton
+            renderCell: (el) => <IconButton
                 aria-label="edit"
                 id={String(el.id)}
                 onClick={deleteContact}
@@ -75,10 +73,11 @@ const ContactList = () => {
                 <NavLink to={'/contacts/delete'}>
                     <Delete/>
                 </NavLink>
-            </IconButton>},
+            </IconButton>
+        },
     ];
 
-     const usePrevious = (value: any) => {
+    const usePrevious = (value: any) => {
         const ref = useRef();
         useEffect(() => {
             ref.current = value;
@@ -204,21 +203,29 @@ const ContactList = () => {
                 </Button>
             </NavLink>
                 <div>
-                    <IconButton aria-label="delete" onClick={() => {
-                        console.log('delete')
-                    }}>
-                        <DeleteIcon/>
-                    </IconButton>
-                    <IconButton aria-label="edit">
-                        <NavLink to={'/contacts/edit'}>
-                            <EditIcon/>
-                        </NavLink>
-                    </IconButton>
-                    <IconButton aria-label="search">
+                    <Button className={styles.deleteButton}
+                        variant="outlined"
+                        color="secondary"
+                    >
+                        Удалить все
+                        <Delete/>
+                    </Button>
+                    <Button className={styles.deleteButton}
+                        variant="outlined"
+                        color="secondary"
+                    >
+                        Удалить выбранные
+                        <Delete/>
+                    </Button>
+                    <Button className={styles.searchButton}
+                        variant="outlined"
+                        color="primary"
+                    >
                         <NavLink to={'/contacts/search'}>
+                            Поиск
                             <SearchIcon/>
                         </NavLink>
-                    </IconButton>
+                    </Button>
                     <Button
                         variant="contained"
                         size="large"
@@ -247,11 +254,11 @@ const ContactList = () => {
                       onPageChange={handlePaginationChange}
                       onPageSizeChange={handlePaginationChange}
                       sortingMode={'server'}
-                      // onRowSelected={(params) => setCurrentContact(params.data.id)}
-                      // checkboxSelection
+                // onRowSelected={(params) => setCurrentContact(params.data.id)}
+                // checkboxSelection
                       disableSelectionOnClick
                       selectionModel={selectionModel}
-                      // onSelectionModelChange={CancelMultiSelection}
+                // onSelectionModelChange={CancelMultiSelection}
             />
         </div>
     );
