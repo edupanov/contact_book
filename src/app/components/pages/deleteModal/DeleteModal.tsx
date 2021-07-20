@@ -6,22 +6,9 @@ import Fade from '@material-ui/core/Fade';
 import {NavLink} from "react-router-dom";
 import {Delete} from "@material-ui/icons";
 import {IconButton} from "@material-ui/core";
+import {useStyles} from "./style/styleModal";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        modal: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        paper: {
-            backgroundColor: theme.palette.background.paper,
-            // border: '2px solid #000',
-            // boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3),
-        },
-    }),
-);
+
 
 export default function DeleteModal() {
     const classes = useStyles();
@@ -37,13 +24,13 @@ export default function DeleteModal() {
 
     return (
         <div>
-            <button type="button" onClick={handleOpen}>
-                <IconButton>
-                    <NavLink to={'/contacts/delete'}>
-                        <Delete/>
-                    </NavLink>
-                </IconButton>
-            </button>
+            {/*<button type="button" onClick={handleOpen}>*/}
+            {/*    <IconButton>*/}
+            {/*        <NavLink to={'/contacts/delete'}>*/}
+            {/*            <Delete/>*/}
+            {/*        </NavLink>*/}
+            {/*    </IconButton>*/}
+            {/*</button>*/}
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"

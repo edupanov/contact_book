@@ -21,6 +21,10 @@ import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 
 const ContactList = () => {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => {
+        setOpen(true);
+    };
 
     const columns: GridColDef[] = [
         {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true},
@@ -54,6 +58,7 @@ const ContactList = () => {
                 aria-label="edit"
                 id={String(el.id)}
                 onClick={contactClickHandler}
+
             >
                 <NavLink to={'/contacts/edit'}>
                     <EditIcon/>
@@ -65,7 +70,7 @@ const ContactList = () => {
             renderCell: (el) =>  <IconButton
                 aria-label="edit"
                 id={String(el.id)}
-                onClick={contactClickHandler}
+                onClick={deleteContact}
             >
                 <NavLink to={'/contacts/delete'}>
                     <Delete/>
@@ -73,8 +78,7 @@ const ContactList = () => {
             </IconButton>},
     ];
 
-
-    const usePrevious = (value: any) => {
+     const usePrevious = (value: any) => {
         const ref = useRef();
         useEffect(() => {
             ref.current = value;
@@ -100,37 +104,15 @@ const ContactList = () => {
         setItems(updatedData)
     }
 
-    useEffect(() => {
-        getContacts()
-        if (data && data.length > 0) {
-            updateFullAddress(data)
-        }
-    }, [])
+    const deleteContact = (event: SyntheticEvent) => {
+        const id = event.currentTarget.id
 
-    useEffect(() => {        // убирает данные из формы редактирования при неактивном чебоксе
-        if (selectionModel.length === 0) {
-            const emptyItem = {} as ContactInterface
-            setItem(emptyItem)
-        }
-    }, [selectionModel]);
-
-    useEffect(() => {
-        if (data && data.length > 0) {
-            if (data !== prevVal) {
-                updateFullAddress(data)
-            }
-        } else {
-            setItems([])
-        }
-    }, [data])
-
-
-    if (isLoading || !data) {
-        return <CircularProgress
-            className={styles.preloader}
-            size={60}
-            color="secondary"
-        />
+        // @ts-ignore
+        fetch('http://localhost:8080/api/contacts/delete', {deletedContacts: [id]})
+            .then(result => {
+                console.log(result)
+            })
+        console.log(id)
     }
 
     const handlePaginationChange = ({page, pageSize}: GridPageChangeParams) => {
@@ -171,6 +153,38 @@ const ContactList = () => {
         } else {
             setSelectionModel(newSelectionModel);
         }
+    }
+
+    useEffect(() => {
+        getContacts()
+        if (data && data.length > 0) {
+            updateFullAddress(data)
+        }
+    }, [])
+
+    useEffect(() => {        // убирает данные из формы редактирования при неактивном чебоксе
+        if (selectionModel.length === 0) {
+            const emptyItem = {} as ContactInterface
+            setItem(emptyItem)
+        }
+    }, [selectionModel]);
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            if (data !== prevVal) {
+                updateFullAddress(data)
+            }
+        } else {
+            setItems([])
+        }
+    }, [data])
+
+    if (isLoading || !data) {
+        return <CircularProgress
+            className={styles.preloader}
+            size={60}
+            color="secondary"
+        />
     }
 
     return (
@@ -234,10 +248,10 @@ const ContactList = () => {
                       onPageSizeChange={handlePaginationChange}
                       sortingMode={'server'}
                       // onRowSelected={(params) => setCurrentContact(params.data.id)}
-                      checkboxSelection
+                      // checkboxSelection
                       disableSelectionOnClick
                       selectionModel={selectionModel}
-                      onSelectionModelChange={CancelMultiSelection}
+                      // onSelectionModelChange={CancelMultiSelection}
             />
         </div>
     );
