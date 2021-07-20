@@ -209,7 +209,7 @@ module.exports = {
 
     deleteContacts: async (req, res, next) => {
         const deleted = req.body.deletedContacts
-
+        console.log(deleted)
         await User.deleteMany({_id: deleted})
             .then(count => {
                res.status(200).json({count})

@@ -3,6 +3,7 @@ import * as loginActionCreators from '../components/pages/mainPage/loginForm/sto
 import * as searchUserActionCreators from '../components/pages/searchPage/store/actionCreators/searchContactActionCreators'
 import * as createContactActionCreators from '../components/pages/addPage/store/actionCreators/addContactActionCreator'
 import * as updateContactActionCreators from '../components/pages/editPage/store/actionCreators/updateContactActionCreator'
+import * as deleteContactActionCreators from '../components/pages/deleteModal/store/actionCreators/deleteContactActionCreator'
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -11,6 +12,7 @@ export default  {
     ...loginActionCreators,
     ...searchUserActionCreators,
     ...createContactActionCreators,
-    ...updateContactActionCreators
+    ...updateContactActionCreators,
+    ...deleteContactActionCreators
 
 }

@@ -6,8 +6,7 @@ import {
     DataGrid,
     GridCellParams,
     GridColDef,
-    GridPageChangeParams,
-    GridRowId,
+    GridPageChangeParams, GridRowId,
     GridSelectionModelChangeParams
 } from "@material-ui/data-grid";
 import styles from "../mainForm/HeaderContactList.module.scss";
@@ -77,6 +76,7 @@ const ContactList = () => {
         },
     ];
 
+
     const usePrevious = (value: any) => {
         const ref = useRef();
         useEffect(() => {
@@ -87,12 +87,10 @@ const ContactList = () => {
 
     const [item, setItem] = useState<ContactInterface>({} as ContactInterface)
     const [items, setItems] = useState<ContactInterface[]>([])
-    const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
-    const [changeContact, setChangeContact] = useState<ContactInterface>({} as ContactInterface)
-
-    const {getContacts, setPage, setTake} = useActions()
+    const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+    const {getContacts, setPage, setTake, deleteContacts} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
-
+    console.log(selectionModel)
     const prevVal = usePrevious(data)
 
     const updateFullAddress = (data: ContactInterface[]) => {
@@ -103,56 +101,39 @@ const ContactList = () => {
         setItems(updatedData)
     }
 
-    const deleteContact = (event: SyntheticEvent) => {
-        const id = event.currentTarget.id
-
-        // @ts-ignore
-        fetch('http://localhost:8080/api/contacts/delete', {deletedContacts: [id]})
-            .then(result => {
-                console.log(result)
-            })
-        console.log(id)
-    }
-
     const handlePaginationChange = ({page, pageSize}: GridPageChangeParams) => {
         setPage(page + 1)
         setTake(pageSize)
         getContacts()
     };
 
-    const setCurrentContact = (id: string) => {
-        const contactsForUpdate = [...data]
-        const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
-        setItem(currentContact)
-        return currentContact
-    }
 
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
         const contactsForUpdate = [...data]
         const currentContact: ContactInterface = contactsForUpdate.find(target => target.id === targetID)
         setItem(currentContact)
-
-        const checkedContacts: Array<ContactInterface> = []
-
-
     }
 
-    // отменяет мультивыбор строк
-    const CancelMultiSelection = (selection: GridSelectionModelChangeParams) => {
-        const newSelectionModel = selection.selectionModel;
-
-        if (newSelectionModel.length > 1) {
-            const selectionSet = new Set(selectionModel);
-            const result = newSelectionModel.filter(
-                (s) => !selectionSet.has(s)
-            );
-
-            setSelectionModel(result);
-        } else {
-            setSelectionModel(newSelectionModel);
-        }
+    const deleteContact = (event: SyntheticEvent) => {
+        const id = event.currentTarget.id
+        const checkedContacts: Array<string> = []
+        deleteContacts([...checkedContacts, id])
     }
+
+
+
+    const checkedCurrenContacts = (newSelectionModel: GridRowId[]) => {
+        setSelectionModel(newSelectionModel);
+    }
+
+
+    /*const setCurrentContact = (id: string) => {
+    const contactsForUpdate = [...data]
+    const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
+    setItem(currentContact)
+    return currentContact
+}*/
 
     useEffect(() => {
         getContacts()
@@ -161,12 +142,12 @@ const ContactList = () => {
         }
     }, [])
 
-    useEffect(() => {        // убирает данные из формы редактирования при неактивном чебоксе
-        if (selectionModel.length === 0) {
-            const emptyItem = {} as ContactInterface
-            setItem(emptyItem)
-        }
-    }, [selectionModel]);
+    // useEffect(() => {        // убирает данные из формы редактирования при неактивном чебоксе
+    //     if (selectionModel.length === 0) {
+    //         const emptyItem = {} as ContactInterface
+    //         setItem(emptyItem)
+    //     }
+    // }, [selectionModel]);
 
     useEffect(() => {
         if (data && data.length > 0) {
@@ -204,22 +185,24 @@ const ContactList = () => {
             </NavLink>
                 <div>
                     <Button className={styles.deleteButton}
-                        variant="outlined"
-                        color="secondary"
+                            variant="outlined"
+                            color="secondary"
                     >
                         Удалить все
                         <Delete/>
                     </Button>
-                    <Button className={styles.deleteButton}
-                        variant="outlined"
-                        color="secondary"
+                    <Button
+
+                        className={styles.deleteButton}
+                            variant="outlined"
+                            color="secondary"
                     >
                         Удалить выбранные
                         <Delete/>
                     </Button>
                     <Button className={styles.searchButton}
-                        variant="outlined"
-                        color="primary"
+                            variant="outlined"
+                            color="primary"
                     >
                         <NavLink to={'/contacts/search'}>
                             Поиск
@@ -255,10 +238,10 @@ const ContactList = () => {
                       onPageSizeChange={handlePaginationChange}
                       sortingMode={'server'}
                 // onRowSelected={(params) => setCurrentContact(params.data.id)}
-                // checkboxSelection
                       disableSelectionOnClick
+                      checkboxSelection
+                      // onSelectionModelChange={checkedCurrenContacts}
                       selectionModel={selectionModel}
-                // onSelectionModelChange={CancelMultiSelection}
             />
         </div>
     );

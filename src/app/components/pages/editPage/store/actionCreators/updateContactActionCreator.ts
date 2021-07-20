@@ -7,15 +7,14 @@ import {ContactInterface} from "../../../../contactList/types/contact.interface"
 import {UpdateContactActionType, UpdateContactActionTypes} from "../actionType/updateContactActionTypes";
 
 
-export const updateContact = (contact: {contact: ContactInterface}) =>
+export const updateContact = (contact: { contact: ContactInterface }) =>
     async (dispatch: Dispatch<UpdateContactActionType | ContactsActionType>, getState: () => RootState) => {
 
         dispatch({type: UpdateContactActionTypes.UPDATE_CONTACT})
 
         await ContactRequests.updateContact(contact)
-            .then( async response => {
-                if(response.isSuccess) {
-                    console.log('jkhh')
+            .then(async response => {
+                if (response.isSuccess) {
                     const updatedContacts = await ContactListRequests.getContact({})
                     dispatch({
                         type: ContactActionTypes.GET_CONTACTS_SUCCESS,

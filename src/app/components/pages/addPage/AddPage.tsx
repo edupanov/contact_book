@@ -9,7 +9,7 @@ import {GridCloseIcon} from "@material-ui/data-grid";
 const AddPage: FC = () => {
     const classes = useStyles()
 
-    const {addContact, getContacts} = useActions()
+    const {addContact} = useActions()
 
     const [contactInfo, setContactInfo] = useState({})
     const [contactAddress, setContactAddress] = useState({})
