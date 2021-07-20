@@ -18,7 +18,7 @@ export const updateContact = (contact: {contact: ContactInterface}) =>
                     console.log('jkhh')
                     const updatedContacts = await ContactListRequests.getContact({})
                     dispatch({
-                        type: ContactActionTypes.GET_CONTACTS,
+                        type: ContactActionTypes.GET_CONTACTS_SUCCESS,
                         payload: {
                             users: updatedContacts?.data as Array<ContactInterface>,
                             maxUsers: response?.maxUsers

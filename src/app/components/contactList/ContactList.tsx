@@ -67,7 +67,7 @@ const ContactList = () => {
         },
         {
             field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
-            renderCell: (el) =>  <IconButton
+            renderCell: (el) => <IconButton
                 aria-label="edit"
                 id={String(el.id)}
                 onClick={deleteContact}
@@ -75,10 +75,11 @@ const ContactList = () => {
                 <NavLink to={'/contacts/delete'}>
                     <Delete/>
                 </NavLink>
-            </IconButton>},
+            </IconButton>
+        },
     ];
 
-     const usePrevious = (value: any) => {
+    const usePrevious = (value: any) => {
         const ref = useRef();
         useEffect(() => {
             ref.current = value;
@@ -108,11 +109,14 @@ const ContactList = () => {
         const id = event.currentTarget.id
 
         // @ts-ignore
-        fetch('http://localhost:8080/api/contacts/delete', {deletedContacts: [id]})
+        fetch('http://localhost:8080/api/contacts/delete', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({deletedContacts: [id]})
+        })
             .then(result => {
                 console.log(result)
             })
-        console.log(id)
     }
 
     const handlePaginationChange = ({page, pageSize}: GridPageChangeParams) => {
@@ -195,25 +199,27 @@ const ContactList = () => {
                 direction="row"
                 justify="space-between"
                 alignItems="center"
-            > <NavLink className={styles.link} to={'/contacts/create'}>
-                <Button
-                    variant="outlined"
-                    color="primary"
-                >
-                    Создать новый контакт
-                </Button>
-            </NavLink>
+            > <Button
+                variant="contained"
+                size="large"
+                color="primary"
+                target="_top"
+                rel="noopener noreferrer"
+                href={``}
+            >
+                <Typography variant="button" style={{fontSize: '0.79rem'}}>
+                    <Delete/>
+                </Typography>
+            </Button>
+                <NavLink className={styles.link} to={'/contacts/create'}>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                    >
+                        Создать новый контакт
+                    </Button>
+                </NavLink>
                 <div>
-                    <IconButton aria-label="delete" onClick={() => {
-                        console.log('delete')
-                    }}>
-                        <DeleteIcon/>
-                    </IconButton>
-                    <IconButton aria-label="edit">
-                        <NavLink to={'/contacts/edit'}>
-                            <EditIcon/>
-                        </NavLink>
-                    </IconButton>
                     <IconButton aria-label="search">
                         <NavLink to={'/contacts/search'}>
                             <SearchIcon/>
@@ -247,11 +253,11 @@ const ContactList = () => {
                       onPageChange={handlePaginationChange}
                       onPageSizeChange={handlePaginationChange}
                       sortingMode={'server'}
-                      // onRowSelected={(params) => setCurrentContact(params.data.id)}
-                      // checkboxSelection
+                // onRowSelected={(params) => setCurrentContact(params.data.id)}
+                      checkboxSelection
                       disableSelectionOnClick
                       selectionModel={selectionModel}
-                      // onSelectionModelChange={CancelMultiSelection}
+                // onSelectionModelChange={CancelMultiSelection}
             />
         </div>
     );

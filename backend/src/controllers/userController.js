@@ -212,7 +212,7 @@ module.exports = {
 
         await User.deleteMany({_id: deleted})
             .then(count => {
-                console.log(count)
+               res.status(200).json({count})
             })
 
         // deleted.map(async contactId => {
