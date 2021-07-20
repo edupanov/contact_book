@@ -5,14 +5,14 @@ import {useStyles} from "../editPage/styles/editContactStyles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
 import {NavLink} from "react-router-dom";
 import {GridCloseIcon} from "@material-ui/data-grid";
+import {formatDate} from "../../../utils/utils";
 
 export type TargetType = {
     name: string
     value: string
 }
-// убрать очищение формы при submit
-const SearchPanel: FC = () => {
 
+const SearchPanel: FC = () => {
 
     const classes = useStyles()
 
@@ -24,19 +24,18 @@ const SearchPanel: FC = () => {
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
 
-        const dateFrom = target.name === 'dateFrom'
-        const dateTo = target.name === 'dateTo'
-        const isDate = dateFrom || dateTo
-
-        const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
+        const isDate = target.name === 'dateFrom' || target.name === 'dateTo'
+        let replaceStr
+        if (isDate && target.value.length === 10) {
+            replaceStr = formatDate(target.value, 'DD.MM.yyyy')
+        }
 
         setSearch({
             ...search,
-            [dateFrom ? 'dateFrom' :
-                dateTo ? 'dateTo' :
-                    target.name]: isDate ? replaceStr : target.value,
+            [target.name]: isDate ? replaceStr : target.value,
         })
     }
+
     const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
         setSearch({
@@ -60,7 +59,7 @@ const SearchPanel: FC = () => {
     return (
         <div className={classes.searchPanel}>
             <h2 className={classes.title}>Поиск контакта</h2>
-            <NavLink className={classes.close} to={'/contacts'} exact >
+            <NavLink className={classes.close} to={'/contacts'} exact>
                 <IconButton aria-label="close">
                     <GridCloseIcon/>
                 </IconButton>
@@ -125,14 +124,14 @@ const SearchPanel: FC = () => {
                                                        name={"dateFrom"}
                                                        type="date"
                                                        onChange={changeContactInfoHandler}
-                                                       defaultValue={savedSearch.dateFrom}
+                                                       defaultValue={formatDate(savedSearch.dateFrom!, 'yyyy-MM-DD')}
                                             />
                                             <TextField className={classes.date}
                                                        helperText="По"
                                                        name={"dateTo"}
                                                        type="date"
                                                        onChange={changeContactInfoHandler}
-                                                       defaultValue={savedSearch.dateTo}
+                                                       defaultValue={formatDate(savedSearch.dateTo!, 'yyyy-MM-DD')}
                                             />
                                         </div>
                                     </div>

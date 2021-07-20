@@ -82,7 +82,7 @@ module.exports = {
             })
     },
 
-    getUsers: async (req, res, next) => {
+    getContacts: async (req, res, next) => {
         const pageSize = req.body.take
         const currentPage = req.body.page
         const isPaging = pageSize && currentPage
@@ -207,7 +207,20 @@ module.exports = {
             })
     },
 
-    setUsers: async (req, res, next) => {
+    deleteContacts: async (req, res, next) => {
+        const deleted = req.body.deletedContacts
+
+        await User.deleteMany({_id: deleted})
+            .then(count => {
+               res.status(200).json({count})
+            })
+
+        // deleted.map(async contactId => {
+        //     const res = await User.deleteOne({_id: contactId})
+        // })
+    },
+
+    setContacts: async (req, res, next) => {
 
         // let i = 0
         //
