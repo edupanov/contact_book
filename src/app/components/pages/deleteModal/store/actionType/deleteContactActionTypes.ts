@@ -1,5 +1,5 @@
 export interface DeleteContactStateInterface {
-    isLoading: boolean
+    isDeleteLoading: boolean
     errors: object
 }
 

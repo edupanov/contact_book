@@ -49,16 +49,20 @@ const ContactList = () => {
         },
         {
             field: 'edit', headerName: '', width: 100, filterable: false, sortable: false,
-            renderCell: (el) => <IconButton
-                aria-label="edit"
-                id={String(el.id)}
-                onClick={contactClickHandler}
+            renderCell: (el) => {
+                console.log(String(el.id))
+                console.log('dddd')
+                return <IconButton
+                    aria-label="edit"
+                    id={String(el.id)}
+                    onClick={contactClickHandler}
 
-            >
-                <NavLink to={'/contacts/edit'}>
-                    <EditIcon/>
-                </NavLink>
-            </IconButton>
+                >
+                    <NavLink to={'/contacts/edit'}>
+                        <EditIcon/>
+                    </NavLink>
+                </IconButton>
+            }
         },
         {
             field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
@@ -87,6 +91,7 @@ const ContactList = () => {
 
     const {getContacts, setPage, setTake, deleteContacts} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
+    const {isDeleteLoading} = useTypeSelector(state => state.delete)
     const prevVal = usePrevious(data)
 
     const handleOpen = () => {
@@ -100,7 +105,7 @@ const ContactList = () => {
     const updateFullAddress = (data: ContactInterface[]) => {
         const updatedData = [...data]
         updatedData.map((item: ContactInterface) => {
-           return  item.address.fullAddress = `${item.address.zipCode} ${item.address.country}, г. ${item.address.city}, ул. ${item.address.street} ${item.address.building}/${item.address.flat}`
+            return item.address.fullAddress = `${item.address.zipCode} ${item.address.country}, г. ${item.address.city}, ул. ${item.address.street} ${item.address.building}/${item.address.flat}`
         })
         setItems(updatedData)
     }
@@ -122,6 +127,7 @@ const ContactList = () => {
     }
 
     const deleteContact = (event: SyntheticEvent) => {
+        console.log('cddcd')
         const id = event.currentTarget.id
         const checkedContacts: Array<string> = []
         deleteContacts([...checkedContacts, id])
@@ -225,6 +231,7 @@ const ContactList = () => {
                       page={page - 1 || 0}
                       rowCount={maxUsers}
                       autoHeight
+                      loading={isDeleteLoading}
                       paginationMode={'server'}
                       rowsPerPageOptions={[5, 10, 25]}
                       onPageChange={handlePaginationChange}

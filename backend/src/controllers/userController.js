@@ -188,6 +188,8 @@ module.exports = {
                         gender: user.gender,
                         maritalStatus: user.maritalStatus,
                         nationality: user.nationality,
+                        del: user.del,
+                        edit: user.edit,
                         address: addr
                     }
                 })
@@ -232,7 +234,9 @@ module.exports = {
         //         birthDate: `01.01.${2007 + i}`,
         //         gender: `${i % 2 === 0 ? 'мужской' : 'женский'}`,
         //         maritalStatus: `${i % 2 === 0 ? 'женат' : 'замужем'}`,
-        //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`
+        //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`,
+        //         del: ``,
+        //         edit: ``,
         //     })
         //
         //     await user.save()

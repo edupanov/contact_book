@@ -14,5 +14,4 @@ export default  {
     ...createContactActionCreators,
     ...updateContactActionCreators,
     ...deleteContactActionCreators
-
 }
