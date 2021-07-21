@@ -28,7 +28,7 @@ const Routes = (props:RouteType) => {
                 <Route exact path={PATH.CREATE} component={AddPage}/>
                 <Route exact path={PATH.EDIT}  render={() => <EditPage contact={item} setContact={setItem}/> }/>
                 <Route exact path={PATH.SEARCH} component={SearchUser}/>
-                <Route exact path={PATH.DELETE} component={DeleteModal}/>
+                {/*<Route exact path={PATH.DELETE} component={DeleteModal}/>*/}
             </Switch>
         </div>
     );

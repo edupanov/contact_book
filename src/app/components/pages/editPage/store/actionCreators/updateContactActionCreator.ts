@@ -12,15 +12,23 @@ export const updateContact = (contact: { contact: ContactInterface }) =>
 
         dispatch({type: UpdateContactActionTypes.UPDATE_CONTACT})
 
+        const {searchParams} = getState().search  //получаем парметры из текущего стейта
+        const {take, page} = getState().contacts
+
+        const search = {
+            ...searchParams,
+            page, take
+        }
+
         await ContactRequests.updateContact(contact)
             .then(async response => {
                 if (response.isSuccess) {
-                    const updatedContacts = await ContactListRequests.getContact({})
+                    const updatedContacts = await ContactListRequests.getContact(search)
                     dispatch({
                         type: ContactActionTypes.GET_CONTACTS_SUCCESS,
                         payload: {
                             users: updatedContacts?.data as Array<ContactInterface>,
-                            maxUsers: response?.maxUsers
+                            maxUsers: updatedContacts?.maxUsers
                         }
                     })
                 }

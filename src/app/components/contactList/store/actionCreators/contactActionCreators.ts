@@ -5,7 +5,7 @@ import {DefaultPagedResponse} from "../../../../shared/types/defaultPagedRespons
 import {ContactInterface} from "../../types/contact.interface";
 import * as ContactListRequests from '../../requests/contactListRequests'
 
-export const getContacts = (pageSize: string = '3', currentPage: string = '1') => // передаем то что хотим поменять
+export const getContacts = () => // передаем то что хотим поменять
     async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => { // передаем наш диспатч
         dispatch({type: ContactActionTypes.GET_CONTACTS}) // запускаем крутилку
 

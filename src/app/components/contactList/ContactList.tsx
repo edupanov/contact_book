@@ -6,7 +6,8 @@ import {
     DataGrid,
     GridCellParams,
     GridColDef,
-    GridPageChangeParams, GridRowId,
+    GridPageChangeParams,
+    GridRowId,
     GridSelectionModelChangeParams
 } from "@material-ui/data-grid";
 import styles from "../mainForm/HeaderContactList.module.scss";
@@ -16,23 +17,20 @@ import {ContactInterface} from "./types/contact.interface";
 import {NavLink} from 'react-router-dom';
 import Routes from '../../routes/Routes';
 import {Delete} from "@material-ui/icons";
+import DeleteModal from "../pages/deleteModal/DeleteModal";
 
 const ContactList = () => {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => {
-        setOpen(true);
-    };
 
     const columns: GridColDef[] = [
         {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false, hide: true},
-        {
-            field: 'fullName', headerName: 'ФИО', width: 250, filterable: false, sortable: false,
-            renderCell: (params: GridCellParams) => {
-                return <span>{`${params.row.name} ${params.row.surname} ${params.row.patronymic}`}</span>
-            }
-        },
+        // {
+        //     field: '', headerName: 'ФИО', width: 250, filterable: false, sortable: false,
+        //     renderCell: (params: GridCellParams) => {
+        //         return <span>{`${params.row.name} ${params.row.surname} ${params.row.patronymic}`}</span>
+        //     }
+        // },
         {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
         {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false},
         {field: 'maritalStatus', headerName: 'Семейное положение', width: 200, filterable: false, sortable: false},
@@ -65,17 +63,14 @@ const ContactList = () => {
         {
             field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
             renderCell: (el) => <IconButton
-                aria-label="edit"
+                aria-label="del"
                 id={String(el.id)}
                 onClick={deleteContact}
             >
-                <NavLink to={'/contacts/delete'}>
-                    <Delete/>
-                </NavLink>
+                <Delete/>
             </IconButton>
         },
     ];
-
 
     const usePrevious = (value: any) => {
         const ref = useRef();
@@ -88,15 +83,24 @@ const ContactList = () => {
     const [item, setItem] = useState<ContactInterface>({} as ContactInterface)
     const [items, setItems] = useState<ContactInterface[]>([])
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+    const [open, setOpen] = React.useState(false);
+
     const {getContacts, setPage, setTake, deleteContacts} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
-    console.log(selectionModel)
     const prevVal = usePrevious(data)
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const updateFullAddress = (data: ContactInterface[]) => {
         const updatedData = [...data]
         updatedData.map((item: ContactInterface) => {
-            item.address.fullAddress = `${item.address.zipCode} ${item.address.country}, г. ${item.address.city}, ул. ${item.address.street} ${item.address.building}/${item.address.flat}`
+           return  item.address.fullAddress = `${item.address.zipCode} ${item.address.country}, г. ${item.address.city}, ул. ${item.address.street} ${item.address.building}/${item.address.flat}`
         })
         setItems(updatedData)
     }
@@ -106,7 +110,9 @@ const ContactList = () => {
         setTake(pageSize)
         getContacts()
     };
-
+    const checkedCurrenContacts = (params: GridSelectionModelChangeParams) => {
+        setSelectionModel(params.selectionModel)
+    }
 
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
@@ -121,19 +127,11 @@ const ContactList = () => {
         deleteContacts([...checkedContacts, id])
     }
 
-
-
-    const checkedCurrenContacts = (newSelectionModel: GridRowId[]) => {
-        setSelectionModel(newSelectionModel);
+    const deleteAllContacts = () => {
+        const contactsId = items.map(el => el.id)
+        deleteContacts(contactsId)
     }
 
-
-    /*const setCurrentContact = (id: string) => {
-    const contactsForUpdate = [...data]
-    const currentContact: ContactInterface = contactsForUpdate.find(item => item.id === id)
-    setItem(currentContact)
-    return currentContact
-}*/
 
     useEffect(() => {
         getContacts()
@@ -141,13 +139,6 @@ const ContactList = () => {
             updateFullAddress(data)
         }
     }, [])
-
-    // useEffect(() => {        // убирает данные из формы редактирования при неактивном чебоксе
-    //     if (selectionModel.length === 0) {
-    //         const emptyItem = {} as ContactInterface
-    //         setItem(emptyItem)
-    //     }
-    // }, [selectionModel]);
 
     useEffect(() => {
         if (data && data.length > 0) {
@@ -184,18 +175,20 @@ const ContactList = () => {
                 </Button>
             </NavLink>
                 <div>
-                    <Button className={styles.deleteButton}
-                            variant="outlined"
-                            color="secondary"
+                    <Button
+                        onClick={deleteAllContacts}
+                        className={selectionModel.length >= 5 ? styles.deleteButton : styles.hideButton}
+                        variant="outlined"
+                        color="secondary"
                     >
                         Удалить все
                         <Delete/>
                     </Button>
                     <Button
-
-                        className={styles.deleteButton}
-                            variant="outlined"
-                            color="secondary"
+                        onClick={handleOpen}
+                        className={selectionModel.length !== 0 ? styles.deleteButton : styles.hideButton}
+                        variant="outlined"
+                        color="secondary"
                     >
                         Удалить выбранные
                         <Delete/>
@@ -240,9 +233,11 @@ const ContactList = () => {
                 // onRowSelected={(params) => setCurrentContact(params.data.id)}
                       disableSelectionOnClick
                       checkboxSelection
-                      // onSelectionModelChange={checkedCurrenContacts}
+                      onSelectionModelChange={checkedCurrenContacts}
                       selectionModel={selectionModel}
             />
+
+            <DeleteModal open={open} onClose={handleClose} selectionModel={selectionModel}/>
         </div>
     );
 }
