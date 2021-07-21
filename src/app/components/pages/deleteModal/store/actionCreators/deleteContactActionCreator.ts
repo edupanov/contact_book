@@ -25,6 +25,7 @@ export const deleteContacts = (deletedContacts:GridRowId[]) =>
             .then(async response => {
                 if (response.isSuccess) {
                     const updatedContacts = await ContactListRequests.getContact(search)
+                    dispatch({type: DeleteContactActionTypes.DELETE_CONTACT_SUCCESS})
                     dispatch({
                         type: ContactActionTypes.GET_CONTACTS_SUCCESS,
                         payload: {

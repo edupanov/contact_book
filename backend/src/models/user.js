@@ -10,6 +10,8 @@ const userSchema = new Schema({
     gender: {type: String, require: true},
     maritalStatus: {type: String, require: true},
     nationality: {type: String, require: true},
+    del: {type: String, require: true},
+    edit: {type: String, require: true},
     addresses: [AddressSchema]
 }, {timestamps: true})
 

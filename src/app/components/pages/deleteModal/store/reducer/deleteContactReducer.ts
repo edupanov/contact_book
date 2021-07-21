@@ -6,7 +6,7 @@ import {
 
 
 const initialState: DeleteContactStateInterface = {
-    isLoading: false,
+    isDeleteLoading: false,
     errors: {}
 
 }
@@ -16,16 +16,17 @@ export const deleteContactReducer = (state: DeleteContactStateInterface = initia
         case DeleteContactActionTypes.DELETE_CONTACT:
             return {
                 ...state,
-                isLoading: true
+                isDeleteLoading: true
             }
         case DeleteContactActionTypes.DELETE_CONTACT_SUCCESS:
             return {
                 ...state,
-                isLoading: false
+                isDeleteLoading: false
             }
         case DeleteContactActionTypes.DELETE_CONTACT_FAILURE:
             return {
                 ...state,
+                isDeleteLoading: false,
                 errors: {}
             }
 
