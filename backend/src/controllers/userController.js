@@ -209,14 +209,10 @@ module.exports = {
 
     deleteContacts: async (req, res, next) => {
         const deleted = req.body.deletedContacts
+
         await User.deleteMany({_id: deleted})
             .then(count => {
-               res.status(200).json({
-                   code: 200,
-                   isSuccess: true,
-                   message: 'Contact deleted successfully!',
-                   count
-               })
+               res.status(200).json({count})
             })
 
         // deleted.map(async contactId => {
