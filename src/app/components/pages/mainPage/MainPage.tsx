@@ -13,7 +13,7 @@ const MainPage = () => {
             <Container
                 className={style.container}
                 fixed>
-                <Route path={"/contacts"} component={MainForm}/>
+                <MainForm/>
 
             </Container>
 

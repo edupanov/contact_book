@@ -87,7 +87,7 @@ const ContactList = () => {
     const [items, setItems] = useState<ContactInterface[]>([])
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
-
+    console.log(item)
     const {getContacts, setPage, setTake, deleteContacts, deleteAll} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
@@ -114,6 +114,7 @@ const ContactList = () => {
         setTake(pageSize)
         getContacts()
     };
+
     const checkedCurrenContacts = (params: GridSelectionModelChangeParams) => {
         setSelectionModel(params.selectionModel)
     }
@@ -136,12 +137,6 @@ const ContactList = () => {
         handleClose()
         setSelectionModel([])
     }
-
-    // const deleteAllContacts = () => {
-    //     const contactsId = items.map(el => el.id)
-    //     deleteAll(contactsId)
-    // }
-
 
     useEffect(() => {
         getContacts()
