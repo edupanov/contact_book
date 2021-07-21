@@ -5,7 +5,6 @@ import Fade from '@material-ui/core/Fade';
 import {useStyles} from "./style/styleModal";
 import {GridRowId} from "@material-ui/data-grid";
 import {Button, Typography} from "@material-ui/core";
-import {getLogin} from "../mainPage/loginForm/store/actionCreators/loginActionCreators";
 
 type DeleteType = {
     open: boolean,

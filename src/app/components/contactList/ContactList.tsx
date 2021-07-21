@@ -25,12 +25,12 @@ const ContactList = () => {
         {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false, hide: true},
-        // {
-        //     field: '', headerName: 'ФИО', width: 250, filterable: false, sortable: false,
-        //     renderCell: (params: GridCellParams) => {
-        //         return <span>{`${params.row.name} ${params.row.surname} ${params.row.patronymic}`}</span>
-        //     }
-        // },
+        {
+            field: '', headerName: 'ФИО', width: 250, filterable: false, sortable: false,
+            renderCell: (params: GridCellParams) => {
+                return <span>{`${params.row.name} ${params.row.surname} ${params.row.patronymic}`}</span>
+            }
+        },
         {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
         {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false},
         {field: 'maritalStatus', headerName: 'Семейное положение', width: 200, filterable: false, sortable: false},
@@ -64,13 +64,14 @@ const ContactList = () => {
         },
         {
             field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
-            renderCell: (el) => <IconButton
-                aria-label="del"
-                id={String(el.id)}
-                onClick={deleteContact}
-            >
-                <Delete/>
-            </IconButton>
+            renderCell: (el) =>
+                <IconButton
+                    aria-label="del"
+                    id={String(el.id)}
+                    onClick={deleteContact}
+                >
+                    <Delete/>
+                </IconButton>
         },
     ];
 
@@ -184,7 +185,7 @@ const ContactList = () => {
             </NavLink>
                 <div>
                     <Button
-                        onClick={handleOpen}
+                        onClick={deleteAll}
                         className={selectionModel.length >= 5 ? styles.deleteButton : styles.hideButton}
                         variant="outlined"
                         color="secondary"
@@ -203,8 +204,8 @@ const ContactList = () => {
                     </Button>
                     <Button
                         className={styles.searchButton}
-                            variant="outlined"
-                            color="primary"
+                        variant="outlined"
+                        color="primary"
                     >
                         <NavLink to={'/contacts/search'}>
                             Поиск

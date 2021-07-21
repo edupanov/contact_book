@@ -8,7 +8,7 @@ import {DeleteContactActionType, DeleteContactActionTypes} from "../actionType/d
 import {GridRowId} from "@material-ui/data-grid";
 
 
-export const deleteContacts = (deletedContacts:GridRowId[]) =>
+export const deleteContacts = (deletedContacts: GridRowId[]) =>
     async (dispatch: Dispatch<DeleteContactActionType | ContactsActionType>, getState: () => RootState) => {
 
         dispatch({type: DeleteContactActionTypes.DELETE_CONTACT})
@@ -32,13 +32,30 @@ export const deleteContacts = (deletedContacts:GridRowId[]) =>
                             users: updatedContacts?.data as Array<ContactInterface>,
                             maxUsers: updatedContacts?.maxUsers
                         }
-                    })}
+                    })
+                }
             })
             .catch(error => {
                 dispatch({type: DeleteContactActionTypes.DELETE_CONTACT_FAILURE, errors: error})
             })
     }
 
-export const deleteAll = () => (dispatch: Dispatch<DeleteContactActionType>) => {
-    dispatch({type: DeleteContactActionTypes.DELETE_ALL})
+export const deleteAll = () => async (dispatch: Dispatch<DeleteContactActionType | ContactsActionType>) => {
+    dispatch({type: DeleteContactActionTypes.DELETE_CONTACT})
+
+    await ContactRequests.deleteAllContact()
+        .then(response => {
+
+            if (response.isSuccess) {
+                dispatch({
+                    type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+                    payload: {
+                        users: [] as Array<ContactInterface>,
+                        maxUsers: 0
+
+                    }
+                })
+                dispatch({type: DeleteContactActionTypes.DELETE_CONTACT_SUCCESS})
+            }
+        })
 }

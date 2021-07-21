@@ -214,35 +214,33 @@ module.exports = {
 
         await User.deleteMany({_id: deleted})
             .then(count => {
-               res.status(200).json({
-                   code: 200,
-                   isSuccess: true,
-                   message: 'Contacts deleted successfully!',
-                   count
-               })
+                res.status(200).json({
+                    code: 200,
+                    isSuccess: true,
+                    message: 'Contacts deleted successfully!',
+                    count
+                })
             })
     },
 
     deleteAllContacts: async (req, res, next) => {
 
-        await User.find(async documents => {
-            const contacts = documents
-            const contactsCount = await User.countDocuments()
+        await User.find({})
+            .then(async documents => {
+                const contacts = documents
 
-            contacts.map(contact => contact._id)
+                contacts.map(contact => contact._id)
 
-            await User.deleteMany({_id: contacts})
-                .then(count => {
-                    if (count === contactsCount) {
-                        res.status(200).json({
-                            code: 200,
-                            isSuccess: true,
-                            message: 'Contacts deleted successfully!',
-                            count
-                        })
-                    }
-                })
-        })
+                await User.deleteMany({_id: contacts})
+                    .then(count => {
+                            res.status(200).json({
+                                code: 200,
+                                isSuccess: true,
+                                message: 'Contacts deleted successfully!',
+                                count
+                            })
+                    })
+            })
     },
 
     setContacts: async (req, res, next) => {
@@ -285,7 +283,7 @@ module.exports = {
         // }
 
         // User.find().populate('addresses').then(documents => res.json({users: documents}))
-
+        //
         // User.deleteMany({}).then(result =>  res.json({deleted: result}))
         // Address.deleteMany({}).then(result =>  res.json({deleted: result}))
     }

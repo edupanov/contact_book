@@ -11,3 +11,13 @@ export const deleteContact = async (deletedContacts:GridRowId[]) => {
 
     return result.json()
 }
+
+export const deleteAllContact = async () => {
+    const BASE_URL = "http://localhost:8080/api"
+
+    const fullUrl = `${BASE_URL}${ContactsUrls.DELETE_ALL_CONTACTS_URL}`
+
+    const result = await RequestSender.delete(fullUrl, {})
+
+    return result.json()
+}
