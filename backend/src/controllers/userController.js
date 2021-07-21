@@ -211,19 +211,38 @@ module.exports = {
 
     deleteContacts: async (req, res, next) => {
         const deleted = req.body.deletedContacts
+
         await User.deleteMany({_id: deleted})
             .then(count => {
                res.status(200).json({
                    code: 200,
                    isSuccess: true,
-                   message: 'Contact deleted successfully!',
+                   message: 'Contacts deleted successfully!',
                    count
                })
             })
+    },
 
-        // deleted.map(async contactId => {
-        //     const res = await User.deleteOne({_id: contactId})
-        // })
+    deleteAllContacts: async (req, res, next) => {
+
+        await User.find(async documents => {
+            const contacts = documents
+            const contactsCount = await User.countDocuments()
+
+            contacts.map(contact => contact._id)
+
+            await User.deleteMany({_id: contacts})
+                .then(count => {
+                    if (count === contactsCount) {
+                        res.status(200).json({
+                            code: 200,
+                            isSuccess: true,
+                            message: 'Contacts deleted successfully!',
+                            count
+                        })
+                    }
+                })
+        })
     },
 
     setContacts: async (req, res, next) => {
