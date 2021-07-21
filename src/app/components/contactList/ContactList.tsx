@@ -48,10 +48,8 @@ const ContactList = () => {
             }
         },
         {
-            field: 'edit', headerName: '', width: 100, filterable: false, sortable: false,
+            field: 'edit', headerName: '', width: 100, filterable: false, sortable: false, editable: true,
             renderCell: (el) => {
-                console.log(String(el.id))
-                console.log('dddd')
                 return <IconButton
                     aria-label="edit"
                     id={String(el.id)}
@@ -89,7 +87,7 @@ const ContactList = () => {
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
 
-    const {getContacts, setPage, setTake, deleteContacts} = useActions()
+    const {getContacts, setPage, setTake, deleteContacts, deleteAll} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
     const prevVal = usePrevious(data)
@@ -127,16 +125,21 @@ const ContactList = () => {
     }
 
     const deleteContact = (event: SyntheticEvent) => {
-        console.log('cddcd')
         const id = event.currentTarget.id
         const checkedContacts: Array<string> = []
         deleteContacts([...checkedContacts, id])
     }
 
-    const deleteAllContacts = () => {
-        const contactsId = items.map(el => el.id)
-        deleteContacts(contactsId)
+    const deleteCheckedContacts = () => {
+        deleteContacts(selectionModel)
+        handleClose()
+        setSelectionModel([])
     }
+
+    // const deleteAllContacts = () => {
+    //     const contactsId = items.map(el => el.id)
+    //     deleteAll(contactsId)
+    // }
 
 
     useEffect(() => {
@@ -163,7 +166,6 @@ const ContactList = () => {
             color="secondary"
         />
     }
-
     return (
         <div style={{height: 400, width: '100%'}}>
             <Grid
@@ -182,7 +184,7 @@ const ContactList = () => {
             </NavLink>
                 <div>
                     <Button
-                        onClick={deleteAllContacts}
+                        onClick={handleOpen}
                         className={selectionModel.length >= 5 ? styles.deleteButton : styles.hideButton}
                         variant="outlined"
                         color="secondary"
@@ -199,7 +201,8 @@ const ContactList = () => {
                         Удалить выбранные
                         <Delete/>
                     </Button>
-                    <Button className={styles.searchButton}
+                    <Button
+                        className={styles.searchButton}
                             variant="outlined"
                             color="primary"
                     >
@@ -244,7 +247,8 @@ const ContactList = () => {
                       selectionModel={selectionModel}
             />
 
-            <DeleteModal open={open} onClose={handleClose} selectionModel={selectionModel}/>
+            <DeleteModal open={open} onClose={handleClose} selectionModel={selectionModel}
+                         deleteCheckedContacts={deleteCheckedContacts} deleteAll={deleteAll}/>
         </div>
     );
 }

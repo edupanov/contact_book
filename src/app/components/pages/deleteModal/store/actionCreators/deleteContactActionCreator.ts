@@ -38,3 +38,7 @@ export const deleteContacts = (deletedContacts:GridRowId[]) =>
                 dispatch({type: DeleteContactActionTypes.DELETE_CONTACT_FAILURE, errors: error})
             })
     }
+
+export const deleteAll = () => (dispatch: Dispatch<DeleteContactActionType>) => {
+    dispatch({type: DeleteContactActionTypes.DELETE_ALL})
+}

@@ -7,20 +7,26 @@ export enum DeleteContactActionTypes {
     DELETE_CONTACT = '[Delete User] Delete User',
     DELETE_CONTACT_SUCCESS = '[Delete User] Delete User Success',
     DELETE_CONTACT_FAILURE = '[Delete User] Delete User Failure',
+    DELETE_ALL = '[Delete all] Delete all contacts'
 }
 
-interface updateContact {
+interface deleteContact {
     type: DeleteContactActionTypes.DELETE_CONTACT,
 }
 
-interface updateContactSuccess {
+interface deleteContactSuccess {
     type: DeleteContactActionTypes.DELETE_CONTACT_SUCCESS,
 }
 
-interface updateContactFailure {
+interface deleteContactFailure {
     type: DeleteContactActionTypes.DELETE_CONTACT_FAILURE,
     errors: {}
 }
 
+interface deleteAll {
+    type: DeleteContactActionTypes.DELETE_ALL,
 
-export type DeleteContactActionType = updateContact | updateContactSuccess | updateContactFailure
+}
+
+
+export type DeleteContactActionType = deleteContact | deleteContactSuccess | deleteContactFailure | deleteAll
