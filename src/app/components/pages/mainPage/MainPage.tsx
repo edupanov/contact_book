@@ -1,9 +1,8 @@
 import React from 'react';
 import HeaderMainPage from "./HeaderMainPage";
 import {Container} from "@material-ui/core";
-import {Route} from "react-router-dom";
-import MainForm from "../../mainForm/MainForm";
 import style from './mainPage.module.scss'
+import ContactList from "../../contactList/ContactList";
 
 const MainPage = () => {
     return (
@@ -13,8 +12,7 @@ const MainPage = () => {
             <Container
                 className={style.container}
                 fixed>
-                <MainForm/>
-
+                <ContactList/>
             </Container>
 
         </div>

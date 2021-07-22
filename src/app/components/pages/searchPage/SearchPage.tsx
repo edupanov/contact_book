@@ -1,9 +1,8 @@
-import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, Dispatch, FormEvent, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "../editPage/styles/editContactStyles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
-import {NavLink} from "react-router-dom";
 import {GridCloseIcon} from "@material-ui/data-grid";
 import {formatDate} from "../../../utils/utils";
 
@@ -12,7 +11,10 @@ export type TargetType = {
     value: string
 }
 
-const SearchPanel: FC = () => {
+type SearchPanelType = {
+    searchClickHandlerClose: ()=> void
+}
+const SearchPanel = (props: SearchPanelType) => {
 
     const classes = useStyles()
 
@@ -57,13 +59,15 @@ const SearchPanel: FC = () => {
     }
 
     return (
-        <div className={classes.searchPanel}>
+        <div
+            className={classes.searchPanel}>
             <h2 className={classes.title}>Поиск контакта</h2>
-            <NavLink className={classes.close} to={'/contacts'} exact>
-                <IconButton aria-label="close">
-                    <GridCloseIcon/>
-                </IconButton>
-            </NavLink>
+                    <IconButton
+                        className={classes.close}
+                        onClick={props.searchClickHandlerClose}
+                        aria-label="close">
+                        <GridCloseIcon/>
+                    </IconButton>
             <Grid container justify="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>

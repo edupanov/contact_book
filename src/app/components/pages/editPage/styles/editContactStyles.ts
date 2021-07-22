@@ -1,11 +1,15 @@
 import {makeStyles} from "@material-ui/core";
 
 export const useStyles = makeStyles({
+    avatar: {
+        width: 300
+    },
     close: {
       textDecoration: "none",
         position: "fixed",
+        top: 160,
         right: 50,
-        fontSize: 32,
+        border: '1px solid black'
     },
 
     errorTitle: {
@@ -18,6 +22,11 @@ export const useStyles = makeStyles({
     searchPanel: {
         marginBottom: 30
     },
+
+    editForm: {
+      display: "flex",
+
+},
     form: {
         width: '100%'
     },
@@ -29,6 +38,10 @@ export const useStyles = makeStyles({
     title: {
         textAlign: "center",
         color: "#3451b9"
+    },
+    wrapperInput:{
+        padding: '10px 0',
+        borderBottom: '3px solid black'
     },
     input: {
         marginLeft: 10,

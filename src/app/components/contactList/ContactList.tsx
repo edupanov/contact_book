@@ -8,16 +8,16 @@ import {
     GridColDef,
     GridPageChangeParams,
     GridRowId,
-    GridSelectionModelChangeParams
 } from "@material-ui/data-grid";
 import styles from "../mainForm/HeaderContactList.module.scss";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
-import {NavLink} from 'react-router-dom';
-import Routes from '../../routes/Routes';
+import {NavLink, useHistory} from 'react-router-dom';
 import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
+import SearchPage from "../pages/searchPage/SearchPage";
+import {PATH} from "../../routes/Routes";
 
 const ContactList = () => {
 
@@ -87,19 +87,23 @@ const ContactList = () => {
     const [items, setItems] = useState<ContactInterface[]>([])
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
-    console.log(item)
+    const [openSearch, setOpenSearch] = React.useState(false);
+
     const {getContacts, setPage, setTake, deleteContacts, deleteAll} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
     const prevVal = usePrevious(data)
 
-    const handleOpen = () => {
+    const history = useHistory()
+
+    const handleOpenModal = () => {
         setOpen(true);
     };
 
-    const handleClose = () => {
+    const handleCloseModal = () => {
         setOpen(false);
     };
+
 
     const updateFullAddress = (data: ContactInterface[]) => {
         const updatedData = [...data]
@@ -115,15 +119,27 @@ const ContactList = () => {
         getContacts()
     };
 
-    const checkedCurrenContacts = (params: GridSelectionModelChangeParams) => {
-        setSelectionModel(params.selectionModel)
+    const checkedCurrenContacts = (params: GridRowId[]) => {
+        setSelectionModel(params)
     }
 
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
         const contactsForUpdate = [...data]
-        const currentContact: ContactInterface = contactsForUpdate.find(target => target.id === targetID)
+        const currentContact: ContactInterface = contactsForUpdate.find(target => target.id === targetID);
+        history.push(PATH.EDIT, {contact: currentContact})
+        //
         setItem(currentContact)
+    }
+
+    const searchClickHandler = (event: SyntheticEvent) => {
+      if(event.currentTarget) {
+          setOpenSearch(true)
+      }
+    }
+
+    const searchClickHandlerClose = () => {
+        setOpenSearch(false)
     }
 
     const deleteContact = (event: SyntheticEvent) => {
@@ -134,7 +150,7 @@ const ContactList = () => {
 
     const deleteCheckedContacts = () => {
         deleteContacts(selectionModel)
-        handleClose()
+        handleCloseModal()
         setSelectionModel([])
     }
 
@@ -162,6 +178,7 @@ const ContactList = () => {
             color="secondary"
         />
     }
+
     return (
         <div style={{height: 400, width: '100%'}}>
             <Grid
@@ -189,8 +206,9 @@ const ContactList = () => {
                         <Delete/>
                     </Button>
                     <Button
-                        onClick={handleOpen}
-                        className={selectionModel.length !== 0 ? styles.deleteButton : styles.hideButton}
+                        onClick={handleOpenModal}
+                        disabled={selectionModel.length === 0}
+                        className={styles.deleteButton}
                         variant="outlined"
                         color="secondary"
                     >
@@ -198,14 +216,14 @@ const ContactList = () => {
                         <Delete/>
                     </Button>
                     <Button
+
+                       onClick={searchClickHandler}
                         className={styles.searchButton}
                         variant="outlined"
                         color="primary"
                     >
-                        <NavLink to={'/contacts/search'}>
                             Поиск
                             <SearchIcon/>
-                        </NavLink>
                     </Button>
                     <Button
                         variant="contained"
@@ -222,7 +240,7 @@ const ContactList = () => {
                 </div>
             </Grid>
 
-            <Routes item={item} setItem={setItem}/>
+            {openSearch ? <SearchPage searchClickHandlerClose={searchClickHandlerClose}/> : null}
 
             <DataGrid rows={items}
                       columns={columns}
@@ -243,7 +261,7 @@ const ContactList = () => {
                       selectionModel={selectionModel}
             />
 
-            <DeleteModal open={open} onClose={handleClose} selectionModel={selectionModel}
+            <DeleteModal open={open} onClose={handleCloseModal} selectionModel={selectionModel}
                          deleteCheckedContacts={deleteCheckedContacts} deleteAll={deleteAll}/>
         </div>
     );

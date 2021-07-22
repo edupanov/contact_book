@@ -1,8 +1,8 @@
 import './App.css';
 import {History} from 'history'
 import {ConnectedRouter} from "connected-react-router";
-import MainPage from "./components/pages/mainPage/MainPage";
 import React from "react";
+import Routes from "./routes/Routes";
 
 interface AppHistory {
     history: History
@@ -13,7 +13,7 @@ function App({history}: AppHistory) {
     return (
         <ConnectedRouter history={history}>
             <div className="App">
-                <MainPage/>
+                <Routes/>
             </div>
         </ConnectedRouter>
     );
