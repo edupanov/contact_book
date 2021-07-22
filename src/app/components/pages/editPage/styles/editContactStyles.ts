@@ -66,6 +66,6 @@ export const useStyles = makeStyles({
         left: '50%',
         marginRight: '-50%',
         transform: 'translate(-50%, 50%)',
-        margin: '20px 0',
+        margin: '80px 0 0 0',
     }
 })

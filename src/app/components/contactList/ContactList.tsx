@@ -18,6 +18,7 @@ import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
+import {History} from "history";
 
 const ContactList = () => {
 
@@ -83,7 +84,6 @@ const ContactList = () => {
         return ref.current;
     }
 
-    const [item, setItem] = useState<ContactInterface>({} as ContactInterface)
     const [items, setItems] = useState<ContactInterface[]>([])
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
@@ -128,8 +128,7 @@ const ContactList = () => {
         const contactsForUpdate = [...data]
         const currentContact: ContactInterface = contactsForUpdate.find(target => target.id === targetID);
         history.push(PATH.EDIT, {contact: currentContact})
-        //
-        setItem(currentContact)
+
     }
 
     const searchClickHandler = (event: SyntheticEvent) => {

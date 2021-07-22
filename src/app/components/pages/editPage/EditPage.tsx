@@ -1,21 +1,26 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react';
+import React, {ChangeEvent, FormEvent} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
-import {updateContact} from "./store/actionCreators/updateContactActionCreator";
 import {ContactInterface} from "../../contactList/types/contact.interface";
 import {useHistory, useLocation} from "react-router-dom";
 import {PATH} from "../../../routes/Routes";
 import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 
+type LocationType = {
+    path: string
+    contact: ContactInterface
+}
+
 const EditPage = () => {
     const history = useHistory()
-    const location = useLocation()
+    const location = useLocation<LocationType>()
 
-   // @ts-ignore
-    const [contact, setContact] = useState<ContactInterface>(location.state.contact)
+
+    let contact = location.state.contact
+    // const [contact, setContact] = useState<ContactInterface>(location.state.contact)
     const classes = useStyles()
 
     const {updateContact} = useActions()
@@ -24,19 +29,24 @@ const EditPage = () => {
         const target: TargetType = (event.target)
         const isDate = target.name === 'birthDate'
         const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
+        if (contact) {
+            contact = {...contact, [target.name]: isDate ? replaceStr : target.value}
+        }
 
-        setContact({
-            // @ts-ignore
-            ...contact,
-            [target.name]: isDate ? replaceStr : target.value,
-        })
+        // setContact({
+        //     // @ts-ignore
+        //     ...contact,
+        //     [target.name]: isDate ? replaceStr : target.value,
+        // })
     }
     const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        setContact({
-            ...contact,
-            address: {...contact.address, id: contact.address.id, [target.name]: target.value}
-        })
+        contact = {...contact, address: {...contact.address, id: contact.address.id, [target.name]: target.value}}
+
+        // setContact({
+        //     ...contact,
+        //     address: {...contact.address, id: contact.address.id, [target.name]: target.value}
+        // })
     }
 
     const onSubmit = (event: FormEvent) => {
