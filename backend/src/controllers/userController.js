@@ -1,6 +1,7 @@
 const User = require('../models/user').User
 const Address = require('../models/address').Address
 const Phone = require('../models/phone').Phone
+const nodemailer = require('nodemailer')
 
 module.exports = {
 
@@ -253,6 +254,47 @@ module.exports = {
                     count
                 })
             })
+    },
+
+    sendEmails: async (req, res, next) => {
+        const emails = req.body.emails?.reduce((acc, email) => {
+            return `${acc} ${email}`
+        }, '')
+        const theme = req.body.theme
+        const text = req.body.text
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'edupanov@gmail.com',
+                pass: 'Marvel9812'
+            }
+        });
+
+        const mailOptions = {
+            from: 'edupanov@gmail.com',
+            to: emails,
+            subject: theme,
+            text
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+                res.status(200).json({
+                    code: 500,
+                    isSuccess: false,
+                    message: 'Ошибка при отправки письма!!'
+                })
+            } else {
+                console.log('Email sent: ' + info.response);
+                res.status(200).json({
+                    code: 200,
+                    isSuccess: true,
+                    message: 'Письмо успешно отправлено!'
+                })
+            }
+        })
     },
 
 

@@ -8,5 +8,6 @@ router.post('/create',  UserController.createContact)
 router.put('/update',  UserController.updateContact)
 router.post('/delete',  UserController.deleteContacts)
 router.delete('/deleteAll',  UserController.deleteAllContacts)
+router.post('/sendEmails',  UserController.sendEmails)
 
 module.exports = router
