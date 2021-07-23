@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 const AddressSchema = require('./address').addressSchema
+const PhoneSchema = require('./phone').PhoneSchema
 
 const userSchema = new Schema({
     name: {type: String, require: true},
@@ -10,9 +11,8 @@ const userSchema = new Schema({
     gender: {type: String, require: true},
     maritalStatus: {type: String, require: true},
     nationality: {type: String, require: true},
-    del: {type: String, require: true},
-    edit: {type: String, require: true},
-    addresses: [AddressSchema]
+    addresses: [AddressSchema],
+    phones: [PhoneSchema]
 }, {timestamps: true})
 
 const User = mongoose.model('User', userSchema)
