@@ -1,86 +1,8 @@
 const User = require('../models/user').User
 const Address = require('../models/address').Address
+const Phone = require('../models/phone').Phone
 
 module.exports = {
-
-    createContact: async (req, res, next) => {
-        let newContact = req.body.contact
-
-        await User.create(newContact)
-            .then(async user => {
-                if (user._id) {
-                    await Address.create(newContact.address).then(address => {
-                        if (address._id) {
-                            user.addresses.push(address)
-                            user.save()
-                                .then(user => {
-                                    if (user._id) {
-                                        res.status(200).json({
-                                            message: 'Contact was created successfully!'
-                                        })
-                                    }
-                                })
-                        }
-                    })
-                }
-            })
-            .catch(error => {
-                res.status(500).json({
-                    message: 'Fetching contacts failed!',
-                    error
-                })
-            })
-    },
-
-    updateContact: async (req, res, next) => {
-        let contactForUpdate = req.body.contact
-        const contactId = contactForUpdate.id
-        const addressId = contactForUpdate.address.id
-
-        await User.findById({_id: contactId})
-            .then(user => {
-                if (user._id) {
-                    const index = user.addresses.findIndex(item => item._id.equals(addressId))
-
-                    user.name = contactForUpdate.name
-                    user.surname = contactForUpdate.surname
-                    user.patronymic = contactForUpdate.patronymic
-                    user.birthDate = contactForUpdate.birthDate
-                    user.gender = contactForUpdate.gender
-                    user.maritalStatus = contactForUpdate.maritalStatus
-                    user.nationality = contactForUpdate.nationality
-
-                    user.addresses[index].city = contactForUpdate.address.city
-                    user.addresses[index].country = contactForUpdate.address.country
-                    user.addresses[index].street = contactForUpdate.address.street
-                    user.addresses[index].building = contactForUpdate.address.building
-                    user.addresses[index].flat = contactForUpdate.address.flat
-                    user.addresses[index].zipCode = contactForUpdate.address.zipCode
-                    user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
-
-                    user.save()
-                        .then(() => {
-                            res.status(200).json({
-                                code: 200,
-                                isSuccess: true,
-                                message: 'Contact updated successfully!'
-                            })
-                        })
-                        .catch(err => {
-                            res.status(500).json({
-                                error: err,
-                                message: 'Ошибка сервера, не удалось обновить контакт'
-                            })
-                        })
-                }
-            })
-            .catch(err => {
-                res.status(500).json({
-                    error: err,
-                    message: 'Ошибка сервера, не удалось обновить контакт'
-                })
-            })
-    },
 
     getContacts: async (req, res, next) => {
         const pageSize = req.body.take
@@ -163,7 +85,7 @@ module.exports = {
         }
 
         await User.find(searchParams)
-            .populate('addresses')
+            .populate(['addresses', 'phones'])
             .skip(isPaging ? pageSize * (currentPage - 1) : 0)
             .limit(isPaging ? pageSize : 0)
             .then(async documents => {
@@ -179,6 +101,18 @@ module.exports = {
                         zipCode: user.addresses[0].zipCode,
                         fullAddress: user.addresses[0].fullAddress
                     }
+
+                    const phones = user.phones.map(phone => {
+                        return {
+                            id: phone._id,
+                            countryCode: phone.countryCode,
+                            operatorID: phone.operatorID,
+                            phoneNumber: phone.phoneNumber,
+                            phoneType: phone.phoneType,
+                            comment: phone.comment
+                        }
+                    })
+
                     return {
                         id: user._id,
                         name: user.name,
@@ -190,7 +124,8 @@ module.exports = {
                         nationality: user.nationality,
                         del: user.del,
                         edit: user.edit,
-                        address: addr
+                        address: addr,
+                        phones
                     }
                 })
                 res.status(200).json({
@@ -209,6 +144,103 @@ module.exports = {
             })
     },
 
+    createContact: async (req, res, next) => {
+        let newContact = req.body.contact
+
+        await User.create(newContact)
+            .then(async user => {
+                if (user._id) {
+                    await Address.create(newContact.address).then(address => {
+                        if (address._id) {
+                            user.addresses.push(address)
+                            newContact.phones.map(phone => {
+                                user.phones.push(phone)
+                            })
+                            user.save()
+                                .then(user => {
+                                    if (user._id) {
+                                        res.status(200).json({
+                                            message: 'Contact was created successfully!'
+                                        })
+                                    }
+                                })
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                res.status(500).json({
+                    message: 'Fetching contacts failed!',
+                    error
+                })
+            })
+    },
+
+    updateContact: async (req, res, next) => {
+        let contactForUpdate = req.body.contact
+        const contactId = contactForUpdate.id
+        const addressId = contactForUpdate.address.id
+        const phones = contactForUpdate.phones
+
+        await User.findById({_id: contactId})
+            .then(user => {
+                if (user._id) {
+                    const index = user.addresses.findIndex(item => item._id.equals(addressId))
+
+                    user.name = contactForUpdate.name
+                    user.surname = contactForUpdate.surname
+                    user.patronymic = contactForUpdate.patronymic
+                    user.birthDate = contactForUpdate.birthDate
+                    user.gender = contactForUpdate.gender
+                    user.maritalStatus = contactForUpdate.maritalStatus
+                    user.nationality = contactForUpdate.nationality
+
+                   if (index >= 0) {
+                       user.addresses[index].city = contactForUpdate.address.city
+                       user.addresses[index].country = contactForUpdate.address.country
+                       user.addresses[index].street = contactForUpdate.address.street
+                       user.addresses[index].building = contactForUpdate.address.building
+                       user.addresses[index].flat = contactForUpdate.address.flat
+                       user.addresses[index].zipCode = contactForUpdate.address.zipCode
+                       user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
+                   }
+
+                    phones.map(phone => {
+                        const phoneIndex = user.phones.findIndex(item => item._id.equals(phone._id))
+
+                        if (phoneIndex >+ 0) {
+                            user.phones[phoneIndex].countryCode = phone.countryCode
+                            user.phones[phoneIndex].operatorID = phone.operatorID
+                            user.phones[phoneIndex].phoneNumber = phone.phoneNumber
+                            user.phones[phoneIndex].phoneType = phone.phoneType
+                            user.phones[phoneIndex].comment = phone.comment
+                        }
+                    })
+
+                    user.save()
+                        .then(() => {
+                            res.status(200).json({
+                                code: 200,
+                                isSuccess: true,
+                                message: 'Contact updated successfully!'
+                            })
+                        })
+                        .catch(err => {
+                            res.status(500).json({
+                                error: err,
+                                message: 'Ошибка сервера, не удалось обновить контакт'
+                            })
+                        })
+                }
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: err,
+                    message: 'Ошибка сервера, не удалось обновить контакт'
+                })
+            })
+    },
+
     deleteContacts: async (req, res, next) => {
         const deleted = req.body.deletedContacts
 
@@ -222,6 +254,7 @@ module.exports = {
                 })
             })
     },
+
 
     deleteAllContacts: async (req, res, next) => {
 
@@ -256,8 +289,6 @@ module.exports = {
         //         gender: `${i % 2 === 0 ? 'мужской' : 'женский'}`,
         //         maritalStatus: `${i % 2 === 0 ? 'женат' : 'замужем'}`,
         //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`,
-        //         del: ``,
-        //         edit: ``,
         //     })
         //
         //     await user.save()
@@ -277,6 +308,20 @@ module.exports = {
         //                     await user.save()
         //                 })
         //
+        //             const phone = new Phone({
+        //                 countryCode: `${i % 2 === 0 ? '+375' : '+7'}`,
+        //                 operatorID: `${i % 2 === 0 ? '29' : '916'}`,
+        //                 phoneNumber: `${i % 2 === 0 ? '126 23 89' : '789 56 18'}`,
+        //                 phoneType: `${i % 2 === 0 ? 'Мобильный' : 'Домашний'}`,
+        //                 comment: `${i % 2 === 0 ? 'Белорусский номер' : 'Российский номер'}`
+        //             })
+        //
+        //             await phone.save()
+        //                 .then(async phone => {
+        //                     user.phones.push(phone)
+        //                     await user.save()
+        //                 })
+        //
         //         }).catch(error => console.log(error))
         //
         //     i++
@@ -286,5 +331,6 @@ module.exports = {
         //
         // User.deleteMany({}).then(result =>  res.json({deleted: result}))
         // Address.deleteMany({}).then(result =>  res.json({deleted: result}))
+        // Phone.deleteMany({}).then(result =>  res.json({deleted: result}))
     }
 }
