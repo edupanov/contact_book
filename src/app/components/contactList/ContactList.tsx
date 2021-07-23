@@ -18,7 +18,6 @@ import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
-import {History} from "history";
 
 const ContactList = () => {
 

@@ -3,17 +3,12 @@ import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
-import {ContactInterface} from "../../contactList/types/contact.interface";
 import {useHistory, useLocation} from "react-router-dom";
 import {PATH} from "../../../routes/Routes";
 import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
-
-type LocationType = {
-    path: string
-    contact: ContactInterface
-}
+import {LocationType} from "./type/editPage.type";
 
 const EditPage = () => {
     const history = useHistory()
@@ -25,8 +20,8 @@ const EditPage = () => {
 
     let contact = location.state.contact
     const classes = useStyles()
-
     const {updateContact} = useActions()
+
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -44,7 +39,6 @@ const EditPage = () => {
     const phoneOpenClickHandler = (event: SyntheticEvent) => {
         event.preventDefault()
         if (event.currentTarget) {
-
             setOpenPhoneForm(true)
         }
     }
@@ -193,7 +187,7 @@ const EditPage = () => {
                                     {openPhoneForm ? <PhoneForm phoneCloseClickHandler={phoneCloseClickHandler}/> : null}
                                     {openAttachmentsForm ? <AttachmentsForm close={attachmentsCloseClickHandler}/> : null}
 
-                                    <div>
+                                    <div className={classes.submitButton}>
                                         <Button
                                             className={classes.button}
                                             type={'submit'}

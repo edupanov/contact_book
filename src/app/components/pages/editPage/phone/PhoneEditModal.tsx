@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import {useStyles} from "../../deleteModal/style/styleModal";
-import  {PhoneInterface} from "./PhoneForm";
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-
-
+import {PhoneInterface} from "../../../contactList/types/contact.interface";
+import {TargetType} from "../../searchPage/SearchPage";
 
 type PhoneEditModalType = {
     open: boolean,
@@ -14,10 +13,17 @@ type PhoneEditModalType = {
     phone: PhoneInterface
 }
 
-export default function PhoneEditModal(props:PhoneEditModalType) {
-    const {open, onClose, phone} = props
+export default function PhoneEditModal(props: PhoneEditModalType) {
+    let {open, onClose, phone} = props
     const classes = useStyles();
 
+    const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const target: TargetType = (event.target)
+        if (phone) {
+            phone = {...phone, [target.name]: target.value}
+        }
+    }
+    console.log(phone)
     return (
         <div>
             <Modal
@@ -43,25 +49,39 @@ export default function PhoneEditModal(props:PhoneEditModalType) {
                                             <FormGroup>
                                                 <div className={classes.wrapperInput}>
                                                     <TextField className={classes.input}
-                                                               label="Телефонный номер"
-                                                               name={"зрщту"}
+                                                               label="Код станы"
+                                                               name={"countryCode"}
                                                                type="search"
-                                                               // onChange={changeContactInfoHandler}
-                                                               defaultValue={phone.phone ? phone.phone : ''}
+                                                               onChange={changePhoneInfoHandler}
+                                                               defaultValue={phone.countryCode ? phone.countryCode : ''}
+                                                    />
+                                                    <TextField className={classes.input}
+                                                               label="Код оператора"
+                                                               name={"operatorID"}
+                                                               type="search"
+                                                               onChange={changePhoneInfoHandler}
+                                                               defaultValue={phone.operatorID ? phone.operatorID : ''}
+                                                    />
+                                                    <TextField className={classes.input}
+                                                               label="Телефонный номер"
+                                                               name={"phone"}
+                                                               type="search"
+                                                               onChange={changePhoneInfoHandler}
+                                                               defaultValue={phone.phoneNumber ? phone.phoneNumber : ''}
                                                     />
                                                     <TextField className={classes.input}
                                                                label="Описание"
                                                                name={"comment"}
                                                                type="search"
-                                                               // onChange={changeContactInfoHandler}
+                                                               onChange={changePhoneInfoHandler}
                                                                defaultValue={phone.comment ? phone.comment : ''}
                                                     />
                                                     <TextField className={classes.input}
                                                                label="Коментарий"
                                                                name={"description"}
                                                                type="search"
-                                                               // onChange={changeContactInfoHandler}
-                                                               defaultValue={phone.description ? phone.description : ''}
+                                                               onChange={changePhoneInfoHandler}
+                                                               defaultValue={phone.phoneType ? phone.phoneType : ''}
                                                     />
                                                 </div>
 

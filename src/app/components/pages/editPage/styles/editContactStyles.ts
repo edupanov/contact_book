@@ -61,10 +61,14 @@ export const useStyles = makeStyles({
         flexWrap: "wrap"
     },
     button: {
-        position: "relative",
         left: '50%',
         marginRight: '-50%',
         transform: 'translate(-50%, 50%)',
+    },
+
+    submitButton:{
+        position: "relative",
+        margin: 80
     },
     wrapperButtonEditPage:{
         display: "flex",

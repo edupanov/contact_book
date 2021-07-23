@@ -1,3 +1,23 @@
+export interface AddressInterface {
+    id: string
+    fullAddress: string
+    city: string
+    country: string
+    street: string
+    building: string
+    flat: string
+    zipCode: string
+}
+
+export interface PhoneInterface {
+    id: string
+    countryCode: string
+    operatorID: string
+    phoneNumber: string
+    phoneType: string
+    comment: string
+}
+
 export interface ContactInterface {
     id: string
     name: string
@@ -7,14 +27,6 @@ export interface ContactInterface {
     gender: string
     maritalStatus: string
     nationality: string
-    address: {
-        id: string
-        fullAddress: string
-        city: string
-        country: string
-        street: string
-        building: string
-        flat: string
-        zipCode: string
-    }
+    address: AddressInterface
+    phones: Array<PhoneInterface>
 }

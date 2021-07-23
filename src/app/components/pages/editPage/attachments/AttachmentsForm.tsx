@@ -4,7 +4,7 @@ import {IconButton} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import {PhoneInterface} from "../phone/PhoneForm";
+import {PhoneInterface} from "../../../contactList/types/contact.interface";
 
 type AttachmentsFormType = {
     close: () => void
@@ -60,7 +60,7 @@ const AttachmentsForm = (props: AttachmentsFormType) => {
     }
 
     return (
-        <div style={{height: 162, width: '80%'}}>
+        <div style={{height: 162, width: '80%', marginBottom: 30, marginTop: 30}}>
             <h2>Вложения</h2>
             <IconButton
                 onClick={props.close}
