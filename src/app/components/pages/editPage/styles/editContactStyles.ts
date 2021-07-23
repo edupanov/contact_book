@@ -41,7 +41,6 @@ export const useStyles = makeStyles({
     },
     wrapperInput:{
         padding: '10px 0',
-        borderBottom: '3px solid black'
     },
     input: {
         marginLeft: 10,
@@ -66,6 +65,12 @@ export const useStyles = makeStyles({
         left: '50%',
         marginRight: '-50%',
         transform: 'translate(-50%, 50%)',
-        margin: '80px 0 0 0',
-    }
+    },
+    wrapperButtonEditPage:{
+        display: "flex",
+        justifyContent: "center"
+    },
+    buttonEditForm: {
+        margin: 20
+    },
 })

@@ -1,52 +1,22 @@
 import React, {SyntheticEvent, useState} from 'react';
 import {DataGrid, GridCloseIcon, GridColDef, GridRowId} from "@material-ui/data-grid";
-import './phone.module.scss'
-import {makeStyles} from "@material-ui/styles";
 import {IconButton} from "@material-ui/core";
-import {NavLink, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import PhoneEditModal from "./PhoneEditModal";
-import {PATH} from "../../../../routes/Routes";
+import {PhoneInterface} from "../phone/PhoneForm";
 
-const useStyles = makeStyles({
-    root: {
-        display: 'none'
-    }
-})
-
-export interface PhoneInterface {
-    id: string,
-    phone: string,
-    description: string,
-    comment: string
+type AttachmentsFormType = {
+    close: () => void
 }
 
-type PhoneFormType = {
-    phoneCloseClickHandler: () => void
-}
-
-const PhoneForm = (props: PhoneFormType) => {
+const AttachmentsForm = (props: AttachmentsFormType) => {
     const history = useHistory()
 
-    const [open, setOpen] = useState(false);
-    const [phone, setPhone] = useState({} as PhoneInterface || '');
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
 
-
-    const handleOpenModal = (e: any) => {
-        contactClickHandler(e)
-        setOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setOpen(false);
-        history.push(PATH.EDIT)
-    };
-
-
     const columns: GridColDef[] = [
-        {field: 'phone', headerName: 'телефонный номер', width: 200, filterable: false, sortable: false},
+        {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false},
         {field: 'description', headerName: 'Описание', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false, flex: 1},
         {
@@ -55,7 +25,6 @@ const PhoneForm = (props: PhoneFormType) => {
                 return <IconButton
                     id={String(el.id)}
                     aria-label="edit"
-                    onClick={handleOpenModal}
                 >
                     <EditIcon/>
                 </IconButton>
@@ -75,14 +44,14 @@ const PhoneForm = (props: PhoneFormType) => {
     ]
 
     const rows = [
-        {id: '1', phone: '+375295268574', description: 'блабла', comment: 'bla bla bla'},
-        {id: '2', phone: '+375258962415', description: 'блабла', comment: 'bla bla bla'},
+        {id: '1', fileName: '...', description: 'блабла', comment: 'bla bla bla'},
+        {id: '2', fileName: '...', description: 'блабла', comment: 'bla bla bla'},
     ]
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
         const phonesForUpdate = [...rows]
         const currentPhone = phonesForUpdate.find(target => target.id === targetID) || {} as PhoneInterface;
-        setPhone(currentPhone)
+
 
     }
 
@@ -92,9 +61,9 @@ const PhoneForm = (props: PhoneFormType) => {
 
     return (
         <div style={{height: 162, width: '80%'}}>
-            <h2>Контактные телефоны</h2>
+            <h2>Вложения</h2>
             <IconButton
-                onClick={props.phoneCloseClickHandler}
+                onClick={props.close}
                 aria-label="close">
                 <GridCloseIcon/>
             </IconButton>
@@ -108,9 +77,8 @@ const PhoneForm = (props: PhoneFormType) => {
                 onSelectionModelChange={checkedCurrenPhone}
                 selectionModel={selectionModel}
             />
-            <PhoneEditModal open={open} onClose={handleCloseModal} phone={phone}/>
         </div>
     );
 };
 
-export default PhoneForm;
+export default AttachmentsForm;
