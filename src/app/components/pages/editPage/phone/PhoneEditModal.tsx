@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, FormEvent} from 'react';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -14,6 +14,7 @@ type PhoneEditModalType = {
 }
 
 export default function PhoneEditModal(props: PhoneEditModalType) {
+
     let {open, onClose, phone} = props
     const classes = useStyles();
 
@@ -23,7 +24,14 @@ export default function PhoneEditModal(props: PhoneEditModalType) {
             phone = {...phone, [target.name]: target.value}
         }
     }
-    console.log(phone)
+
+    const onSubmit = (event: FormEvent) => {
+        event.preventDefault()
+        sessionStorage.setItem('phone', JSON.stringify([phone]));
+        onClose()
+
+    }
+
     return (
         <div>
             <Modal
@@ -44,7 +52,7 @@ export default function PhoneEditModal(props: PhoneEditModalType) {
                         <div>
                             <Grid container justify="center">
                                 <Grid item xs={10}>
-                                    <form onSubmit={onClose}>
+                                    <form>
                                         <FormControl>
                                             <FormGroup>
                                                 <div className={classes.wrapperInput}>
@@ -84,24 +92,20 @@ export default function PhoneEditModal(props: PhoneEditModalType) {
                                                                defaultValue={phone.phoneType ? phone.phoneType : ''}
                                                     />
                                                 </div>
-
                                                 <div>
                                                     <Button
                                                         className={classes.button}
-                                                        type={'submit'}
                                                         variant={'contained'}
+                                                        onClick={onSubmit}
                                                         color={'primary'}
                                                     >Сохранить изменения</Button>
                                                 </div>
-
                                             </FormGroup>
                                         </FormControl>
                                     </form>
                                 </Grid>
                             </Grid>
                         </div>
-
-
                     </div>
                 </Fade>
             </Modal>

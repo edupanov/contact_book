@@ -9,18 +9,18 @@ import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
 import {LocationType} from "./type/editPage.type";
+import {PhoneInterface} from "../../contactList/types/contact.interface";
 
 const EditPage = () => {
     const history = useHistory()
     const location = useLocation<LocationType>()
 
-    const [openPhoneForm, setOpenPhoneForm] = useState(false)
-    const [openAttachmentsForm, setOpenAttachmentsForm] = useState(false)
-
-
     let contact = location.state.contact
     const classes = useStyles()
     const {updateContact} = useActions()
+
+    const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
+    console.log(savedPhone)
 
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,26 +34,6 @@ const EditPage = () => {
     const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
         contact = {...contact, address: {...contact.address, id: contact.address.id, [target.name]: target.value}}
-    }
-
-    const phoneOpenClickHandler = (event: SyntheticEvent) => {
-        event.preventDefault()
-        if (event.currentTarget) {
-            setOpenPhoneForm(true)
-        }
-    }
-    const phoneCloseClickHandler = () => {
-        setOpenPhoneForm(false)
-    }
-    const attachmentsOpenClickHandler = (event: SyntheticEvent) => {
-        event.preventDefault()
-        if (event.currentTarget) {
-
-            setOpenAttachmentsForm(true)
-        }
-    }
-    const attachmentsCloseClickHandler = () => {
-        setOpenAttachmentsForm(false)
     }
 
     const onSubmit = (event: FormEvent) => {
@@ -168,24 +148,8 @@ const EditPage = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div className={classes.wrapperButtonEditPage}>
-                                        <Button
-                                            onClick={phoneOpenClickHandler}
-                                            className={classes.buttonEditForm}
-                                            type={'submit'}
-                                            variant={'contained'}
-                                            color={'primary'}
-                                        >Показать телефонные номера</Button>
-                                        <Button
-                                            onClick={attachmentsOpenClickHandler}
-                                            className={classes.buttonEditForm}
-                                            type={'submit'}
-                                            variant={'contained'}
-                                            color={'primary'}
-                                        >Показать вложения</Button>
-                                    </div>
-                                    {openPhoneForm ? <PhoneForm phoneCloseClickHandler={phoneCloseClickHandler}/> : null}
-                                    {openAttachmentsForm ? <AttachmentsForm close={attachmentsCloseClickHandler}/> : null}
+                                    <PhoneForm/>
+                                    <AttachmentsForm/>
 
                                     <div className={classes.submitButton}>
                                         <Button

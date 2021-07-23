@@ -6,11 +6,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
 import {PhoneInterface} from "../../../contactList/types/contact.interface";
 
-type AttachmentsFormType = {
-    close: () => void
-}
 
-const AttachmentsForm = (props: AttachmentsFormType) => {
+const AttachmentsForm = () => {
     const history = useHistory()
 
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
@@ -62,11 +59,6 @@ const AttachmentsForm = (props: AttachmentsFormType) => {
     return (
         <div style={{height: 162, width: '80%', marginBottom: 30, marginTop: 30}}>
             <h2>Вложения</h2>
-            <IconButton
-                onClick={props.close}
-                aria-label="close">
-                <GridCloseIcon/>
-            </IconButton>
             <DataGrid
                 rows={rows}
                 columns={columns}
