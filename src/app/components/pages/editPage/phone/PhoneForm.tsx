@@ -1,8 +1,8 @@
-import React, {SyntheticEvent, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
 import {DataGrid, GridCellParams, GridColDef, GridRowId} from "@material-ui/data-grid";
 import './phone.module.scss'
 import {IconButton} from "@material-ui/core";
-import {useLocation} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
 import PhoneEditModal from "./PhoneEditModal";
@@ -11,12 +11,9 @@ import {LocationType} from "../type/editPage.type";
 
 
 const PhoneForm = () => {
-
     const location = useLocation<LocationType>()
     const data = location.state.contact.phones
-    console.log(data)
     const savedPhone:  PhoneInterface[] = JSON.parse(sessionStorage.getItem('phone') || '{}');
-    console.log(savedPhone)
 
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
@@ -74,13 +71,13 @@ const PhoneForm = () => {
                 </IconButton>
         },
     ]
-
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const phonesForUpdate = [...data]
+        const phonesForUpdate = !savedPhone.length ? [...data] : [...savedPhone]
         const currentPhone = phonesForUpdate.find(target => target.id === targetID) || {} as PhoneInterface;
         setPhone(currentPhone)
     }
+
     const checkedCurrenPhone = (params: GridRowId[]) => {
         setSelectionModel(params)
     }
@@ -89,7 +86,7 @@ const PhoneForm = () => {
         <div style={{height: 162, width: '100%', marginBottom: 30}}>
             <h2>Контактные телефоны</h2>
             <DataGrid
-                rows={data}
+                rows={!savedPhone.length ? data : savedPhone}
                 columns={columns}
                 pageSize={3}
                 disableSelectionOnClick

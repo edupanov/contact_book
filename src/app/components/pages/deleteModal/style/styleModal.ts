@@ -8,6 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
         },
         paper: {
+            position: 'relative',
             backgroundColor: theme.palette.background.paper,
 
             // border: '2px solid #000',
@@ -26,8 +27,12 @@ export const useStyles = makeStyles((theme: Theme) =>
             left: '50%',
             marginRight: '-50%',
             transform: 'translate(-50%, 50%)',
-            margin: '80px 0 0 0',
-        }
+            margin: '80px 0 20px 0',
+        },
+        modalButtonClose: {
+          position:  "absolute",
+            left: '93%'
+        },
 
     }),
 );

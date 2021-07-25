@@ -7,7 +7,7 @@ import {ContactInterface} from "../../../../contactList/types/contact.interface"
 import {UpdateContactActionType, UpdateContactActionTypes} from "../actionType/updateContactActionTypes";
 
 
-export const updateContact = (contact: { contact: ContactInterface }) =>
+export const updateContact = (contact: { contact: ContactInterface}) =>
     async (dispatch: Dispatch<UpdateContactActionType | ContactsActionType>, getState: () => RootState) => {
 
         dispatch({type: UpdateContactActionTypes.UPDATE_CONTACT})

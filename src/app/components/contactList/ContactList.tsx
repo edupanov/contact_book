@@ -103,7 +103,6 @@ const ContactList = () => {
         setOpen(false);
     };
 
-
     const updateFullAddress = (data: ContactInterface[]) => {
         const updatedData = [...data]
         updatedData.map((item: ContactInterface) => {
@@ -127,7 +126,6 @@ const ContactList = () => {
         const contactsForUpdate = [...data]
         const currentContact: ContactInterface = contactsForUpdate.find(target => target.id === targetID);
         history.push(PATH.EDIT, {contact: currentContact})
-
     }
 
     const searchClickHandler = (event: SyntheticEvent) => {
@@ -252,7 +250,6 @@ const ContactList = () => {
                       onPageChange={handlePaginationChange}
                       onPageSizeChange={handlePaginationChange}
                       sortingMode={'server'}
-                // onRowSelected={(params) => setCurrentContact(params.data.id)}
                       disableSelectionOnClick
                       checkboxSelection
                       onSelectionModelChange={checkedCurrenContacts}

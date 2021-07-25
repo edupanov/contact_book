@@ -3,9 +3,12 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import {useStyles} from "../../deleteModal/style/styleModal";
-import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {PhoneInterface} from "../../../contactList/types/contact.interface";
 import {TargetType} from "../../searchPage/SearchPage";
+import {GridCloseIcon} from "@material-ui/data-grid";
+import {useHistory} from "react-router-dom";
+import {PATH} from "../../../../routes/Routes";
 
 type PhoneEditModalType = {
     open: boolean,
@@ -14,7 +17,7 @@ type PhoneEditModalType = {
 }
 
 export default function PhoneEditModal(props: PhoneEditModalType) {
-
+const history = useHistory()
     let {open, onClose, phone} = props
     const classes = useStyles();
 
@@ -26,10 +29,9 @@ export default function PhoneEditModal(props: PhoneEditModalType) {
     }
 
     const onSubmit = (event: FormEvent) => {
-        event.preventDefault()
+        // event.preventDefault()
         sessionStorage.setItem('phone', JSON.stringify([phone]));
         onClose()
-
     }
 
     return (
@@ -48,6 +50,12 @@ export default function PhoneEditModal(props: PhoneEditModalType) {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
+                        <IconButton
+                            className={classes.modalButtonClose}
+                            onClick={onClose}
+                            aria-label="close">
+                            <GridCloseIcon/>
+                        </IconButton>
                         <h2 id="transition-modal-title">Редактирование телефонного номера</h2>
                         <div>
                             <Grid container justify="center">
