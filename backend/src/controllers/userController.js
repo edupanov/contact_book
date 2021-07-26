@@ -196,20 +196,20 @@ module.exports = {
                     user.maritalStatus = contactForUpdate.maritalStatus
                     user.nationality = contactForUpdate.nationality
 
-                   if (index >= 0) {
-                       user.addresses[index].city = contactForUpdate.address.city
-                       user.addresses[index].country = contactForUpdate.address.country
-                       user.addresses[index].street = contactForUpdate.address.street
-                       user.addresses[index].building = contactForUpdate.address.building
-                       user.addresses[index].flat = contactForUpdate.address.flat
-                       user.addresses[index].zipCode = contactForUpdate.address.zipCode
-                       user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
-                   }
+                    if (index >= 0) {
+                        user.addresses[index].city = contactForUpdate.address.city
+                        user.addresses[index].country = contactForUpdate.address.country
+                        user.addresses[index].street = contactForUpdate.address.street
+                        user.addresses[index].building = contactForUpdate.address.building
+                        user.addresses[index].flat = contactForUpdate.address.flat
+                        user.addresses[index].zipCode = contactForUpdate.address.zipCode
+                        user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
+                    }
 
                     phones.map(phone => {
                         const phoneIndex = user.phones.findIndex(item => item._id.equals(phone._id))
 
-                        if (phoneIndex >+ 0) {
+                        if (phoneIndex > +0) {
                             user.phones[phoneIndex].countryCode = phone.countryCode
                             user.phones[phoneIndex].operatorID = phone.operatorID
                             user.phones[phoneIndex].phoneNumber = phone.phoneNumber
@@ -297,6 +297,47 @@ module.exports = {
         })
     },
 
+    addPhone: async (req, res, next) => {
+        const newPhone = req.body.phone
+        const contactId = req.body.contactId
+
+        await User.findById({_id: contactId})
+            .then(user => {
+                if (user._id) {
+                    user.phones.forEach(phone => {
+                        const fullPhone = `${phone.countryCode} ${phone.operatorID} ${phone.phoneNumber}`
+                        const newFullPhone = `${newPhone.countryCode} ${newPhone.operatorID} ${newPhone.phoneNumber}`
+
+                        if (fullPhone.equals(newFullPhone)) {
+                            res.status(400).json({
+                                message: 'Данный номер телефона уже зарегистрирован'
+                            })
+                        }
+                    })
+
+                    user.phones.push(newPhone)
+                    user.save().then(user => {
+                        if (user._id) {
+                            res.status(200).json({
+                                message: 'Телефон успешно добавлен!'
+                            })
+                        }
+                    })
+
+                } else {
+                    res.status(404).json({
+                        message: `Контакт с id ${contactId} не найден!`
+                    })
+                }
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: 'Ошибка сервера, попробуйте еще раз'б
+                    err
+                })
+            })
+    },
+
 
     deleteAllContacts: async (req, res, next) => {
 
@@ -308,12 +349,12 @@ module.exports = {
 
                 await User.deleteMany({_id: contacts})
                     .then(count => {
-                            res.status(200).json({
-                                code: 200,
-                                isSuccess: true,
-                                message: 'Contacts deleted successfully!',
-                                count
-                            })
+                        res.status(200).json({
+                            code: 200,
+                            isSuccess: true,
+                            message: 'Contacts deleted successfully!',
+                            count
+                        })
                     })
             })
     },
