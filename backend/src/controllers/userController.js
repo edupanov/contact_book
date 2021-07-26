@@ -183,11 +183,11 @@ module.exports = {
         const addressId = contactForUpdate.address.id
         const phones = contactForUpdate.phones
 
+
         await User.findById({_id: contactId})
             .then(user => {
                 if (user._id) {
                     const index = user.addresses.findIndex(item => item._id.equals(addressId))
-
                     user.name = contactForUpdate.name
                     user.surname = contactForUpdate.surname
                     user.patronymic = contactForUpdate.patronymic
@@ -207,9 +207,8 @@ module.exports = {
                    }
 
                     phones.map(phone => {
-                        const phoneIndex = user.phones.findIndex(item => item._id.equals(phone._id))
-
-                        if (phoneIndex >+ 0) {
+                        const phoneIndex = user.phones.findIndex(item => item._id.equals(phone.id))
+                        if (phoneIndex >= 0) {
                             user.phones[phoneIndex].countryCode = phone.countryCode
                             user.phones[phoneIndex].operatorID = phone.operatorID
                             user.phones[phoneIndex].phoneNumber = phone.phoneNumber

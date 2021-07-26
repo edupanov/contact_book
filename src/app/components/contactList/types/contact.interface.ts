@@ -30,3 +30,5 @@ export interface ContactInterface {
     address: AddressInterface
     phones: Array<PhoneInterface>
 }
+
+export type EditionTableType = PhoneInterface

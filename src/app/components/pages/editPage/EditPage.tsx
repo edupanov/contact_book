@@ -1,25 +1,21 @@
-import React, {ChangeEvent, FormEvent, useEffect, useRef} from 'react';
+import React, {ChangeEvent, FormEvent} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
 import {useHistory, useLocation} from "react-router-dom";
-import {PATH} from "../../../routes/Routes";
 import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
 import {LocationType} from "./type/editPage.type";
-import {PhoneInterface} from "../../contactList/types/contact.interface";
+import {EditionTableType, PhoneInterface} from "../../contactList/types/contact.interface";
 
 const EditPage = () => {
-    const history = useHistory()
-    const location = useLocation<LocationType>()
 
+    const location = useLocation<LocationType>()
     let contact = location.state.contact
     const classes = useStyles()
     const {updateContact} = useActions()
-
-    const savedPhone: PhoneInterface[] = JSON.parse(sessionStorage.getItem('phone') || '{}');
 
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,38 +30,17 @@ const EditPage = () => {
         const target: TargetType = (event.target)
         contact = {...contact, address: {...contact.address, id: contact.address.id, [target.name]: target.value}}
     }
-    // console.log(savedPhone)
-    // useEffect(() => {
-    //
-    //         console.log(savedPhone)
-    //
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [savedPhone.length === 0]);
 
-
-    // useEffect(() => {
-    //     if(savedPhone.length) {
-    //         contact = {...contact, phones: savedPhone}
-    //     }
-    // }, []);
-    // const ref = useRef(savedPhone);
-    // console.log(ref.current)
-    // useEffect(() => {
-    //     console.log(savedPhone)
-    // }, [savedPhone]);
-    // console.log(savedPhone.length)
-    // console.log(savedPhone)
-    // console.log(contact)
-    // console.log({...contact, phones: savedPhone})
-    // console.log(contact.phones)
-    // console.log(contact.phones)
-
-
+    const setContact = (data: EditionTableType, tableName: string) => {
+        let updatedPhones: PhoneInterface[] = contact.phones
+        updatedPhones = updatedPhones.filter(phone => phone.id !== data.id)
+        updatedPhones = [...updatedPhones, data as PhoneInterface]
+        contact = {...contact, [tableName]: updatedPhones}
+    }
 
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         updateContact({contact})
-        history.push(PATH.HOME)
         sessionStorage.clear()
     }
 
@@ -176,7 +151,7 @@ const EditPage = () => {
                                         </div>
                                     </div>
 
-                                    <PhoneForm/>
+                                    <PhoneForm setContact={setContact}/>
                                     <AttachmentsForm/>
 
                                     <div className={classes.submitButton}>

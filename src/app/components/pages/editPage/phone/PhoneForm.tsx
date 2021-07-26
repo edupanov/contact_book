@@ -1,32 +1,21 @@
-import React, {SyntheticEvent, useEffect, useState} from 'react';
+import React, {SyntheticEvent, useState} from 'react';
 import {DataGrid, GridCellParams, GridColDef, GridRowId} from "@material-ui/data-grid";
 import './phone.module.scss'
-import {IconButton} from "@material-ui/core";
-import {useHistory, useLocation} from "react-router-dom";
+import {Button, IconButton} from "@material-ui/core";
+import {useLocation} from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import PhoneEditModal from "./PhoneEditModal";
 import {PhoneInterface} from "../../../contactList/types/contact.interface";
 import {LocationType} from "../type/editPage.type";
+import {PhoneModal} from "./PhoneModal";
+import {ButtonsEditForm} from "./editForm/buttonsEditForm";
+import {EditPhoneForm} from "./editForm/EditPhoneForm";
 
+interface PhoneFormProps {
+    setContact: (data: any, tableName: string) => void
+}
 
-const PhoneForm = () => {
-    const location = useLocation<LocationType>()
-    const data = location.state.contact.phones
-    const savedPhone:  PhoneInterface[] = JSON.parse(sessionStorage.getItem('phone') || '{}');
-
-    const [open, setOpen] = useState(false);
-    const [phone, setPhone] = useState({} as PhoneInterface);
-    const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-
-    const handleOpenModal = (e: any) => {
-        contactClickHandler(e)
-        setOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setOpen(false);
-    };
+const PhoneForm = (props: PhoneFormProps) => {
 
     const columns: GridColDef[] = [
         {
@@ -55,7 +44,7 @@ const PhoneForm = () => {
                 return <IconButton
                     id={String(el.id)}
                     aria-label="edit"
-                    onClick={handleOpenModal}
+                    onClick={contactClickHandler}
                 >
                     <EditIcon/>
                 </IconButton>
@@ -71,11 +60,55 @@ const PhoneForm = () => {
                 </IconButton>
         },
     ]
+
+    const {setContact} = props
+
+    const location = useLocation<LocationType>()
+    const data = location.state.contact.phones
+    const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
+    console.log(savedPhone)
+
+    const [open, setOpen] = useState(false);
+    const [phone, setPhone] = useState({} as PhoneInterface);
+    const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+
+    const [title, setTitle] = useState<string>('');
+    const [body, setBody] = useState<JSX.Element>(<div/>);
+    const [buttons, setButtons] = useState<JSX.Element>(<div/>);
+
+    const handleCloseModal = () => {
+        setOpen(false);
+    };
+
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const phonesForUpdate = !savedPhone.length ? [...data] : [...savedPhone]
+        const phonesForUpdate = Object.keys(savedPhone).length === 0 ? [...data] : [savedPhone]
         const currentPhone = phonesForUpdate.find(target => target.id === targetID) || {} as PhoneInterface;
         setPhone(currentPhone)
+        setTitle('Редактирование номера телефона');
+        setBody(<EditPhoneForm  phone={currentPhone}/>)
+        setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal(savedPhone)}/>)
+        setOpen(true);
+    }
+
+    // const handleOpenEditModal = () => {
+    //
+    //     console.log(phone)
+    //     setTitle('Редактирование номера телефона');
+    //     setBody(<EditPhoneForm  phone={phone} setPhone={setPhone}/>)
+    //     setButtons(<ButtonsEditForm onSubmitModal={onSubmitModal}/>)
+    //     setOpen(true);
+    // };
+
+    // const handleOpenAddModal = (e: any) => {
+    //     contactClickHandler(e)
+    //     setOpen(true);
+    //     return <PhoneEditModal />
+    // };
+    const onSubmitModal = (phone: PhoneInterface) => {
+
+        setContact(phone, 'phones')
+        handleCloseModal()
     }
 
     const checkedCurrenPhone = (params: GridRowId[]) => {
@@ -85,8 +118,14 @@ const PhoneForm = () => {
     return (
         <div style={{height: 162, width: '100%', marginBottom: 30}}>
             <h2>Контактные телефоны</h2>
+            <Button
+                variant="outlined"
+                color="primary"
+            >
+                Добавить новый номер
+            </Button>
             <DataGrid
-                rows={!savedPhone.length ? data : savedPhone}
+                rows={Object.keys(savedPhone).length === 0 ? data : [savedPhone]}
                 columns={columns}
                 pageSize={3}
                 disableSelectionOnClick
@@ -95,9 +134,18 @@ const PhoneForm = () => {
                 onSelectionModelChange={checkedCurrenPhone}
                 selectionModel={selectionModel}
             />
-            <PhoneEditModal open={open} onClose={handleCloseModal} phone={phone}/>
+
+            <PhoneModal
+                open={open}
+                onClose={handleCloseModal}
+                title={title}
+                body={body}
+                buttons={buttons}
+            />
         </div>
     );
 };
 
 export default PhoneForm;
+
+

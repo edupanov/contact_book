@@ -1,14 +1,15 @@
 import {Dispatch} from "redux";
-import {ContactActionTypes, ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
+import {ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
 import {RootState} from "../../../../../store/rootReducer";
-import * as ContactListRequests from "../../../../contactList/requests/contactListRequests";
 import * as ContactRequests from "../../../../../components/pages/editPage/requests/updateContactRequests";
 import {ContactInterface} from "../../../../contactList/types/contact.interface";
 import {UpdateContactActionType, UpdateContactActionTypes} from "../actionType/updateContactActionTypes";
+import {CallHistoryMethodAction, push} from "connected-react-router";
+import {PATH} from "../../../../../routes/Routes";
 
 
-export const updateContact = (contact: { contact: ContactInterface}) =>
-    async (dispatch: Dispatch<UpdateContactActionType | ContactsActionType>, getState: () => RootState) => {
+export const updateContact = (contact: { contact: ContactInterface }) =>
+    async (dispatch: Dispatch<UpdateContactActionType | ContactsActionType | CallHistoryMethodAction>, getState: () => RootState) => {
 
         dispatch({type: UpdateContactActionTypes.UPDATE_CONTACT})
 
@@ -23,14 +24,7 @@ export const updateContact = (contact: { contact: ContactInterface}) =>
         await ContactRequests.updateContact(contact)
             .then(async response => {
                 if (response.isSuccess) {
-                    const updatedContacts = await ContactListRequests.getContact(search)
-                    dispatch({
-                        type: ContactActionTypes.GET_CONTACTS_SUCCESS,
-                        payload: {
-                            users: updatedContacts?.data as Array<ContactInterface>,
-                            maxUsers: updatedContacts?.maxUsers
-                        }
-                    })
+                    dispatch(push(PATH.HOME))
                 }
             })
             .catch(error => {
