@@ -332,7 +332,7 @@ module.exports = {
             })
             .catch(err => {
                 res.status(500).json({
-                    message: 'Ошибка сервера, попробуйте еще раз'б
+                    message: 'Ошибка сервера, попробуйте еще раз',
                     err
                 })
             })
