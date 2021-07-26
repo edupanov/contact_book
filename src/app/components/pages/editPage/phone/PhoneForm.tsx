@@ -6,14 +6,10 @@ import {useLocation} from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
 import {PhoneInterface} from "../../../contactList/types/contact.interface";
-import {LocationType} from "../type/editPage.type";
+import {LocationType, PhoneFormProps} from "../type/editPage.type";
 import {PhoneModal} from "./PhoneModal";
-import {ButtonsEditForm} from "./editForm/buttonsEditForm";
 import {EditPhoneForm} from "./editForm/EditPhoneForm";
-
-interface PhoneFormProps {
-    setContact: (data: any, tableName: string) => void
-}
+import {ButtonsEditForm} from "./editForm/ButtonsEditForm";
 
 const PhoneForm = (props: PhoneFormProps) => {
 
@@ -24,7 +20,6 @@ const PhoneForm = (props: PhoneFormProps) => {
                 return <span>{`${params.row.countryCode} ${params.row.operatorID} ${params.row.phoneNumber}`}</span>
             }
         },
-
         {field: 'countryCode', headerName: 'Код страны', width: 200, filterable: false, sortable: false, hide: true},
         {field: 'operatorID', headerName: 'Код оператора', width: 200, filterable: false, sortable: false, hide: true},
         {
@@ -35,7 +30,6 @@ const PhoneForm = (props: PhoneFormProps) => {
             sortable: false,
             hide: true
         },
-
         {field: 'phoneType', headerName: 'Описание', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false, flex: 1},
         {
@@ -64,14 +58,12 @@ const PhoneForm = (props: PhoneFormProps) => {
     const {setContact} = props
 
     const location = useLocation<LocationType>()
+
     const data = location.state.contact.phones
-    const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
-    console.log(savedPhone)
 
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons, setButtons] = useState<JSX.Element>(<div/>);
@@ -82,12 +74,12 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const phonesForUpdate = Object.keys(savedPhone).length === 0 ? [...data] : [savedPhone]
+        const phonesForUpdate = Object.keys(phone).length === 0 ? [...data] : [phone]
         const currentPhone = phonesForUpdate.find(target => target.id === targetID) || {} as PhoneInterface;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
-        setBody(<EditPhoneForm  phone={currentPhone}/>)
-        setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal(savedPhone)}/>)
+        setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
+        setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
         setOpen(true);
     }
 
@@ -100,14 +92,9 @@ const PhoneForm = (props: PhoneFormProps) => {
     //     setOpen(true);
     // };
 
-    // const handleOpenAddModal = (e: any) => {
-    //     contactClickHandler(e)
-    //     setOpen(true);
-    //     return <PhoneEditModal />
-    // };
-    const onSubmitModal = (phone: PhoneInterface) => {
-
-        setContact(phone, 'phones')
+    const onSubmitModal = () => {
+        const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
+        setContact(savedPhone, 'phones')
         handleCloseModal()
     }
 
@@ -125,7 +112,7 @@ const PhoneForm = (props: PhoneFormProps) => {
                 Добавить новый номер
             </Button>
             <DataGrid
-                rows={Object.keys(savedPhone).length === 0 ? data : [savedPhone]}
+                rows={Object.keys(phone).length === 0 ? data : [phone]}
                 columns={columns}
                 pageSize={3}
                 disableSelectionOnClick

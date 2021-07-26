@@ -8,7 +8,7 @@ interface ButtonsEditFormInterface {
 
 export const ButtonsEditForm = (props: ButtonsEditFormInterface) => {
     const classes = useStyles();
-    let {onSubmitModal} = props
+    const {onSubmitModal} = props
 
     return (
         <div>

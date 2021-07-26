@@ -6,21 +6,21 @@ import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 
 interface EditPhoneFormInterface {
     phone: PhoneInterface,
+    setPhone: Dispatch<SetStateAction<PhoneInterface>>
 }
 
 export const EditPhoneForm = (props: EditPhoneFormInterface) => {
     const classes = useStyles();
 
-    let {phone} = props
+    let {phone, setPhone} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
         if (phone) {
             phone = {...phone, [target.name]: target.value}
-
         }
         sessionStorage.setItem('phone', JSON.stringify(phone));
-        console.log(phone)
+        setPhone(phone)
     }
     return (
         <div>

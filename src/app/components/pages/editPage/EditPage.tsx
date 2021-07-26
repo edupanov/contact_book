@@ -152,7 +152,7 @@ const EditPage = () => {
                                     </div>
 
                                     <PhoneForm setContact={setContact}/>
-                                    <AttachmentsForm/>
+                                    <AttachmentsForm setContact={setContact}/>
 
                                     <div className={classes.submitButton}>
                                         <Button

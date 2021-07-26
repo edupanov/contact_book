@@ -4,3 +4,7 @@ export type LocationType = {
     path: string
     contact: ContactInterface
 }
+
+export interface PhoneFormProps {
+    setContact: (data: any, tableName: string) => void
+}

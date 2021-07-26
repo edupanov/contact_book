@@ -18,6 +18,13 @@ export interface PhoneInterface {
     comment: string
 }
 
+export interface AttachmentInterface {
+    id: string
+    file: File,
+    description: string
+    comment: string
+}
+
 export interface ContactInterface {
     id: string
     name: string
@@ -29,6 +36,8 @@ export interface ContactInterface {
     nationality: string
     address: AddressInterface
     phones: Array<PhoneInterface>
+    attachments: Array<AttachmentInterface>
+
 }
 
-export type EditionTableType = PhoneInterface
+export type EditionTableType = PhoneInterface | AttachmentInterface
