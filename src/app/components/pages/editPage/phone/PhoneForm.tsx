@@ -107,6 +107,7 @@ const PhoneForm = (props: PhoneFormProps) => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('newPhone') || '{}');
 
         addPhone(savedPhone, props.contact!.id)
+        setOpen(false);
     }
 
     const checkedCurrenPhone = (params: GridRowId[]) => {

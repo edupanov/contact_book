@@ -51,7 +51,7 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                onChange={changePhoneInfoHandler}
                                     />
                                     <TextField className={classes.input}
-                                               label="Тип номера"
+                                               label="Тип"
                                                name={"phoneType"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
