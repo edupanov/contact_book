@@ -41,7 +41,6 @@ const ContactList = () => {
             flex: 1,
             width: 350,
             filterable: false,
-
             sortable: false,
             renderCell: (params: GridCellParams) => {
                 return <span>{params.row.address.fullAddress}</span>
@@ -54,7 +53,6 @@ const ContactList = () => {
                     aria-label="edit"
                     id={String(el.id)}
                     onClick={contactClickHandler}
-
                 >
                     <NavLink to={'/contacts/edit'}>
                         <EditIcon/>
@@ -125,7 +123,7 @@ const ContactList = () => {
         const targetID = event.currentTarget.id
         const contactsForUpdate = [...data]
         const currentContact: ContactInterface = contactsForUpdate.find(target => target.id === targetID);
-        history.push(PATH.EDIT, {contact: currentContact})
+        history.push(`${PATH.EDIT}/${currentContact.id}`, {contact: currentContact})
     }
 
     const searchClickHandler = (event: SyntheticEvent) => {

@@ -17,7 +17,7 @@ const Routes = () => {
             <Switch>
                 <Route exact path={PATH.HOME} component={MainPage}/>
                 <Route exact path={PATH.CREATE} component={AddPage}/>
-                <Route exact path={PATH.EDIT}  component={EditPage}/>
+                <Route exact path={`${PATH.EDIT}/:id`}  component={EditPage}/>
             </Switch>
         </div>
     );

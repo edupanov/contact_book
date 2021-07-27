@@ -13,6 +13,7 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
     const classes = useStyles();
 
     let {phone, setPhone} = props
+    console.log(phone.id)
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)

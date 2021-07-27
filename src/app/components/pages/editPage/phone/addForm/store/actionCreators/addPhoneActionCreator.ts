@@ -19,16 +19,16 @@ export const addPhone = (phone: PhoneInterface, contactId: string) =>
         await PhoneRequests.addPhone(phone, contactId)
             .then(async response => {
 
-                if (response.isSuccess) {
-                    const updatedContacts = await ContactListRequests.getContact({})
-                    dispatch({
-                        type: ContactActionTypes.GET_CONTACTS,
-                        payload: {
-                            users: updatedContacts?.data as Array<ContactInterface>,
-                            maxUsers: response?.maxUsers
-                        }
-                    })
-                }
+                // if (response.isSuccess) {
+                //     const updatedContacts = await ContactListRequests.getContact({})
+                //     dispatch({
+                //         type: ContactActionTypes.GET_CONTACTS,
+                //         payload: {
+                //             users: updatedContacts?.data as Array<ContactInterface>,
+                //             maxUsers: response?.maxUsers
+                //         }
+                //     })
+                // }
             })
             .catch(error => {
                 dispatch({type: CreatePhoneActionTypes.CREATE_PHONE_FAILURE, errors: error})

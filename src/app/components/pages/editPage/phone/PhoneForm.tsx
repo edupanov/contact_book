@@ -2,11 +2,10 @@ import React, {SyntheticEvent, useState} from 'react';
 import {DataGrid, GridCellParams, GridColDef, GridRowId} from "@material-ui/data-grid";
 import './phone.module.scss'
 import {Button, IconButton} from "@material-ui/core";
-import {useLocation} from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
 import {PhoneInterface} from "../../../contactList/types/contact.interface";
-import {LocationType, PhoneFormProps} from "../type/editPage.type";
+import {PhoneFormProps} from "../type/editPage.type";
 import {PhoneModal} from "./PhoneModal";
 import {EditPhoneForm} from "./editForm/EditPhoneForm";
 import {ButtonsEditForm} from "./editForm/ButtonsEditForm";
@@ -59,11 +58,10 @@ const PhoneForm = (props: PhoneFormProps) => {
         },
     ]
 
-    const {setContact} = props
+    const {setContact, contact} = props
 
-    const location = useLocation<LocationType>()
-
-    let data = location.state.contact.phones
+    let data = contact.phones
+    // console.log(data)
 
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
@@ -78,9 +76,9 @@ const PhoneForm = (props: PhoneFormProps) => {
     };
 
     const contactClickHandler = (event: SyntheticEvent) => {
+        debugger
         const targetID = event.currentTarget.id
-        const phonesForUpdate = Object.keys(phone).length === 0 ? [...data] : [phone]
-        const currentPhone = phonesForUpdate.find(target => target.id === targetID) || {} as PhoneInterface;
+        const currentPhone = data.find(target => target.id === targetID) || {} as PhoneInterface;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
         setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
@@ -119,7 +117,7 @@ const PhoneForm = (props: PhoneFormProps) => {
     }
 
     return (
-        <div style={{height: 162, width: '100%', marginBottom: 30}}>
+        <div style={{height: 162, width: '100%', marginBottom: 70}}>
             <h2>Контактные телефоны</h2>
             <Button
                 variant="outlined"
@@ -130,7 +128,7 @@ const PhoneForm = (props: PhoneFormProps) => {
                 Добавить новый номер
             </Button>
             <DataGrid
-                rows={Object.keys(phone).length === 0 ? data : [phone]}
+                rows={data}
                 columns={columns}
                 pageSize={3}
                 disableSelectionOnClick

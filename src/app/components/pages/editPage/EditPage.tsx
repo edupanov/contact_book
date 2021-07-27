@@ -8,15 +8,20 @@ import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
 import {LocationType} from "./type/editPage.type";
-import {EditionTableType, PhoneInterface} from "../../contactList/types/contact.interface";
+import {ContactInterface, EditionTableType, PhoneInterface} from "../../contactList/types/contact.interface";
+import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
+import {RootState} from "../../../store/rootReducer";
 
 const EditPage = () => {
-
+    const contacts: ContactInterface[] = useTypeSelector((state: RootState) => state.contacts.data)
+    console.log(contacts)
     const location = useLocation<LocationType>()
-    let contact = location.state.contact
-    const classes = useStyles()
-    const {updateContact} = useActions()
+    const contactId = location.pathname.slice(15)
+    let contact = contacts.find(el => el.id === contactId)!
 
+    const classes = useStyles()
+
+    const {updateContact} = useActions()
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -152,7 +157,7 @@ const EditPage = () => {
                                     </div>
 
                                     <PhoneForm contact={contact} setContact={setContact}/>
-                                    <AttachmentsForm setContact={setContact}/>
+                                    <AttachmentsForm contact={contact} setContact={setContact}/>
 
                                     <div className={classes.submitButton}>
                                         <Button
