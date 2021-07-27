@@ -3,7 +3,6 @@ import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {TargetType} from "../../../searchPage/SearchPage";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 import {useStyles} from "../../../deleteModal/style/styleModal";
-import {AddPhoneInterface} from "./types/addPhone.interface";
 
 interface AddPhoneFormInterface {
     newPhone: PhoneInterface,
@@ -51,14 +50,14 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                onChange={changePhoneInfoHandler}
                                     />
                                     <TextField className={classes.input}
-                                               label="Описание"
-                                               name={"comment"}
+                                               label="Тип"
+                                               name={"phoneType"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Коментарий"
-                                               name={"description"}
+                                               name={"comment"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
                                     />

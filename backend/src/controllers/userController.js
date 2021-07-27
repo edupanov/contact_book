@@ -196,15 +196,15 @@ module.exports = {
                     user.maritalStatus = contactForUpdate.maritalStatus
                     user.nationality = contactForUpdate.nationality
 
-                   if (index >= 0) {
-                       user.addresses[index].city = contactForUpdate.address.city
-                       user.addresses[index].country = contactForUpdate.address.country
-                       user.addresses[index].street = contactForUpdate.address.street
-                       user.addresses[index].building = contactForUpdate.address.building
-                       user.addresses[index].flat = contactForUpdate.address.flat
-                       user.addresses[index].zipCode = contactForUpdate.address.zipCode
-                       user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
-                   }
+                    if (index >= 0) {
+                        user.addresses[index].city = contactForUpdate.address.city
+                        user.addresses[index].country = contactForUpdate.address.country
+                        user.addresses[index].street = contactForUpdate.address.street
+                        user.addresses[index].building = contactForUpdate.address.building
+                        user.addresses[index].flat = contactForUpdate.address.flat
+                        user.addresses[index].zipCode = contactForUpdate.address.zipCode
+                        user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
+                    }
 
                     phones.map(phone => {
                         const phoneIndex = user.phones.findIndex(item => item._id.equals(phone.id))
@@ -302,26 +302,26 @@ module.exports = {
         const contactId = req.body.contactId
 
         await User.findById({_id: contactId})
-            .then(user => {
-
+            .then(async user => {
                 if (user._id) {
                     user.phones.forEach(phone => {
                         const fullPhone = `${phone.countryCode} ${phone.operatorID} ${phone.phoneNumber}`
                         const newFullPhone = `${newPhone.countryCode} ${newPhone.operatorID} ${newPhone.phoneNumber}`
-                        console.log(fullPhone)
-                        console.log(newFullPhone)
 
-                        if (fullPhone.equals(newFullPhone)) {
+                        if (fullPhone.trim() === newFullPhone.trim()) {
                             res.status(400).json({
                                 message: 'Данный номер телефона уже зарегистрирован'
                             })
                         }
                     })
+
                     user.phones.push(newPhone)
 
                     user.save().then(user => {
                         if (user._id) {
                             res.status(200).json({
+                                status: 200,
+                                isSuccess: true,
                                 message: 'Телефон успешно добавлен!'
                             })
                         }
@@ -352,18 +352,18 @@ module.exports = {
 
                 await User.deleteMany({_id: contacts})
                     .then(count => {
-                            res.status(200).json({
-                                code: 200,
-                                isSuccess: true,
-                                message: 'Contacts deleted successfully!',
-                                count
-                            })
+                        res.status(200).json({
+                            code: 200,
+                            isSuccess: true,
+                            message: 'Contacts deleted successfully!',
+                            count
+                        })
                     })
             })
     },
 
     setContacts: async (req, res, next) => {
-
+        //
         // let i = 0
         //
         // while (i <= 50) {
