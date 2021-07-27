@@ -297,15 +297,19 @@ module.exports = {
     },
 
     addPhone: async (req, res, next) => {
+
         const newPhone = req.body.phone
         const contactId = req.body.contactId
 
         await User.findById({_id: contactId})
             .then(user => {
+
                 if (user._id) {
                     user.phones.forEach(phone => {
                         const fullPhone = `${phone.countryCode} ${phone.operatorID} ${phone.phoneNumber}`
                         const newFullPhone = `${newPhone.countryCode} ${newPhone.operatorID} ${newPhone.phoneNumber}`
+                        console.log(fullPhone)
+                        console.log(newFullPhone)
 
                         if (fullPhone.equals(newFullPhone)) {
                             res.status(400).json({
@@ -313,8 +317,8 @@ module.exports = {
                             })
                         }
                     })
-
                     user.phones.push(newPhone)
+
                     user.save().then(user => {
                         if (user._id) {
                             res.status(200).json({

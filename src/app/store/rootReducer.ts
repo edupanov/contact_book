@@ -7,6 +7,7 @@ import {searchContactReducer} from "../components/pages/searchPage/store/reducer
 import {createContactReducer} from "../components/pages/addPage/store/reducers/addContactReducer";
 import {updateContactReducer} from "../components/pages/editPage/store/reducers/updateContactReducer";
 import {deleteContactReducer} from "../components/pages/deleteModal/store/reducer/deleteContactReducer";
+import {createPhoneReducer} from "../components/pages/editPage/phone/addForm/store/reducers/addPhoneReducer";
 
 let rootState = {} as CombinedState<any>
 
@@ -20,7 +21,8 @@ export const createRootReducer = (history: History) => {
         search: searchContactReducer,
         createContact: createContactReducer,
         updateContact: updateContactReducer,
-        delete: deleteContactReducer
+        delete: deleteContactReducer,
+        addPhone: createPhoneReducer
 
     })
 

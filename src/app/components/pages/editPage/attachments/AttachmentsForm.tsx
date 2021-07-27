@@ -1,12 +1,11 @@
 import React, {SyntheticEvent, useState} from 'react';
-import {DataGrid, GridCloseIcon, GridColDef, GridRowId} from "@material-ui/data-grid";
+import {DataGrid, GridColDef, GridRowId} from "@material-ui/data-grid";
 import {Button, IconButton} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
 import {AttachmentInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
 import {LocationType, PhoneFormProps} from "../type/editPage.type";
 import {useLocation} from "react-router-dom";
-import {EditPhoneForm} from "../phone/editForm/EditPhoneForm";
 import {ButtonsEditForm} from "../phone/editForm/ButtonsEditForm";
 import {PhoneModal} from "../phone/PhoneModal";
 import {EditAttachmentForm} from "./EditAttachmentForm";

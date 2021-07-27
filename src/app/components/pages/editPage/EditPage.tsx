@@ -3,7 +3,7 @@ import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
-import {useHistory, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
@@ -151,7 +151,7 @@ const EditPage = () => {
                                         </div>
                                     </div>
 
-                                    <PhoneForm setContact={setContact}/>
+                                    <PhoneForm contact={contact} setContact={setContact}/>
                                     <AttachmentsForm setContact={setContact}/>
 
                                     <div className={classes.submitButton}>
