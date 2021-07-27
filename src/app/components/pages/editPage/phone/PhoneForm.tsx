@@ -10,8 +10,12 @@ import {LocationType, PhoneFormProps} from "../type/editPage.type";
 import {PhoneModal} from "./PhoneModal";
 import {EditPhoneForm} from "./editForm/EditPhoneForm";
 import {ButtonsEditForm} from "./editForm/ButtonsEditForm";
+import {AddPhoneForm} from "./addForm/AddPhoneForm";
+import {useActions} from "../../../../store/hooks/useActions";
 
 const PhoneForm = (props: PhoneFormProps) => {
+
+    const {addPhone} = useActions()
 
     const columns: GridColDef[] = [
         {
@@ -59,10 +63,11 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const location = useLocation<LocationType>()
 
-    const data = location.state.contact.phones
+    let data = location.state.contact.phones
 
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
+    const [newPhone, setNewPhone] = useState({} as PhoneInterface);
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
@@ -83,14 +88,12 @@ const PhoneForm = (props: PhoneFormProps) => {
         setOpen(true);
     }
 
-    // const handleOpenEditModal = () => {
-    //
-    //     console.log(phone)
-    //     setTitle('Редактирование номера телефона');
-    //     setBody(<EditPhoneForm  phone={phone} setPhone={setPhone}/>)
-    //     setButtons(<ButtonsEditForm onSubmitModal={onSubmitModal}/>)
-    //     setOpen(true);
-    // };
+    const addPhoneClickHandler = (event: SyntheticEvent) => {
+        setTitle('Добавить номер телефона');
+        setBody(<AddPhoneForm newPhone={newPhone} setNewPhone={setNewPhone}/>)
+        setButtons(<ButtonsEditForm onSubmitModal={() => onAddPhoneSubmit()}/>)
+        setOpen(true);
+    }
 
     const onSubmitModal = () => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
@@ -98,8 +101,20 @@ const PhoneForm = (props: PhoneFormProps) => {
         handleCloseModal()
     }
 
+
+
+    const onAddPhoneSubmit = () => {
+        const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('newPhone') || '{}');
+
+        addPhone(savedPhone, props.contact!.id)
+    }
+
     const checkedCurrenPhone = (params: GridRowId[]) => {
         setSelectionModel(params)
+    }
+
+    if (Object.keys(phone).length !== 0) {
+        data = [...data, newPhone]
     }
 
     return (
@@ -108,6 +123,8 @@ const PhoneForm = (props: PhoneFormProps) => {
             <Button
                 variant="outlined"
                 color="primary"
+                onClick={addPhoneClickHandler}
+
             >
                 Добавить новый номер
             </Button>
