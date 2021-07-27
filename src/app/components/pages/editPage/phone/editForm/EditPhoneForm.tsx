@@ -53,7 +53,7 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
                                     />
                                     <TextField className={classes.input}
                                                label="Описание"
-                                               name={"comment"}
+                                               name={"phoneType"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
                                                defaultValue={phone.comment ? phone.comment : ''}

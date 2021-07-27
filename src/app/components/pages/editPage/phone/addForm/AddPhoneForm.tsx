@@ -51,14 +51,14 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                onChange={changePhoneInfoHandler}
                                     />
                                     <TextField className={classes.input}
-                                               label="Описание"
-                                               name={"comment"}
+                                               label="Тип номера"
+                                               name={"phoneType"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
                                     />
                                     <TextField className={classes.input}
                                                label="Коментарий"
-                                               name={"description"}
+                                               name={"comment"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
                                     />

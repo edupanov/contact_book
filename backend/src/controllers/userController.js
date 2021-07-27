@@ -308,8 +308,6 @@ module.exports = {
                     user.phones.forEach(phone => {
                         const fullPhone = `${phone.countryCode} ${phone.operatorID} ${phone.phoneNumber}`
                         const newFullPhone = `${newPhone.countryCode} ${newPhone.operatorID} ${newPhone.phoneNumber}`
-                        console.log(fullPhone)
-                        console.log(newFullPhone)
 
                         if (fullPhone.equals(newFullPhone)) {
                             res.status(400).json({
