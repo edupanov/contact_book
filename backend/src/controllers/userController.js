@@ -183,11 +183,11 @@ module.exports = {
         const addressId = contactForUpdate.address.id
         const phones = contactForUpdate.phones
 
-
         await User.findById({_id: contactId})
             .then(user => {
                 if (user._id) {
                     const index = user.addresses.findIndex(item => item._id.equals(addressId))
+
                     user.name = contactForUpdate.name
                     user.surname = contactForUpdate.surname
                     user.patronymic = contactForUpdate.patronymic
@@ -294,6 +294,47 @@ module.exports = {
                 })
             }
         })
+    },
+
+    addPhone: async (req, res, next) => {
+        const newPhone = req.body.phone
+        const contactId = req.body.contactId
+
+        await User.findById({_id: contactId})
+            .then(user => {
+                if (user._id) {
+                    user.phones.forEach(phone => {
+                        const fullPhone = `${phone.countryCode} ${phone.operatorID} ${phone.phoneNumber}`
+                        const newFullPhone = `${newPhone.countryCode} ${newPhone.operatorID} ${newPhone.phoneNumber}`
+
+                        if (fullPhone.equals(newFullPhone)) {
+                            res.status(400).json({
+                                message: 'Данный номер телефона уже зарегистрирован'
+                            })
+                        }
+                    })
+
+                    user.phones.push(newPhone)
+                    user.save().then(user => {
+                        if (user._id) {
+                            res.status(200).json({
+                                message: 'Телефон успешно добавлен!'
+                            })
+                        }
+                    })
+
+                } else {
+                    res.status(404).json({
+                        message: `Контакт с id ${contactId} не найден!`
+                    })
+                }
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: 'Ошибка сервера, попробуйте еще раз',
+                    err
+                })
+            })
     },
 
 
