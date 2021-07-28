@@ -74,8 +74,6 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const {setContact, contact} = props
 
-    // let phones = contact.phones
-
     const {deletePhone} = useActions()
     let [phones, setPhones] = useState(contact.phones)
     const [open, setOpen] = useState(false);
@@ -122,7 +120,6 @@ const PhoneForm = (props: PhoneFormProps) => {
     const checkedCurrenPhone = (params: GridRowId[]) => {
         setSelectionModel(params)
     }
-
     const newPhones = phones.map(item => item.id === phone.id ? phone : item);
     const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
     const result = equals(phones, newPhones)

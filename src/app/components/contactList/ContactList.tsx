@@ -92,11 +92,12 @@ const ContactList = () => {
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
     const prevVal = usePrevious(data)
     const history = useHistory()
+    sessionStorage.setItem('contactsId', JSON.stringify(selectionModel));
+    sessionStorage.setItem('contacts', JSON.stringify(items));
 
     const handleOpenModal = () => {
         setOpen(true);
     };
-
     const handleCloseModal = () => {
         setOpen(false);
     };
