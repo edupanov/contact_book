@@ -72,7 +72,7 @@ const EditPage = () => {
             <div className={classes.avatar}><Avatar/></div>
             <div>
                 <h2 className={classes.title}>Редактирование контакта </h2>
-                <Grid container justify="center">
+                <Grid container justifyContent="center">
                     <Grid item xs={10}>
                         <form onSubmit={onSubmit}>
                             <FormControl>

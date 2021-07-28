@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
 import {RootState} from "../../../../../store/rootReducer";
-import * as ContactRequests from "../../../../../components/pages/editPage/requests/updateContactRequests";
+import * as EditRequest from "../../../../../components/pages/editPage/requests/updateContactRequests";
 import {ContactInterface} from "../../../../contactList/types/contact.interface";
 import {UpdateContactActionType, UpdateContactActionTypes} from "../actionType/updateContactActionTypes";
 import {CallHistoryMethodAction, push} from "connected-react-router";
@@ -13,7 +13,7 @@ export const updateContact = (contact: { contact: ContactInterface }) =>
 
         dispatch({type: UpdateContactActionTypes.UPDATE_CONTACT})
 
-        await ContactRequests.updateContact(contact)
+        await EditRequest.updateContact(contact)
             .then(async response => {
                 if (response.isSuccess) {
                     dispatch(push(PATH.HOME))

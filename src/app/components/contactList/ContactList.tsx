@@ -180,7 +180,7 @@ const ContactList = () => {
                 className={styles.headerWrapper}
                 container
                 direction="row"
-                justify="space-between"
+                justifyContent="space-between"
                 alignItems="center"
             > <NavLink className={styles.link} to={'/contacts/create'}>
                 <Button

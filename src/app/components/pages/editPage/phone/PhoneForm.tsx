@@ -1,4 +1,4 @@
-import React, {SyntheticEvent, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
 import {DataGrid, GridCellParams, GridColDef, GridRowId} from "@material-ui/data-grid";
 import './phone.module.scss'
 import {Button, IconButton} from "@material-ui/core";
@@ -12,6 +12,15 @@ import {ButtonsEditForm} from "./editForm/ButtonsEditForm";
 import {AddPhoneForm} from "./addForm/AddPhoneForm";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "../styles/formStyles";
+
+export interface EditPhoneInterface {
+    id?: string
+    countryCode?: string
+    operatorID?: string
+    phoneNumber?: string
+    phoneType?: string
+    comment?: string
+}
 
 const PhoneForm = (props: PhoneFormProps) => {
 
@@ -55,6 +64,8 @@ const PhoneForm = (props: PhoneFormProps) => {
             renderCell: (el) =>
                 <IconButton
                     aria-label="del"
+                    id={String(el.id)}
+                    onClick={deleteCurrentPhone}
                 >
                     <Delete/>
                 </IconButton>
@@ -63,7 +74,9 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const {setContact, contact} = props
 
-    let data = contact.phones
+    let phones = contact.phones
+
+    const {deletePhone} = useActions()
 
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
@@ -79,7 +92,7 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const currentPhone = data.find(target => target.id === targetID)!;
+        const currentPhone = phones.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
         setBody(<EditPhoneForm id={targetID} phone={currentPhone} setPhone={setPhone}/>)
@@ -102,7 +115,6 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const onAddPhoneSubmit = () => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('newPhone') || '{}');
-
         addPhone(savedPhone, props.contact!.id)
         setOpen(false);
     }
@@ -110,10 +122,20 @@ const PhoneForm = (props: PhoneFormProps) => {
     const checkedCurrenPhone = (params: GridRowId[]) => {
         setSelectionModel(params)
     }
+    const newPhones = phones.map(item => item.id === phone.id ? phone : item);
+    const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
+    const result = equals(phones, newPhones)
 
-    if (Object.keys(phone).length !== 0) {
-        data = [...data, newPhone]
+    const deleteCurrentPhone = (event: SyntheticEvent) => {
+        const phoneId = event.currentTarget.id
+        const contactId = contact.id
+        deletePhone(contactId, phoneId)
     }
+
+
+    useEffect(() => {
+        phones = [...phones, newPhone]
+    }, [phone])
 
     return (
         <div style={{height: 'auto', width: '100%'}}>
@@ -123,12 +145,11 @@ const PhoneForm = (props: PhoneFormProps) => {
                 variant="outlined"
                 color="primary"
                 onClick={addPhoneClickHandler}
-
             >
                 Добавить новый номер
             </Button>
             <DataGrid
-                rows={data}
+                rows={result ? phones : newPhones}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick

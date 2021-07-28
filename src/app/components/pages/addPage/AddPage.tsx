@@ -58,7 +58,7 @@ const AddPage: FC = () => {
                     <GridCloseIcon/>
                 </IconButton>
             </NavLink>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
                         <FormControl className={classes.form}>

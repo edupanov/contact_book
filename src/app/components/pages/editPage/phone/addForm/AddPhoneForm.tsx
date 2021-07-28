@@ -4,6 +4,7 @@ import {TargetType} from "../../../searchPage/SearchPage";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 import {useStyles} from "../../../deleteModal/style/styleModal";
 import {AddPhoneInterface} from "./types/addPhone.interface";
+import {EditPhoneInterface} from "../PhoneForm";
 
 interface AddPhoneFormInterface {
     newPhone: PhoneInterface,
@@ -26,7 +27,7 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
     }
     return (
         <div>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form>
                         <FormControl>
