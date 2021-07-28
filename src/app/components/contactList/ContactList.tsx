@@ -91,7 +91,6 @@ const ContactList = () => {
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
     const prevVal = usePrevious(data)
-
     const history = useHistory()
 
     const handleOpenModal = () => {
