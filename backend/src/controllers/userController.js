@@ -123,7 +123,8 @@ module.exports = {
                         gender: user.gender,
                         maritalStatus: user.maritalStatus,
                         nationality: user.nationality,
-                        del: user.del,
+                        currentJob: user.currentJob,
+                        email: user.email,
                         edit: user.edit,
                         address: addr,
                         phones
@@ -195,6 +196,8 @@ module.exports = {
                     user.gender = contactForUpdate.gender
                     user.maritalStatus = contactForUpdate.maritalStatus
                     user.nationality = contactForUpdate.nationality
+                    user.currentJob = contactForUpdate.currentJob
+                    user.email = contactForUpdate.email
 
                     if (index >= 0) {
                         user.addresses[index].city = contactForUpdate.address.city
@@ -341,6 +344,40 @@ module.exports = {
             })
     },
 
+    removePhone: async (req, res, next) => {
+
+        const contactId = req.body.contactId
+        const phoneId = req.body.phoneId
+
+        await User.findById({_id: contactId})
+            .then(async user => {
+                if (user._id) {
+                    user.phones.pull(phoneId)
+
+                    user.save().then(user => {
+                        if (user._id) {
+                            res.status(200).json({
+                                status: 200,
+                                isSuccess: true,
+                                message: 'Телефон успешно удален!'
+                            })
+                        }
+                    })
+
+                } else {
+                    res.status(404).json({
+                        message: `Контакт с id ${contactId} не найден!`
+                    })
+                }
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: 'Ошибка сервера, попробуйте еще раз',
+                    err
+                })
+            })
+    },
+
 
     deleteAllContacts: async (req, res, next) => {
 
@@ -363,7 +400,7 @@ module.exports = {
     },
 
     setContacts: async (req, res, next) => {
-        //
+
         // let i = 0
         //
         // while (i <= 50) {
@@ -375,6 +412,8 @@ module.exports = {
         //         gender: `${i % 2 === 0 ? 'мужской' : 'женский'}`,
         //         maritalStatus: `${i % 2 === 0 ? 'женат' : 'замужем'}`,
         //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`,
+        //         currentJob: `${i % 2 === 0 ? 'Programmer' : 'Tester'}`,
+        //         email: `${i % 2 === 0 ? 'kleshchenok90@gmail.com' : 'kleshchenok.private@gmail.com'}`,
         //     })
         //
         //     await user.save()

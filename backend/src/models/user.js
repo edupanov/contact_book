@@ -11,6 +11,8 @@ const userSchema = new Schema({
     gender: {type: String, require: true},
     maritalStatus: {type: String, require: true},
     nationality: {type: String, require: true},
+    currentJob: {type: String, require: true},
+    email: {type: String, require: true},
     addresses: [AddressSchema],
     phones: [PhoneSchema]
 }, {timestamps: true})
