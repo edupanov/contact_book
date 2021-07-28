@@ -74,10 +74,10 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const {setContact, contact} = props
 
-    let phones = contact.phones
+    // let phones = contact.phones
 
     const {deletePhone} = useActions()
-
+    let [phones, setPhones] = useState(contact.phones)
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
     const [newPhone, setNewPhone] = useState({} as PhoneInterface);
@@ -122,9 +122,15 @@ const PhoneForm = (props: PhoneFormProps) => {
     const checkedCurrenPhone = (params: GridRowId[]) => {
         setSelectionModel(params)
     }
+
     const newPhones = phones.map(item => item.id === phone.id ? phone : item);
     const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
     const result = equals(phones, newPhones)
+
+    useEffect(() => {
+        setPhones(newPhones)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [!result]);
 
     const deleteCurrentPhone = (event: SyntheticEvent) => {
         const phoneId = event.currentTarget.id
@@ -149,7 +155,7 @@ const PhoneForm = (props: PhoneFormProps) => {
                 Добавить новый номер
             </Button>
             <DataGrid
-                rows={result ? phones : newPhones}
+                rows={phones}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick
