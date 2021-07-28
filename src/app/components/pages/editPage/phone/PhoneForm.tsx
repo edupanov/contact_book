@@ -1,4 +1,4 @@
-import React, {SyntheticEvent, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
 import {DataGrid, GridCellParams, GridColDef, GridRowId} from "@material-ui/data-grid";
 import './phone.module.scss'
 import {Button, IconButton} from "@material-ui/core";
@@ -82,7 +82,7 @@ const PhoneForm = (props: PhoneFormProps) => {
         const currentPhone = data.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
-        setBody(<EditPhoneForm id={targetID} phone={currentPhone} setPhone={setPhone}/>)
+        setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
         setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
         setOpen(true);
     }
@@ -111,9 +111,9 @@ const PhoneForm = (props: PhoneFormProps) => {
         setSelectionModel(params)
     }
 
-    if (Object.keys(phone).length !== 0) {
+    useEffect(() => {
         data = [...data, newPhone]
-    }
+    }, [phone])
 
     return (
         <div style={{height: 'auto', width: '100%'}}>

@@ -5,16 +5,14 @@ import {TargetType} from "../../../searchPage/SearchPage";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 
 interface EditPhoneFormInterface {
-    phone: PhoneInterface,
-    setPhone: Dispatch<SetStateAction<PhoneInterface>>,
-    id: string
+    phone: PhoneInterface
+    setPhone: Dispatch<SetStateAction<PhoneInterface>>
 }
 
 export const EditPhoneForm = (props: EditPhoneFormInterface) => {
-
     const classes = useStyles();
 
-    let {phone, setPhone, id} = props
+    let {phone, setPhone} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -24,8 +22,8 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
         sessionStorage.setItem('phone', JSON.stringify(phone));
         setPhone(phone)
     }
+
     return (
-        <div id={id}>
             <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form>
@@ -73,8 +71,6 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
                     </form>
                 </Grid>
             </Grid>
-        </div>
-
     );
 };
 
