@@ -6,13 +6,15 @@ import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 
 interface EditPhoneFormInterface {
     phone: PhoneInterface,
-    setPhone: Dispatch<SetStateAction<PhoneInterface>>
+    setPhone: Dispatch<SetStateAction<PhoneInterface>>,
+    id: string
 }
 
 export const EditPhoneForm = (props: EditPhoneFormInterface) => {
+
     const classes = useStyles();
 
-    let {phone, setPhone} = props
+    let {phone, setPhone, id} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -23,8 +25,8 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
         setPhone(phone)
     }
     return (
-        <div>
-            <Grid container justify="center">
+        <div id={id}>
+            <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form>
                         <FormControl>
@@ -53,7 +55,7 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
                                     />
                                     <TextField className={classes.input}
                                                label="Описание"
-                                               name={"comment"}
+                                               name={"phoneType"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
                                                defaultValue={phone.comment ? phone.comment : ''}

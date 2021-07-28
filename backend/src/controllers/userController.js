@@ -21,6 +21,8 @@ module.exports = {
         const gender = req.body.gender
         const maritalStatus = req.body.maritalStatus
         const nationality = req.body.nationality
+
+
         //address
         const city = req.body.city
         const country = req.body.country
@@ -65,6 +67,8 @@ module.exports = {
         if (nationality) {
             searchParams.nationality = nationality
         }
+
+
 
         if (city) {
             searchParams['addresses.city'] = city

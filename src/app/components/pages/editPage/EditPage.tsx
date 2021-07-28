@@ -1,5 +1,5 @@
-import React, {ChangeEvent, FormEvent} from 'react';
-import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
@@ -8,39 +8,62 @@ import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
 import {LocationType} from "./type/editPage.type";
-import {EditionTableType, PhoneInterface} from "../../contactList/types/contact.interface";
+import {ContactInterface, EditionTableType, PhoneInterface} from "../../contactList/types/contact.interface";
+import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
+import {RootState} from "../../../store/rootReducer";
+import styles from "../../mainForm/HeaderContactList.module.scss";
 
 const EditPage = () => {
 
-    const location = useLocation<LocationType>()
-    let contact = location.state.contact
     const classes = useStyles()
-    const {updateContact} = useActions()
+    const {updateContact, getContacts} = useActions()
+    const contacts: ContactInterface[] = useTypeSelector((state: RootState) => state.contacts.data)
+    const location = useLocation<LocationType>()
+    const contactId = location.pathname.split('/').reverse()[0]
+    const defaultContact = contacts?.find(el => el.id === contactId)!
 
+    let [currentContact, setCurrentContact] = useState<ContactInterface>(defaultContact)
+
+    useEffect(() => {
+        const newContact: ContactInterface = contacts?.find(el => el.id === contactId)!
+        setCurrentContact(newContact)
+        if(!contacts) {
+            getContacts()
+        }
+    }, [contacts])
+
+
+    if(!contacts || !currentContact) {
+        return <CircularProgress
+            className={styles.preloader}
+            size={60}
+            color="secondary"
+        />
+    }
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
         const isDate = target.name === 'birthDate'
         const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
-        if (contact) {
-            contact = {...contact, [target.name]: isDate ? replaceStr : target.value}
+        if (currentContact) {
+            currentContact = {...currentContact, [target.name]: isDate ? replaceStr : target.value}
         }
     }
     const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        contact = {...contact, address: {...contact.address, id: contact.address.id, [target.name]: target.value}}
+        currentContact = {...currentContact, address: {...currentContact.address, id: currentContact.address.id, [target.name]: target.value}}
     }
 
     const setContact = (data: EditionTableType, tableName: string) => {
-        let updatedPhones: PhoneInterface[] = contact.phones
+        let updatedPhones: PhoneInterface[] = currentContact.phones
         updatedPhones = updatedPhones.filter(phone => phone.id !== data.id)
         updatedPhones = [...updatedPhones, data as PhoneInterface]
-        contact = {...contact, [tableName]: updatedPhones}
+        currentContact = {...currentContact, [tableName]: updatedPhones}
     }
 
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
-        updateContact({contact})
+        updateContact({contact: currentContact})
         sessionStorage.clear()
     }
 
@@ -60,49 +83,63 @@ const EditPage = () => {
                                                    name={"name"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={contact.name ? contact.name : ''}
+                                                   defaultValue={currentContact.name ? currentContact.name : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Фамилия"
                                                    name={"surname"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={contact.surname ? contact.surname : ''}
+                                                   defaultValue={currentContact.surname ? currentContact.surname : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Отчество"
                                                    name={"patronymic"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={contact.patronymic ? contact.patronymic : ''}
+                                                   defaultValue={currentContact.patronymic ? currentContact.patronymic : ''}
                                         />
                                         <TextField className={classes.date}
                                                    helperText="Дата рождения"
                                                    name={"birthDate"}
                                                    type="date"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={contact.birthDate ? contact.birthDate.split('.').reverse().join('-') : ''}
+                                                   defaultValue={currentContact.birthDate ? currentContact.birthDate.split('.').reverse().join('-') : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Пол"
                                                    name={"gender"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={contact.gender ? contact.gender : ''}
+                                                   defaultValue={currentContact.gender ? currentContact.gender : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Семейное положение"
                                                    name={"maritalStatus"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={contact.maritalStatus ? contact.maritalStatus : ''}
+                                                   defaultValue={currentContact.maritalStatus ? currentContact.maritalStatus : ''}
                                         />
                                         <TextField className={classes.input}
                                                    label="Гражданство"
                                                    name={"nationality"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={contact.nationality ? contact.nationality : ''}
+                                                   defaultValue={currentContact.nationality ? currentContact.nationality : ''}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Email"
+                                                   name={"email"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={currentContact.email ? currentContact.email : ''}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Место работы"
+                                                   name={"currenJob"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={currentContact.currenJob ? currentContact.currenJob : ''}
                                         />
                                         <div>
                                             <h3 className={classes.title}>Адрес</h3>
@@ -111,48 +148,48 @@ const EditPage = () => {
                                                             name={"country"}
                                                             type="search"
                                                             onChange={changeContactAddressHandler}
-                                                            defaultValue={contact.address?.country ? contact.address?.country : ''}
+                                                            defaultValue={currentContact.address?.country ? currentContact.address?.country : ''}
                                         />
                                             <TextField className={classes.input}
                                                        label="Город"
                                                        name={"city"}
                                                        type="search"
                                                        onChange={changeContactAddressHandler}
-                                                       defaultValue={contact.address?.city ? contact.address?.city : ''}
+                                                       defaultValue={currentContact.address?.city ? currentContact.address?.city : ''}
                                             />
                                             <TextField className={classes.input}
                                                        label="Улица"
                                                        name={"street"}
                                                        type="search"
                                                        onChange={changeContactAddressHandler}
-                                                       defaultValue={contact.address?.street ? contact.address?.street : ''}
+                                                       defaultValue={currentContact.address?.street ? currentContact.address?.street : ''}
                                             />
                                             <TextField className={classes.input}
                                                        label="Номер дома"
                                                        name={"building"}
                                                        type="number"
                                                        onChange={changeContactAddressHandler}
-                                                       defaultValue={contact.address?.building ? contact.address?.building : ''}
+                                                       defaultValue={currentContact.address?.building ? currentContact.address?.building : ''}
                                             />
                                             <TextField className={classes.input}
                                                        label="Номер квартиры"
                                                        name={"flat"}
                                                        type="number"
                                                        onChange={changeContactAddressHandler}
-                                                       defaultValue={contact.address?.flat ? contact.address?.flat : ''}
+                                                       defaultValue={currentContact.address?.flat ? currentContact.address?.flat : ''}
                                             />
                                             <TextField className={classes.input}
                                                        label="Индекс"
                                                        name={"zipCode"}
                                                        type="number"
                                                        onChange={changeContactAddressHandler}
-                                                       defaultValue={contact.address?.zipCode ? contact.address?.zipCode : ''}
+                                                       defaultValue={currentContact.address?.zipCode ? currentContact.address?.zipCode : ''}
                                             />
                                         </div>
                                     </div>
 
-                                    <PhoneForm contact={contact} setContact={setContact}/>
-                                    <AttachmentsForm setContact={setContact}/>
+                                    <PhoneForm contact={currentContact} setContact={setContact}/>
+                                    <AttachmentsForm contact={currentContact} setContact={setContact}/>
 
                                     <div className={classes.submitButton}>
                                         <Button

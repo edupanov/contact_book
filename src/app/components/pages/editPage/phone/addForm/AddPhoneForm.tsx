@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {TargetType} from "../../../searchPage/SearchPage";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 import {useStyles} from "../../../deleteModal/style/styleModal";
+import {AddPhoneInterface} from "./types/addPhone.interface";
 
 interface AddPhoneFormInterface {
     newPhone: PhoneInterface,
