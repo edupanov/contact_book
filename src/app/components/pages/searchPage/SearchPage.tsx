@@ -68,7 +68,7 @@ const SearchPanel = (props: SearchPanelType) => {
                         aria-label="close">
                         <GridCloseIcon/>
                     </IconButton>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
                         <FormControl className={classes.form}>
@@ -116,6 +116,20 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
                                                    defaultValue={savedSearch.nationality}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Email"
+                                                   name={"email"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.email}
+                                        />
+                                        <TextField className={classes.input}
+                                                   label="Место работы"
+                                                   name={"currenJob"}
+                                                   type="search"
+                                                   onChange={changeContactInfoHandler}
+                                                   defaultValue={savedSearch.currenJob}
                                         />
                                     </div>
                                     <div className={classes.dateWrapper}>

@@ -8,7 +8,7 @@ import {
 import {RootState} from "../../../../../../../store/rootReducer";
 import * as ContactListRequests from "../../../../../../contactList/requests/contactListRequests";
 import {ContactInterface, PhoneInterface} from "../../../../../../contactList/types/contact.interface";
-import {CallHistoryMethodAction, push} from "connected-react-router";
+import {CallHistoryMethodAction} from "connected-react-router";
 
 
 export const addPhone = (phone: PhoneInterface, contactId: string) =>
@@ -19,16 +19,24 @@ export const addPhone = (phone: PhoneInterface, contactId: string) =>
         await PhoneRequests.addPhone(phone, contactId)
             .then(async response => {
 
-                // if (response.isSuccess) {
-                //     const updatedContacts = await ContactListRequests.getContact({})
-                //     dispatch({
-                //         type: ContactActionTypes.GET_CONTACTS,
-                //         payload: {
-                //             users: updatedContacts?.data as Array<ContactInterface>,
-                //             maxUsers: response?.maxUsers
-                //         }
-                //     })
-                // }
+                const {searchParams} = getState().search  //получаем парметры из текущего стейта
+                const {take, page} = getState().contacts
+
+                const search = {
+                    ...searchParams,
+                    page, take
+                }
+
+                if (response.isSuccess) {
+                    const updatedContacts = await ContactListRequests.getContact(search)
+                    dispatch({
+                        type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+                        payload: {
+                            users: updatedContacts?.data as Array<ContactInterface>,
+                            maxUsers: response?.maxUsers
+                        }
+                    })
+                }
             })
             .catch(error => {
                 dispatch({type: CreatePhoneActionTypes.CREATE_PHONE_FAILURE, errors: error})

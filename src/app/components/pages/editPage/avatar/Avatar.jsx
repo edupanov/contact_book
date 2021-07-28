@@ -58,16 +58,16 @@ const Logo = () => {
 
     return (
         <div>
-            <Box display="flex">
-                <Box width="35%">
+            <Box display="flex" flexWrap='wrap'>
+                <Box width="500%">
                     <Avatar
                         src={picture.croppedImg}
-                        style={{width: "100%", height: "auto", padding: "5"}}
+                        style={{width: "100%", height: "auto", padding: "10", marginBottom: 10 }}
                     />
                     <Button
                         variant="contained"
                         width="100%"
-                        style={{ backgroundColor: "red", color: "white" }}
+                        style={{ backgroundColor: "#3451b9", color: "white"}}
                     >
                         <input type="file" accept="image/*" onChange={handleFileChange}/>
                     </Button>

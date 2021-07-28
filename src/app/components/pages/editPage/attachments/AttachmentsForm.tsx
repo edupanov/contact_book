@@ -9,8 +9,11 @@ import {useLocation} from "react-router-dom";
 import {ButtonsEditForm} from "../phone/editForm/ButtonsEditForm";
 import {PhoneModal} from "../phone/PhoneModal";
 import {EditAttachmentForm} from "./EditAttachmentForm";
+import {useStyles} from "../styles/formStyles";
 
 const AttachmentsForm = (props: PhoneFormProps) => {
+
+    const classes = useStyles()
 
     const columns: GridColDef[] = [
         {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false},
@@ -84,9 +87,10 @@ const AttachmentsForm = (props: PhoneFormProps) => {
     }
 
     return (
-        <div style={{height: 162, width: '80%', marginBottom: 30, marginTop: 30}}>
+        <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>
             <h2>Вложения</h2>
             <Button
+                className={classes.button}
                 variant="outlined"
                 color="primary"
             >
@@ -95,7 +99,7 @@ const AttachmentsForm = (props: PhoneFormProps) => {
             <DataGrid
                 rows={rows}
                 columns={columns}
-                pageSize={3}
+                autoHeight
                 disableSelectionOnClick
                 hideFooter
                 checkboxSelection

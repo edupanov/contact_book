@@ -11,8 +11,11 @@ import {EditPhoneForm} from "./editForm/EditPhoneForm";
 import {ButtonsEditForm} from "./editForm/ButtonsEditForm";
 import {AddPhoneForm} from "./addForm/AddPhoneForm";
 import {useActions} from "../../../../store/hooks/useActions";
+import {useStyles} from "../styles/formStyles";
 
 const PhoneForm = (props: PhoneFormProps) => {
+
+    const classes = useStyles()
 
     const {addPhone} = useActions()
 
@@ -61,7 +64,6 @@ const PhoneForm = (props: PhoneFormProps) => {
     const {setContact, contact} = props
 
     let data = contact.phones
-    // console.log(data)
 
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
@@ -76,12 +78,11 @@ const PhoneForm = (props: PhoneFormProps) => {
     };
 
     const contactClickHandler = (event: SyntheticEvent) => {
-        debugger
         const targetID = event.currentTarget.id
-        const currentPhone = data.find(target => target.id === targetID) || {} as PhoneInterface;
+        const currentPhone = data.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
-        setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
+        setBody(<EditPhoneForm id={targetID} phone={currentPhone} setPhone={setPhone}/>)
         setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
         setOpen(true);
     }
@@ -99,8 +100,6 @@ const PhoneForm = (props: PhoneFormProps) => {
         handleCloseModal()
     }
 
-
-
     const onAddPhoneSubmit = () => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('newPhone') || '{}');
 
@@ -117,9 +116,10 @@ const PhoneForm = (props: PhoneFormProps) => {
     }
 
     return (
-        <div style={{height: 162, width: '100%', marginBottom: 70}}>
+        <div style={{height: 'auto', width: '100%'}}>
             <h2>Контактные телефоны</h2>
             <Button
+                className={classes.button}
                 variant="outlined"
                 color="primary"
                 onClick={addPhoneClickHandler}
@@ -130,7 +130,7 @@ const PhoneForm = (props: PhoneFormProps) => {
             <DataGrid
                 rows={data}
                 columns={columns}
-                pageSize={3}
+                autoHeight
                 disableSelectionOnClick
                 hideFooter
                 checkboxSelection

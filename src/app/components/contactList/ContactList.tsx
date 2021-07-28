@@ -32,9 +32,9 @@ const ContactList = () => {
             }
         },
         {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
-        {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false},
-        {field: 'maritalStatus', headerName: 'Семейное положение', width: 200, filterable: false, sortable: false},
-        {field: 'nationality', headerName: 'Гражданство', width: 140, filterable: false, sortable: false},
+        {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false, hide: true},
+        {field: 'maritalStatus', headerName: 'Семейное положение', width: 200, filterable: false, sortable: false, hide: true},
+        {field: 'nationality', headerName: 'Гражданство', width: 140, filterable: false, sortable: false, hide: true},
         {
             field: 'address',
             headerName: 'Адрес',
@@ -46,6 +46,8 @@ const ContactList = () => {
                 return <span>{params.row.address.fullAddress}</span>
             }
         },
+        {field: 'email', headerName: 'Email', width: 140, filterable: false, sortable: false, hide: true},
+        {field: 'currenJob', headerName: 'Место работы', width: 140, filterable: false, sortable: false},
         {
             field: 'edit', headerName: '', width: 100, filterable: false, sortable: false, editable: true,
             renderCell: (el) => {
@@ -85,7 +87,6 @@ const ContactList = () => {
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
     const [openSearch, setOpenSearch] = React.useState(false);
-
     const {getContacts, setPage, setTake, deleteContacts, deleteAll} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
@@ -190,15 +191,15 @@ const ContactList = () => {
                 </Button>
             </NavLink>
                 <div>
-                    <Button
-                        onClick={deleteAll}
-                        className={selectionModel.length >= 5 ? styles.deleteButton : styles.hideButton}
-                        variant="outlined"
-                        color="secondary"
-                    >
-                        Удалить все
-                        <Delete/>
-                    </Button>
+                    {/*<Button*/}
+                    {/*    onClick={deleteAll}*/}
+                    {/*    className={selectionModel.length >= 5 ? styles.deleteButton : styles.hideButton}*/}
+                    {/*    variant="outlined"*/}
+                    {/*    color="secondary"*/}
+                    {/*>*/}
+                    {/*    Удалить все*/}
+                    {/*    <Delete/>*/}
+                    {/*</Button>*/}
                     <Button
                         onClick={handleOpenModal}
                         disabled={selectionModel.length === 0}
@@ -219,6 +220,7 @@ const ContactList = () => {
                             Поиск
                             <SearchIcon/>
                     </Button>
+                    <NavLink className={styles.link} to={'/contacts/email'}>
                     <Button
                         variant="contained"
                         size="large"
@@ -231,6 +233,7 @@ const ContactList = () => {
                             Отправить E-mail
                         </Typography>
                     </Button>
+                        </NavLink>
                 </div>
             </Grid>
 
@@ -254,8 +257,11 @@ const ContactList = () => {
                       selectionModel={selectionModel}
             />
 
-            <DeleteModal open={open} onClose={handleCloseModal} selectionModel={selectionModel}
-                         deleteCheckedContacts={deleteCheckedContacts} deleteAll={deleteAll}/>
+            <DeleteModal open={open}
+                         onClose={handleCloseModal}
+                         selectionModel={selectionModel}
+                         deleteCheckedContacts={deleteCheckedContacts}
+                         deleteAll={deleteAll}/>
         </div>
     );
 }

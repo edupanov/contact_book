@@ -34,6 +34,8 @@ export interface ContactInterface {
     gender: string
     maritalStatus: string
     nationality: string
+    email: string
+    currenJob: string
     address: AddressInterface
     phones: Array<PhoneInterface>
     attachments: Array<AttachmentInterface>
