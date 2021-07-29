@@ -129,13 +129,9 @@ const PhoneForm = (props: PhoneFormProps) => {
         deletePhone(contactId, phoneId)
     }
 
-    console.log(newPhone)
-
     useEffect(() => {
         phones = [...phones, newPhone]
     }, [newPhone])
-    console.log(phones)
-
 
     return (
         <div style={{height: 'auto', width: '100%'}}>

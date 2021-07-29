@@ -13,7 +13,6 @@ interface EditPhoneFormInterface {
 export const EditPhoneForm = (props: EditPhoneFormInterface) => {
 
     const classes = useStyles();
-
     let {phone, setPhone, id} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {

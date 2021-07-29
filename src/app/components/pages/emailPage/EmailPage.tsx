@@ -1,8 +1,11 @@
 import TextField from '@material-ui/core/TextField';
-import React from 'react';
-import {FormControl, InputLabel, NativeSelect} from "@material-ui/core";
+import React, {ChangeEvent, useState} from 'react';
+import {Button, FormControl, InputLabel, NativeSelect} from "@material-ui/core";
 import {useStyles} from "./styles/emailStyles";
 import {ContactInterface} from "../../contactList/types/contact.interface";
+import {TargetType} from "../searchPage/SearchPage";
+import {EmailInterface} from "./types/email.interface";
+import {useActions} from "../../../store/hooks/useActions";
 
 const messageTemplate = {
     template1: 'Пусть хорошее случается,\n' +
@@ -30,6 +33,10 @@ const messageTemplate = {
 
 const EmailPage = () => {
 
+    const {sendMail} = useActions()
+
+    let [email, setEmail] = useState({} as EmailInterface)
+
     const contactsId = JSON.parse(sessionStorage.getItem('contactsId') || '[]');
     const contacts = JSON.parse(sessionStorage.getItem('contacts') || '[]');
 
@@ -48,25 +55,33 @@ const EmailPage = () => {
     }
 
     const currentContacts = findEqualObjects(contacts, contactsId)
-
+    // имена выбранных пользователей для поля кому
     const valueContact = currentContacts.map(el => `${el.name} ${el.surname}`).join(', ')
+    // email выбранных пользователей
+    const emails = currentContacts.map(el => `${el.email}`)
 
     const classes = useStyles();
-    const [state, setState] = React.useState<{ age: string | number; name: string }>({
-        age: '',
-        name: '',
-    });
-    const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        const name = event.target.name as keyof typeof state;
+    const [state, setState] = React.useState<{ name: string }>({name: ''});
+    const handleChange = (event: React.ChangeEvent<{ name: string; value: unknown }>) => {
+        const name = event.target.name;
         setState({
             ...state,
             [name]: event.target.value,
         });
-        console.log(event.target.value)
     };
-    // if (state.name === '') {
-    //
-    // }
+    const changeMailHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const target: TargetType = (event.target)
+        if (email) {
+            email = {...email, [target.name]: target.value}
+        }
+        setEmail(email)
+
+    }
+
+    const sendMailHandler = () => {
+        sendMail(emails, email.theme, email.text)
+    }
+
     return (
         <form noValidate autoComplete="off" className={classes.emailFormWrapper}>
             <TextField className={classes.inputStyle}
@@ -83,7 +98,10 @@ const EmailPage = () => {
                        required
                        id="outlined-required"
                        label="Тема"
+                       name={'theme'}
                        variant="outlined"
+                       onChange={changeMailHandler}
+
             />
             <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="name-native-error">Шаблон</InputLabel>
@@ -108,11 +126,19 @@ const EmailPage = () => {
             <TextField className={classes.inputStyle}
                        id="outlined-textarea"
                        label="Текст сообщения"
+                       name={'text'}
                        multiline
                        variant="outlined"
+                       onChange={changeMailHandler}
                        defaultValue={state.name}
-                       autoFocus
             />
+            <Button
+                variant="outlined"
+                color="primary"
+                onClick={sendMailHandler}
+            >
+                Отправить e-mail
+            </Button>
 
         </form>
     );
