@@ -91,13 +91,13 @@ const ContactList = () => {
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
     const prevVal = usePrevious(data)
-
     const history = useHistory()
+    sessionStorage.setItem('contactsId', JSON.stringify(selectionModel));
+    sessionStorage.setItem('contacts', JSON.stringify(items));
 
     const handleOpenModal = () => {
         setOpen(true);
     };
-
     const handleCloseModal = () => {
         setOpen(false);
     };
@@ -180,7 +180,7 @@ const ContactList = () => {
                 className={styles.headerWrapper}
                 container
                 direction="row"
-                justify="space-between"
+                justifyContent="space-between"
                 alignItems="center"
             > <NavLink className={styles.link} to={'/contacts/create'}>
                 <Button

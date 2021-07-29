@@ -13,6 +13,15 @@ import {AddPhoneForm} from "./addForm/AddPhoneForm";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "../styles/formStyles";
 
+export interface EditPhoneInterface {
+    id?: string
+    countryCode?: string
+    operatorID?: string
+    phoneNumber?: string
+    phoneType?: string
+    comment?: string
+}
+
 const PhoneForm = (props: PhoneFormProps) => {
 
     const classes = useStyles()
@@ -55,6 +64,8 @@ const PhoneForm = (props: PhoneFormProps) => {
             renderCell: (el) =>
                 <IconButton
                     aria-label="del"
+                    id={String(el.id)}
+                    onClick={deleteCurrentPhone}
                 >
                     <Delete/>
                 </IconButton>
@@ -63,8 +74,8 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const {setContact, contact} = props
 
-    let data = contact.phones
-
+    const {deletePhone} = useActions()
+    let [phones, setPhones] = useState(contact.phones)
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
     const [newPhone, setNewPhone] = useState({} as PhoneInterface);
@@ -79,10 +90,10 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const currentPhone = data.find(target => target.id === targetID)!;
+        const currentPhone = phones.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
-        setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
+        setBody(<EditPhoneForm id={targetID} phone={currentPhone} setPhone={setPhone}/>)
         setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
         setOpen(true);
     }
@@ -102,7 +113,6 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     const onAddPhoneSubmit = () => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('newPhone') || '{}');
-
         addPhone(savedPhone, props.contact!.id)
         setOpen(false);
     }
@@ -110,9 +120,24 @@ const PhoneForm = (props: PhoneFormProps) => {
     const checkedCurrenPhone = (params: GridRowId[]) => {
         setSelectionModel(params)
     }
+    const newPhones = phones.map(item => item.id === phone.id ? phone : item);
+    const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
+    const result = equals(phones, newPhones)
 
     useEffect(() => {
-        data = [...data, newPhone]
+        setPhones(newPhones)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [!result]);
+
+    const deleteCurrentPhone = (event: SyntheticEvent) => {
+        const phoneId = event.currentTarget.id
+        const contactId = contact.id
+        deletePhone(contactId, phoneId)
+    }
+
+
+    useEffect(() => {
+        phones = [...phones, newPhone]
     }, [phone])
 
     return (
@@ -123,12 +148,11 @@ const PhoneForm = (props: PhoneFormProps) => {
                 variant="outlined"
                 color="primary"
                 onClick={addPhoneClickHandler}
-
             >
                 Добавить новый номер
             </Button>
             <DataGrid
-                rows={data}
+                rows={phones}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick
