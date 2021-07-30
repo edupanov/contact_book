@@ -21,6 +21,8 @@ module.exports = {
         const gender = req.body.gender
         const maritalStatus = req.body.maritalStatus
         const nationality = req.body.nationality
+        const email = req.body.email
+        const currentJob = req.body.currentJob
 
 
         //address
@@ -66,6 +68,12 @@ module.exports = {
         }
         if (nationality) {
             searchParams.nationality = nationality
+        }
+        if (currentJob) {
+            searchParams.currentJob = currentJob
+        }
+        if (email) {
+            searchParams.email = email
         }
 
 

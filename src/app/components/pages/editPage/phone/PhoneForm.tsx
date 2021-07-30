@@ -13,15 +13,6 @@ import {AddPhoneForm} from "./addForm/AddPhoneForm";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "../styles/formStyles";
 
-export interface EditPhoneInterface {
-    id?: string
-    countryCode?: string
-    operatorID?: string
-    phoneNumber?: string
-    phoneType?: string
-    comment?: string
-}
-
 const PhoneForm = (props: PhoneFormProps) => {
 
     const classes = useStyles()
@@ -82,6 +73,9 @@ const PhoneForm = (props: PhoneFormProps) => {
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons, setButtons] = useState<JSX.Element>(<div/>);
+    const newPhones = phones.map(item => item.id === phone.id ? phone : item);
+    const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
+    const result = equals(phones, newPhones)
 
     const handleCloseModal = () => {
         setOpen(false);
@@ -119,9 +113,6 @@ const PhoneForm = (props: PhoneFormProps) => {
     const checkedCurrenPhone = (params: GridRowId[]) => {
         setSelectionModel(params)
     }
-    const newPhones = phones.map(item => item.id === phone.id ? phone : item);
-    const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
-    const result = equals(phones, newPhones)
 
     const deleteCurrentPhone = (event: SyntheticEvent) => {
         const phoneId = event.currentTarget.id

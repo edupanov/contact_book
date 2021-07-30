@@ -126,10 +126,10 @@ const SearchPanel = (props: SearchPanelType) => {
                                         />
                                         <TextField className={classes.input}
                                                    label="Место работы"
-                                                   name={"currenJob"}
+                                                   name={"currentJob"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.currenJob}
+                                                   defaultValue={savedSearch.currentJob}
                                         />
                                     </div>
                                     <div className={classes.dateWrapper}>
