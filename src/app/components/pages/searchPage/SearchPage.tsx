@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Dispatch, FormEvent, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "../editPage/styles/editContactStyles";
@@ -12,7 +12,7 @@ export type TargetType = {
 }
 
 type SearchPanelType = {
-    searchClickHandlerClose: ()=> void
+    searchClickHandlerClose: () => void
 }
 const SearchPanel = (props: SearchPanelType) => {
 
@@ -24,7 +24,10 @@ const SearchPanel = (props: SearchPanelType) => {
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-
+        console.log(target.name)
+        // if(target.name === 'email') {
+        //     target.value = ``
+        // }
         const isDate = target.name === 'dateFrom' || target.name === 'dateTo'
         let replaceStr
         if (isDate && target.value.length === 10) {
@@ -62,12 +65,12 @@ const SearchPanel = (props: SearchPanelType) => {
         <div
             className={classes.searchPanel}>
             <h2 className={classes.title}>Поиск контакта</h2>
-                    <IconButton
-                        className={classes.close}
-                        onClick={props.searchClickHandlerClose}
-                        aria-label="close">
-                        <GridCloseIcon/>
-                    </IconButton>
+            <IconButton
+                className={classes.close}
+                onClick={props.searchClickHandlerClose}
+                aria-label="close">
+                <GridCloseIcon/>
+            </IconButton>
             <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
@@ -96,7 +99,9 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    onChange={changeContactInfoHandler}
                                                    defaultValue={savedSearch.patronymic}
                                         />
+
                                         <TextField className={classes.input}
+
                                                    label="Пол"
                                                    name={"gender"}
                                                    type="search"
@@ -195,7 +200,9 @@ const SearchPanel = (props: SearchPanelType) => {
                                         <TextField className={classes.input}
                                                    label="Индекс"
                                                    name={"zipCode"}
-                                                   type="number"
+                                                   type="search"
+                                                   placeholder={'6-ти значный номер'}
+                                                   inputProps={{pattern: "[0-9]{6}"}}
                                                    onChange={changeContactInfoHandler}
                                                    defaultValue={savedSearch.address?.zipCode}
                                         />

@@ -64,6 +64,7 @@ const PhoneForm = (props: PhoneFormProps) => {
     ]
 
     const {setContact, contact} = props
+    // let [phones, setPhones] = useState(contact.phones)
     let phones = contact.phones
     const {deletePhone} = useActions()
     const [open, setOpen] = useState(false);
@@ -86,13 +87,14 @@ const PhoneForm = (props: PhoneFormProps) => {
         const currentPhone = phones.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
-        setBody(<EditPhoneForm id={targetID} phone={currentPhone} setPhone={setPhone}/>)
+        setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
         setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
         setOpen(true);
     }
 
     const addPhoneClickHandler = (event: SyntheticEvent) => {
         setTitle('Добавить номер телефона');
+
         setBody(<AddPhoneForm newPhone={newPhone} setNewPhone={setNewPhone}/>)
         setButtons(<ButtonsEditForm onSubmitModal={() => onAddPhoneSubmit()}/>)
         setOpen(true);
@@ -123,6 +125,11 @@ const PhoneForm = (props: PhoneFormProps) => {
     useEffect(() => {
         phones = [...phones, newPhone]
     }, [newPhone])
+
+    // useEffect(() => {
+    //     setPhones(newPhones)
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [!result]);
 
     return (
         <div style={{height: 'auto', width: '100%'}}>
@@ -159,5 +166,3 @@ const PhoneForm = (props: PhoneFormProps) => {
 };
 
 export default PhoneForm;
-
-

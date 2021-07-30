@@ -7,13 +7,12 @@ import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 interface EditPhoneFormInterface {
     phone: PhoneInterface,
     setPhone: Dispatch<SetStateAction<PhoneInterface>>,
-    id: string
 }
 
 export const EditPhoneForm = (props: EditPhoneFormInterface) => {
 
     const classes = useStyles();
-    let {phone, setPhone, id} = props
+    let {phone, setPhone} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -24,7 +23,7 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
         setPhone(phone)
     }
     return (
-        <div id={id}>
+        <div>
             <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form>
