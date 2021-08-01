@@ -55,10 +55,10 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                     countryCode.onChange(event)
                                             }}
                                             onBlur={event => countryCode.onBlur(event)}
-                                            helperText={(countryCode.isDirty && countryCode.minLength && countryCode.isEmpty) && 'Введите' +
+                                            helperText={(countryCode.isDirty && countryCode.minLength) && 'Введите' +
                                             ' код' +
                                             ' в формате +XXX'}
-                                            error={(countryCode.isDirty && countryCode.isEmpty && countryCode.minLength)}
+                                            error={(countryCode.isDirty && countryCode.isEmpty )}
                                         />
                                         <TextField
                                             value={operatorID.value}
