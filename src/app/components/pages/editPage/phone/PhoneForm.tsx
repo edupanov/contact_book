@@ -64,7 +64,6 @@ const PhoneForm = (props: PhoneFormProps) => {
     ]
 
     const {setContact, contact} = props
-    // let [phones, setPhones] = useState(contact.phones)
     let phones = contact.phones
     const {deletePhone} = useActions()
     const [open, setOpen] = useState(false);
@@ -125,11 +124,6 @@ const PhoneForm = (props: PhoneFormProps) => {
     useEffect(() => {
         phones = [...phones, newPhone]
     }, [newPhone])
-
-    // useEffect(() => {
-    //     setPhones(newPhones)
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [!result]);
 
     return (
         <div style={{height: 'auto', width: '100%'}}>
