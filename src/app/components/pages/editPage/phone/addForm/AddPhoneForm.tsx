@@ -1,84 +1,39 @@
-import React, {ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from 'react';
+import React, {ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState} from 'react';
 import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 import {useStyles} from "../../../deleteModal/style/styleModal";
+import {useInput} from "../../../../../utils/utils";
 
 interface AddPhoneFormInterface {
-    newPhone: PhoneInterface,
     setNewPhone: Dispatch<SetStateAction<PhoneInterface>>
 }
 
-const initialFormValues = {
-    countryCode: "",
-    operatorID: "",
-    phoneNumber: "",
-    phoneType: "",
-    comment: "",
-    formSubmitted: false,
-    success: false
-}
+
+
 export const AddPhoneForm = (props: AddPhoneFormInterface) => {
-
+    const countryCode = useInput('', {isEmpty: true, minLength: 3})
+    const operatorID = useInput('', {isEmpty: true, minLength: 2})
+    const phoneNumber = useInput('', {isEmpty: true, minLength: 3})
+    const phoneType = useInput('', {isEmpty: true, minLength: 3})
+    const comment = useInput('', {isEmpty: true, minLength: 3})
     const classes = useStyles();
-    let {newPhone, setNewPhone} = props
-    const [values, setValues] = useState(initialFormValues);
-    const [errors, setErrors] = useState({} as any);
+    let {setNewPhone} = props
+    const [values, setValues] = useState({} as PhoneInterface);
 
 
-    const validate: any = (fieldValues = values) => {
-        let temp: any = {...errors}
+    const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const {name, value} = event.target
 
-        if ("countryCode" in fieldValues) {
-            temp.countryCode = fieldValues.countryCode ? "" : "This field is required."
-            if (fieldValues.countryCode)
-                temp.countryCode = !/^[0-9]{3}$/i.test(fieldValues.countryCode)
-                    ? ""
-                    : "Введите код в формате XXX"
+        if (name === 'countryCode' || 'operatorID' || 'phoneNumber' || 'phoneType' || 'comment') {
+            // newPhone = {...newPhone, [name]: value}
+            setValues({
+                ...values,
+                [name]: value
+            });
         }
-        if ("operatorID" in fieldValues) {
-            temp.operatorID = fieldValues.operatorID ? "" : "This field is required."
-            if (fieldValues.operatorID)
-                temp.operatorID = !/^[0-9]{2}$/i.test(fieldValues.operatorID)
-                    ? ""
-                    : "Введите код в формате XXX"
-        }
-        if ("phoneNumber" in fieldValues) {
-            temp.phoneNumber = fieldValues.phoneNumber ? "" : "This field is required."
-            if (fieldValues.phoneNumber)
-                temp.phoneNumber = !/^[0-9]{7}$/i.test(fieldValues.phoneNumber)
-                    ? ""
-                    : "Введите код в формате XXX"
-        }
-        if ("phoneType" in fieldValues)
-            temp.phoneType = fieldValues.phoneType ? "" : "This field is required."
-
-        if ("comment" in fieldValues)
-            temp.comment = fieldValues.comment ? "" : "This field is required."
-
-        setErrors({
-            ...temp
-        });
+        sessionStorage.setItem('newPhone', JSON.stringify(values));
+        setNewPhone(values)
     }
-
-
-        const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
-            const {name, value} = event.target
-
-            if (newPhone) {
-                newPhone = {...newPhone, [name]: value}
-                // setValues({
-                //     ...values,
-                //     [name]: value
-                // });
-
-            }
-            sessionStorage.setItem('newPhone', JSON.stringify(newPhone));
-            setNewPhone(newPhone)
-            // validate(values);
-        }
-
-    console.log(values)
-
 
         return (
             <div>
@@ -88,40 +43,82 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                             <FormControl>
                                 <FormGroup>
                                     <div className={classes.wrapperInput}>
-                                        <TextField className={classes.input}
-                                                   label="Код станы"
-                                                   name={"countryCode"}
-                                                   type="search"
-                                                   onChange={changePhoneInfoHandler}
-                                                   {...(errors[values.countryCode] && { error: true, helperText: errors[values.countryCode] })}
+                                        <TextField
+                                            value={countryCode.value}
+                                            className={classes.input}
+                                            label="Код станы"
+                                            name={"countryCode"}
+                                            type="search"
+                                            onChange={(event) => {
+                                                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                                                changePhoneInfoHandler(event),
+                                                    countryCode.onChange(event)
+                                            }}
+                                            onBlur={event => countryCode.onBlur(event)}
+                                            helperText={(countryCode.isDirty && countryCode.minLength && countryCode.isEmpty) && 'Введите' +
+                                            ' код' +
+                                            ' в формате +XXX'}
+                                            error={(countryCode.isDirty && countryCode.isEmpty && countryCode.minLength)}
                                         />
-                                        <TextField className={classes.input}
-                                                   label="Код оператора"
-                                                   name={"operatorID"}
-                                                   type="search"
-                                                   onChange={changePhoneInfoHandler}
-                                                   {...(errors[values.operatorID] && { error: true, helperText: errors[values.operatorID] })}
+                                        <TextField
+                                            value={operatorID.value}
+                                            className={classes.input}
+                                            label="Код оператора"
+                                            name={"operatorID"}
+                                            type="search"
+                                            onChange={(event) => {
+                                                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                                                changePhoneInfoHandler(event),
+                                                    operatorID.onChange(event)
+                                            }}
+                                            onBlur={event => operatorID.onBlur(event)}
+                                            helperText={(operatorID.isDirty && operatorID.isEmpty) && 'Заполните поле'}
+                                            error={(operatorID.isDirty && operatorID.isEmpty)}
                                         />
-                                        <TextField className={classes.input}
-                                                   label="Телефонный номер"
-                                                   name={"phoneNumber"}
-                                                   type="search"
-                                                   onChange={changePhoneInfoHandler}
-                                                   {...(errors[values.phoneNumber] && { error: true, helperText: errors[values.phoneNumber] })}
+                                        <TextField
+                                            value={phoneNumber.value}
+                                            className={classes.input}
+                                            label="Телефонный номер"
+                                            name={"phoneNumber"}
+                                            type="search"
+                                            onChange={(event) => {
+                                                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                                                changePhoneInfoHandler(event),
+                                                    phoneNumber.onChange(event)
+                                            }}
+                                            onBlur={event => phoneNumber.onBlur(event)}
+                                            helperText={(phoneNumber.isDirty && phoneNumber.isEmpty) && 'Заполните поле'}
+                                            error={(phoneNumber.isDirty && phoneNumber.isEmpty)}
                                         />
-                                        <TextField className={classes.input}
-                                                   label="Тип"
-                                                   name={"phoneType"}
-                                                   type="search"
-                                                   onChange={changePhoneInfoHandler}
-                                                    {...(errors[values.phoneType] && { error: true, helperText: errors[values.phoneType] })}
+                                        <TextField
+                                            value={phoneType.value}
+                                            className={classes.input}
+                                            label="Тип"
+                                            name={"phoneType"}
+                                            type="search"
+                                            onChange={(event) => {
+                                                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                                                changePhoneInfoHandler(event),
+                                                    phoneType.onChange(event)
+                                            }}
+                                            onBlur={event => phoneType.onBlur(event)}
+                                            helperText={(phoneType.isDirty && phoneType.isEmpty) && 'Заполните поле'}
+                                            error={(phoneType.isDirty && phoneType.isEmpty)}
                                         />
-                                        <TextField className={classes.input}
-                                                   label="Коментарий"
-                                                   name={"comment"}
-                                                   type="search"
-                                                   onChange={changePhoneInfoHandler}
-                                                    {...(errors[values.comment] && { error: true, helperText: errors[values.comment] })}
+                                        <TextField
+                                            value={comment.value}
+                                            className={classes.input}
+                                            label="Коментарий"
+                                            name={"comment"}
+                                            type="search"
+                                            onChange={(event) => {
+                                                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                                                changePhoneInfoHandler(event),
+                                                    comment.onChange(event)
+                                            }}
+                                            onBlur={event => comment.onBlur(event)}
+                                            helperText={(comment.isDirty && comment.isEmpty) && 'Заполните поле'}
+                                            error={(comment.isDirty && comment.isEmpty)}
                                         />
                                     </div>
                                 </FormGroup>

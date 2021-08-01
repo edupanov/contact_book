@@ -95,7 +95,7 @@ const PhoneForm = (props: PhoneFormProps) => {
     const addPhoneClickHandler = (event: SyntheticEvent) => {
         setTitle('Добавить номер телефона');
 
-        setBody(<AddPhoneForm newPhone={newPhone} setNewPhone={setNewPhone}/>)
+        setBody(<AddPhoneForm setNewPhone={setNewPhone}/>)
         setButtons(<ButtonsEditForm onSubmitModal={() => onAddPhoneSubmit()}/>)
         setOpen(true);
     }
