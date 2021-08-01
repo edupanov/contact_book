@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from 'react';
+import React, {ChangeEvent, Dispatch, SetStateAction} from 'react';
 import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 import {useStyles} from "../../../deleteModal/style/styleModal";
@@ -18,12 +18,9 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
 
         if (newPhone) {
             newPhone = {...newPhone, [name]: value}
-
-
         }
         sessionStorage.setItem('newPhone', JSON.stringify(newPhone));
         setNewPhone(newPhone)
-        // validate(values);
     }
 
     return (
