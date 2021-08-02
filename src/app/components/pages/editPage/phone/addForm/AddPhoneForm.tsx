@@ -2,7 +2,7 @@ import React, {ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useStat
 import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 import {useStyles} from "../../../deleteModal/style/styleModal";
-import {useInput} from "../../../../../utils/utils";
+import {useInput} from "../../../../../utils/validation";
 
 interface AddPhoneFormInterface {
     setNewPhone: Dispatch<SetStateAction<PhoneInterface>>
