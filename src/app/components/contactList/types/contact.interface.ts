@@ -21,7 +21,6 @@ export interface PhoneInterface {
 export interface AttachmentInterface {
     id: string
     file: File,
-    description: string
     comment: string
 }
 
@@ -38,8 +37,6 @@ export interface ContactInterface {
     currentJob: string
     address: AddressInterface
     phones: Array<PhoneInterface>
-    attachments: Array<AttachmentInterface>
-
 }
 
 export type EditionTableType = PhoneInterface | AttachmentInterface

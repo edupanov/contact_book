@@ -8,7 +8,7 @@ import {PhoneInterface} from "../../../contactList/types/contact.interface";
 import {PhoneFormProps} from "../type/editPage.type";
 import {PhoneModal} from "./PhoneModal";
 import {EditPhoneForm} from "./editForm/EditPhoneForm";
-import {ButtonsEditForm} from "./editForm/ButtonsEditForm";
+import {ButtonsForm} from "./editForm/ButtonsForm";
 import {AddPhoneForm} from "./addForm/AddPhoneForm";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "../styles/formStyles";
@@ -44,7 +44,7 @@ const PhoneForm = (props: PhoneFormProps) => {
                 return <IconButton
                     id={String(el.id)}
                     aria-label="edit"
-                    onClick={contactClickHandler}
+                    onClick={changePhoneHandler}
                 >
                     <EditIcon/>
                 </IconButton>
@@ -63,46 +63,59 @@ const PhoneForm = (props: PhoneFormProps) => {
         },
     ]
 
-    const {setContact, contact} = props
-    let phones = contact.phones
+    const {setContact, contact, setCurrentContact} = props
+
     const {deletePhone} = useActions()
     const [open, setOpen] = useState(false);
-    const [phone, setPhone] = useState({} as PhoneInterface);
-    const [newPhone, setNewPhone] = useState({} as PhoneInterface);
+    const [phone, setPhone] = useState({} as PhoneInterface); //edit phone
+    const [newPhone, setNewPhone] = useState({} as PhoneInterface); //add phone
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons, setButtons] = useState<JSX.Element>(<div/>);
+
+    let phones = contact.phones
     const newPhones = phones.map(item => item.id === phone.id ? phone : item);
+    let [updatePhones, setUpdatePhones] = useState(phones)
+
+    useEffect(() => {
+        setUpdatePhones(newPhones)
+    }, [phone])
+
+    console.log(newPhones)
+
     const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
     const result = equals(phones, newPhones)
+
 
     const handleCloseModal = () => {
         setOpen(false);
     };
 
-    const contactClickHandler = (event: SyntheticEvent) => {
+
+// EDIT PHONE HANDLER
+    const changePhoneHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const currentPhone = phones.find(target => target.id === targetID)!;
+        const currentPhone = updatePhones.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
         setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
-        setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
+        setButtons(<ButtonsForm onSubmitModal={() => onEditPhoneSubmit()}/>)
         setOpen(true);
     }
 
-    const addPhoneClickHandler = (event: SyntheticEvent) => {
+  // ADD PHONE HANDLER
+    const addPhoneChangeHandler = (event: SyntheticEvent) => {
         setTitle('Добавить номер телефона');
-
         setBody(<AddPhoneForm newPhone={newPhone} setNewPhone={setNewPhone}/>)
-        setButtons(<ButtonsEditForm onSubmitModal={() => onAddPhoneSubmit()}/>)
+        setButtons(<ButtonsForm onSubmitModal={() => onAddPhoneSubmit()}/>)
         setOpen(true);
     }
 
-    const onSubmitModal = () => {
+    const onEditPhoneSubmit = () => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
         setContact(savedPhone, 'phones')
-        handleCloseModal()
+        setOpen(false);
     }
 
     const onAddPhoneSubmit = () => {
@@ -122,8 +135,9 @@ const PhoneForm = (props: PhoneFormProps) => {
     }
 
     useEffect(() => {
-        phones = [...phones, newPhone]
+        updatePhones = [...updatePhones, newPhone]
     }, [newPhone])
+
 
     return (
         <div style={{height: 'auto', width: '100%'}}>
@@ -132,13 +146,12 @@ const PhoneForm = (props: PhoneFormProps) => {
                 className={classes.button}
                 variant="outlined"
                 color="primary"
-                onClick={addPhoneClickHandler}
+                onClick={addPhoneChangeHandler}
             >
                 Добавить новый номер
             </Button>
             <DataGrid
                 rows={result ? phones : newPhones}
-                // rows={phones}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick

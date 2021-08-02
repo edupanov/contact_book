@@ -3,20 +3,23 @@ import {DataGrid, GridColDef, GridRowId} from "@material-ui/data-grid";
 import {Button, IconButton} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import {AttachmentInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
-import {LocationType, PhoneFormProps} from "../type/editPage.type";
-import {useLocation} from "react-router-dom";
-import {ButtonsEditForm} from "../phone/editForm/ButtonsEditForm";
+import {AttachmentInterface, ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
+import {ButtonsForm} from "../phone/editForm/ButtonsForm";
 import {PhoneModal} from "../phone/PhoneModal";
 import {EditAttachmentForm} from "./EditAttachmentForm";
 import {useStyles} from "../styles/formStyles";
+import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
+import {RootState} from "../../../../store/rootReducer";
 
-const AttachmentsForm = (props: PhoneFormProps) => {
+const AttachmentsForm = () => {
 
     const classes = useStyles()
 
+    const attachments: ContactInterface[] = useTypeSelector((state: RootState) => state.attachments.data)
+
+
     const columns: GridColDef[] = [
-        {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false},
+        {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
         {field: 'description', headerName: 'Описание', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false, flex: 1},
         {
@@ -44,11 +47,9 @@ const AttachmentsForm = (props: PhoneFormProps) => {
         },
     ]
 
-    const {setContact} = props
+    // const {setContact} = props
 
-    const location = useLocation<LocationType>()
 
-    const data = location.state.contact.attachments
 
     const [open, setOpen] = useState(false);
     const [attachment, setAttachment] = useState({} as AttachmentInterface);
@@ -67,18 +68,18 @@ const AttachmentsForm = (props: PhoneFormProps) => {
     };
     const contactClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const phonesForUpdate = Object.keys(attachment).length === 0 ? [...data] : [attachment]
-        const currentAttachment = phonesForUpdate.find(target => target.id === targetID) || {} as AttachmentInterface;
-        setAttachment(currentAttachment)
+        // const phonesForUpdate = Object.keys(attachment).length === 0 ? [...data] : [attachment]
+        // const currentAttachment = phonesForUpdate.find(target => target.id === targetID) || {} as AttachmentInterface;
+        // setAttachment(currentAttachment)
         setTitle('Редактирование вложений');
-        setBody(<EditAttachmentForm attachment={currentAttachment} setAttachment={setAttachment}/>)
-        setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
+        setBody(<EditAttachmentForm/>)
+        setButtons(<ButtonsForm onSubmitModal={() => onSubmitModal()}/>)
         setOpen(true);
     }
 
     const onSubmitModal = () => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
-        setContact(savedPhone, 'phones')
+        // setContact(savedPhone, 'phones')
         handleCloseModal()
     }
 
