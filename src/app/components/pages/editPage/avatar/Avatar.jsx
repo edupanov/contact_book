@@ -32,7 +32,7 @@ const Logo = () => {
         editor = ed;
     };
 
-    const handleSave = (e) => {
+    const handleSave = () => {
         if (setEditorRef) {
             const canvasScaled = editor.getImageScaledToCanvas();
             const croppedImg = canvasScaled.toDataURL();

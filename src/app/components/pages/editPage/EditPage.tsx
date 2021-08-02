@@ -136,10 +136,10 @@ const EditPage = () => {
                                         />
                                         <TextField className={classes.input}
                                                    label="Место работы"
-                                                   name={"currenJob"}
+                                                   name={"currentJob"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={currentContact.currenJob ? currentContact.currenJob : ''}
+                                                   defaultValue={currentContact.currentJob ? currentContact.currentJob : ''}
                                         />
                                         <div>
                                             <h3 className={classes.title}>Адрес</h3>

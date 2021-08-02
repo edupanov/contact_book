@@ -9,9 +9,6 @@ import {GridCloseIcon} from "@material-ui/data-grid";
 interface PhoneEditModalType  {
     open: boolean,
     onClose: () => void,
-    // onSubmitModal: Function,
-    // phone: PhoneInterface,
-    // setPhone: Dispatch<React.SetStateAction<PhoneInterface>>
 
     title: string
     body: JSX.Element

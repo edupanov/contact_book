@@ -13,15 +13,6 @@ import {AddPhoneForm} from "./addForm/AddPhoneForm";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "../styles/formStyles";
 
-export interface EditPhoneInterface {
-    id?: string
-    countryCode?: string
-    operatorID?: string
-    phoneNumber?: string
-    phoneType?: string
-    comment?: string
-}
-
 const PhoneForm = (props: PhoneFormProps) => {
 
     const classes = useStyles()
@@ -73,9 +64,9 @@ const PhoneForm = (props: PhoneFormProps) => {
     ]
 
     const {setContact, contact} = props
-
+    // let [phones, setPhones] = useState(contact.phones)
+    let phones = contact.phones
     const {deletePhone} = useActions()
-    let [phones, setPhones] = useState(contact.phones)
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface);
     const [newPhone, setNewPhone] = useState({} as PhoneInterface);
@@ -83,6 +74,9 @@ const PhoneForm = (props: PhoneFormProps) => {
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons, setButtons] = useState<JSX.Element>(<div/>);
+    const newPhones = phones.map(item => item.id === phone.id ? phone : item);
+    const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
+    const result = equals(phones, newPhones)
 
     const handleCloseModal = () => {
         setOpen(false);
@@ -93,13 +87,14 @@ const PhoneForm = (props: PhoneFormProps) => {
         const currentPhone = phones.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
-        setBody(<EditPhoneForm id={targetID} phone={currentPhone} setPhone={setPhone}/>)
+        setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
         setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
         setOpen(true);
     }
 
     const addPhoneClickHandler = (event: SyntheticEvent) => {
         setTitle('Добавить номер телефона');
+
         setBody(<AddPhoneForm newPhone={newPhone} setNewPhone={setNewPhone}/>)
         setButtons(<ButtonsEditForm onSubmitModal={() => onAddPhoneSubmit()}/>)
         setOpen(true);
@@ -120,14 +115,6 @@ const PhoneForm = (props: PhoneFormProps) => {
     const checkedCurrenPhone = (params: GridRowId[]) => {
         setSelectionModel(params)
     }
-    const newPhones = phones.map(item => item.id === phone.id ? phone : item);
-    const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
-    const result = equals(phones, newPhones)
-
-    useEffect(() => {
-        setPhones(newPhones)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [!result]);
 
     const deleteCurrentPhone = (event: SyntheticEvent) => {
         const phoneId = event.currentTarget.id
@@ -135,10 +122,14 @@ const PhoneForm = (props: PhoneFormProps) => {
         deletePhone(contactId, phoneId)
     }
 
-
     useEffect(() => {
         phones = [...phones, newPhone]
-    }, [phone])
+    }, [newPhone])
+
+    // useEffect(() => {
+    //     setPhones(newPhones)
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [!result]);
 
     return (
         <div style={{height: 'auto', width: '100%'}}>
@@ -152,7 +143,8 @@ const PhoneForm = (props: PhoneFormProps) => {
                 Добавить новый номер
             </Button>
             <DataGrid
-                rows={phones}
+                rows={result ? phones : newPhones}
+                // rows={phones}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick
@@ -174,5 +166,3 @@ const PhoneForm = (props: PhoneFormProps) => {
 };
 
 export default PhoneForm;
-
-

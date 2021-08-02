@@ -1,8 +1,15 @@
 import TextField from '@material-ui/core/TextField';
-import React from 'react';
-import {FormControl, InputLabel, NativeSelect} from "@material-ui/core";
+import React, {ChangeEvent, useState} from 'react';
+import {Button, FormControl, IconButton, InputLabel, NativeSelect} from "@material-ui/core";
 import {useStyles} from "./styles/emailStyles";
 import {ContactInterface} from "../../contactList/types/contact.interface";
+import {TargetType} from "../searchPage/SearchPage";
+import {EmailInterface} from "./types/email.interface";
+import {useActions} from "../../../store/hooks/useActions";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import {GridArrowUpwardIcon, GridCloseIcon} from "@material-ui/data-grid";
+import {useHistory} from "react-router-dom";
+import {PATH} from "../../../routes/Routes";
 
 const messageTemplate = {
     template1: 'Пусть хорошее случается,\n' +
@@ -29,13 +36,18 @@ const messageTemplate = {
 }
 
 const EmailPage = () => {
+const history = useHistory()
+    const classes = useStyles();
 
+    const {sendMail} = useActions()
+    let [email, setEmail] = useState({} as EmailInterface)
     const contactsId = JSON.parse(sessionStorage.getItem('contactsId') || '[]');
     const contacts = JSON.parse(sessionStorage.getItem('contacts') || '[]');
+    const [state, setState] = React.useState<{ name: string }>({name: ''});
 
-    function findEqualObjects(someArray: any, otherArray: any) {
+
+    const findEqualObjects =(someArray: any, otherArray: any) => {
         let equalObjects: ContactInterface[] = [];
-
         someArray.forEach((i: ContactInterface) => {
             otherArray.forEach((j: string) => {
                 if (i.id === j) {
@@ -48,73 +60,98 @@ const EmailPage = () => {
     }
 
     const currentContacts = findEqualObjects(contacts, contactsId)
-
+    // имена выбранных пользователей для поля кому
     const valueContact = currentContacts.map(el => `${el.name} ${el.surname}`).join(', ')
+    // email выбранных пользователей
+    const emails = currentContacts.map(el => `${el.email}`)
 
-    const classes = useStyles();
-    const [state, setState] = React.useState<{ age: string | number; name: string }>({
-        age: '',
-        name: '',
-    });
-    const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        const name = event.target.name as keyof typeof state;
+    const handleChange = (event: React.ChangeEvent<{ name: string; value: unknown }>) => {
+        const name = event.target.name;
         setState({
             ...state,
             [name]: event.target.value,
         });
-        console.log(event.target.value)
     };
-    // if (state.name === '') {
-    //
-    // }
-    return (
-        <form noValidate autoComplete="off" className={classes.emailFormWrapper}>
-            <TextField className={classes.inputStyle}
-                       id="outlined-textarea"
-                       label="Кому"
-                       multiline
-                       variant="outlined"
-                       defaultValue={valueContact}
-                       InputProps={{
-                           readOnly: true,
-                       }}
-            />
-            <TextField className={classes.inputStyle}
-                       required
-                       id="outlined-required"
-                       label="Тема"
-                       variant="outlined"
-            />
-            <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="name-native-error">Шаблон</InputLabel>
-                <NativeSelect
-                    value={state.name}
-                    onChange={handleChange}
-                    name="name"
-                    inputProps={{
-                        id: 'name-native-error',
-                    }}
-                >
-                    <option aria-label="None" value="" />
-                    <optgroup label="С Новым Годом!">
-                        <option value={messageTemplate.template1}>Шаблон1</option>
-                    </optgroup>
-                    <optgroup label="С днем Рождения!">
-                        <option value={messageTemplate.template2}>Шаблон2</option>
-                        <option value={messageTemplate.template3}>Шаблон3</option>
-                    </optgroup>
-                </NativeSelect>
-            </FormControl>
-            <TextField className={classes.inputStyle}
-                       id="outlined-textarea"
-                       label="Текст сообщения"
-                       multiline
-                       variant="outlined"
-                       defaultValue={state.name}
-                       autoFocus
-            />
 
-        </form>
+    const changeMailHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const target: TargetType = (event.target)
+        if (email) {
+            email = {...email, [target.name]: target.value}
+        }
+        setEmail(email)
+    }
+
+    const sendMailHandler = () => {
+        sendMail(emails, email.theme, email.text)
+    }
+
+    return (
+        <>
+            <IconButton
+                onClick={()=>history.push(PATH.HOME)}
+                aria-label="close">
+                <ArrowBackIcon/>
+            </IconButton>
+            <form noValidate autoComplete="off" className={classes.emailFormWrapper}>
+                <TextField className={classes.inputStyle}
+                           id="outlined-textarea"
+                           label="Кому"
+                           multiline
+                           variant="outlined"
+                           defaultValue={valueContact}
+                           InputProps={{
+                               readOnly: true,
+                           }}
+                />
+                <TextField className={classes.inputStyle}
+                           required
+                           id="outlined-required"
+                           label="Тема"
+                           name={'theme'}
+                           variant="outlined"
+                           onChange={changeMailHandler}
+
+                />
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="name-native-error">Шаблон</InputLabel>
+                    <NativeSelect
+                        value={state.name}
+                        onChange={handleChange}
+                        name="name"
+                        inputProps={{
+                            id: 'name-native-error',
+                        }}
+                    >
+                        <option aria-label="None" value="" />
+                        <optgroup label="С Новым Годом!">
+                            <option value={messageTemplate.template1}>Шаблон1</option>
+                        </optgroup>
+                        <optgroup label="С днем Рождения!">
+                            <option value={messageTemplate.template2}>Шаблон2</option>
+                            <option value={messageTemplate.template3}>Шаблон3</option>
+                        </optgroup>
+                    </NativeSelect>
+                </FormControl>
+                <TextField className={classes.inputStyle}
+                           autoFocus
+                           id="outlined-textarea"
+                           label="Текст сообщения"
+                           name={'text'}
+                           multiline
+                           variant="outlined"
+                           onChange={changeMailHandler}
+                           defaultValue={state.name}
+                />
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={sendMailHandler}
+                >
+                    Отправить e-mail
+                </Button>
+
+            </form>
+        </>
     );
 };
 

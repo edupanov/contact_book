@@ -8,7 +8,7 @@ export interface SearchParamsInterface {
    maritalStatus?: string
    nationality?: string
    email?: string
-   currenJob?: string
+   currentJob?: string
    address?: {
       fullAddress?: string
       city?: string

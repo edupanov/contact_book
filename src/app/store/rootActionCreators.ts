@@ -6,6 +6,7 @@ import * as updateContactActionCreators from '../components/pages/editPage/store
 import * as deleteContactActionCreators from '../components/pages/deleteModal/store/actionCreators/deleteContactActionCreator'
 import * as addPhoneActionCreators from '../components/pages/editPage/phone/addForm/store/actionCreators/addPhoneActionCreator'
 import * as deletePhoneActionCreators from '../components/pages/editPage/phone/deletePhone/store/actionCreators/deletePhoneActionCreator'
+import * as sendMailActionCreator from '../components/pages/emailPage/store/actionCtreators/sendMailActionCreator'
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -17,5 +18,6 @@ export default  {
     ...updateContactActionCreators,
     ...deleteContactActionCreators,
     ...addPhoneActionCreators,
-    ...deletePhoneActionCreators
+    ...deletePhoneActionCreators,
+    ...sendMailActionCreator
 }
