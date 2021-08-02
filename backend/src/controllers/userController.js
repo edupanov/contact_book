@@ -1,6 +1,5 @@
 const User = require('../models/user').User
 const Address = require('../models/address').Address
-const Phone = require('../models/phone').Phone
 const nodemailer = require('nodemailer')
 
 module.exports = {
