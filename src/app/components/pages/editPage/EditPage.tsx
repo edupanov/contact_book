@@ -18,6 +18,7 @@ const EditPage = () => {
     const classes = useStyles()
     const {updateContact, getContacts} = useActions()
     const contacts: ContactInterface[] = useTypeSelector((state: RootState) => state.contacts.data)
+    // const attachments = useTypeSelector((state: RootState)=> state)
     const location = useLocation<LocationType>()
     const contactId = location.pathname.split('/').reverse()[0]
     const defaultContact = contacts?.find(el => el.id === contactId)!
@@ -188,8 +189,8 @@ const EditPage = () => {
                                         </div>
                                     </div>
 
-                                    <PhoneForm contact={currentContact} setContact={setContact}/>
-                                    <AttachmentsForm contact={currentContact} setContact={setContact}/>
+                                    <PhoneForm contact={currentContact} setContact={setContact} setCurrentContact={setCurrentContact}/>
+                                    <AttachmentsForm/>
 
                                     <div className={classes.submitButton}>
                                         <Button
