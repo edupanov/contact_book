@@ -82,8 +82,6 @@ const PhoneForm = (props: PhoneFormProps) => {
         setUpdatePhones(newPhones)
     }, [phone])
 
-    console.log(newPhones)
-
     const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
     const result = equals(phones, newPhones)
 
