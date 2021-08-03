@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 const AddressSchema = require('./address').addressSchema
 const PhoneSchema = require('./phone').PhoneSchema
+const AttachmentSchema = require('./attachment').AttachmentSchema
 
 const userSchema = new Schema({
     name: {type: String, require: true},
@@ -13,8 +14,10 @@ const userSchema = new Schema({
     nationality: {type: String, require: true},
     currentJob: {type: String, require: true},
     email: {type: String, require: true},
+    imagePath: {type: String, require: true},
     addresses: [AddressSchema],
-    phones: [PhoneSchema]
+    phones: [PhoneSchema],
+    attachments: [AttachmentSchema],
 }, {timestamps: true})
 
 const User = mongoose.model('User', userSchema)

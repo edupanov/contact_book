@@ -1,6 +1,10 @@
 const User = require('../models/user').User
 const Address = require('../models/address').Address
+const Phone = require('../models/phone').Phone
+const Attachment = require('../models/attachment').Attachment
 const nodemailer = require('nodemailer')
+const fs = require('fs')
+
 
 module.exports = {
 
@@ -76,7 +80,6 @@ module.exports = {
         }
 
 
-
         if (city) {
             searchParams['addresses.city'] = city
         }
@@ -97,7 +100,7 @@ module.exports = {
         }
 
         await User.find(searchParams)
-            .populate(['addresses', 'phones'])
+            .populate(['addresses', 'phones', 'attachments'])
             .skip(isPaging ? pageSize * (currentPage - 1) : 0)
             .limit(isPaging ? pageSize : 0)
             .then(async documents => {
@@ -138,6 +141,8 @@ module.exports = {
                         email: user.email,
                         edit: user.edit,
                         address: addr,
+                        imagePath: user.imagePath,
+                        attachments: user.attachments,
                         phones
                     }
                 })
@@ -159,6 +164,9 @@ module.exports = {
 
     createContact: async (req, res, next) => {
         let newContact = req.body.contact
+
+        const url = req.protocol + '://' + req.get('host')
+        newContact.imagePath = url + '/attachments/' + req.file.filename
 
         await User.create(newContact)
             .then(async user => {
@@ -190,69 +198,83 @@ module.exports = {
     },
 
     updateContact: async (req, res, next) => {
-        let contactForUpdate = req.body.contact
-        const contactId = contactForUpdate.id
-        const addressId = contactForUpdate.address.id
-        const phones = contactForUpdate.phones
+        // console.log(req.body)
 
-        await User.findById({_id: contactId})
-            .then(user => {
-                if (user._id) {
-                    const index = user.addresses.findIndex(item => item._id.equals(addressId))
+        const url = req.protocol + '://' + req.get('host')
+        const path = url + '/backend/src/attachments/' + req.body.test.fvf
+        const path1 = 'backend/src/attachments/' + req.body.test.fvf + '.jpeg'
 
-                    user.name = contactForUpdate.name
-                    user.surname = contactForUpdate.surname
-                    user.patronymic = contactForUpdate.patronymic
-                    user.birthDate = contactForUpdate.birthDate
-                    user.gender = contactForUpdate.gender
-                    user.maritalStatus = contactForUpdate.maritalStatus
-                    user.nationality = contactForUpdate.nationality
-                    user.currentJob = contactForUpdate.currentJob
-                    user.email = contactForUpdate.email
+        console.log(path)
 
-                    if (index >= 0) {
-                        user.addresses[index].city = contactForUpdate.address.city
-                        user.addresses[index].country = contactForUpdate.address.country
-                        user.addresses[index].street = contactForUpdate.address.street
-                        user.addresses[index].building = contactForUpdate.address.building
-                        user.addresses[index].flat = contactForUpdate.address.flat
-                        user.addresses[index].zipCode = contactForUpdate.address.zipCode
-                        user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
-                    }
+        let base64Image = req.body.img.split(';base64,').pop();
 
-                    phones.map(phone => {
-                        const phoneIndex = user.phones.findIndex(item => item._id.equals(phone.id))
-                        if (phoneIndex >= 0) {
-                            user.phones[phoneIndex].countryCode = phone.countryCode
-                            user.phones[phoneIndex].operatorID = phone.operatorID
-                            user.phones[phoneIndex].phoneNumber = phone.phoneNumber
-                            user.phones[phoneIndex].phoneType = phone.phoneType
-                            user.phones[phoneIndex].comment = phone.comment
-                        }
-                    })
+        fs.writeFile(path1, base64Image, {encoding: 'base64'}, () => {
+            console.log('Файл успешно сохранен')
+        });
 
-                    user.save()
-                        .then(() => {
-                            res.status(200).json({
-                                code: 200,
-                                isSuccess: true,
-                                message: 'Contact updated successfully!'
-                            })
-                        })
-                        .catch(err => {
-                            res.status(500).json({
-                                error: err,
-                                message: 'Ошибка сервера, не удалось обновить контакт'
-                            })
-                        })
-                }
-            })
-            .catch(err => {
-                res.status(500).json({
-                    error: err,
-                    message: 'Ошибка сервера, не удалось обновить контакт'
-                })
-            })
+        // let contactForUpdate = req.body.contact
+        // const contactId = contactForUpdate.id
+        // const addressId = contactForUpdate.address.id
+        // const phones = contactForUpdate.phones
+        //
+        // await User.findById({_id: contactId})
+        //     .then(user => {
+        //         if (user._id) {
+        //             const index = user.addresses.findIndex(item => item._id.equals(addressId))
+        //
+        //             user.name = contactForUpdate.name
+        //             user.surname = contactForUpdate.surname
+        //             user.patronymic = contactForUpdate.patronymic
+        //             user.birthDate = contactForUpdate.birthDate
+        //             user.gender = contactForUpdate.gender
+        //             user.maritalStatus = contactForUpdate.maritalStatus
+        //             user.nationality = contactForUpdate.nationality
+        //             user.currentJob = contactForUpdate.currentJob
+        //             user.email = contactForUpdate.email
+        //
+        //             if (index >= 0) {
+        //                 user.addresses[index].city = contactForUpdate.address.city
+        //                 user.addresses[index].country = contactForUpdate.address.country
+        //                 user.addresses[index].street = contactForUpdate.address.street
+        //                 user.addresses[index].building = contactForUpdate.address.building
+        //                 user.addresses[index].flat = contactForUpdate.address.flat
+        //                 user.addresses[index].zipCode = contactForUpdate.address.zipCode
+        //                 user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
+        //             }
+        //
+        //             phones.map(phone => {
+        //                 const phoneIndex = user.phones.findIndex(item => item._id.equals(phone.id))
+        //                 if (phoneIndex >= 0) {
+        //                     user.phones[phoneIndex].countryCode = phone.countryCode
+        //                     user.phones[phoneIndex].operatorID = phone.operatorID
+        //                     user.phones[phoneIndex].phoneNumber = phone.phoneNumber
+        //                     user.phones[phoneIndex].phoneType = phone.phoneType
+        //                     user.phones[phoneIndex].comment = phone.comment
+        //                 }
+        //             })
+        //
+        //             user.save()
+        //                 .then(() => {
+        //                     res.status(200).json({
+        //                         code: 200,
+        //                         isSuccess: true,
+        //                         message: 'Contact updated successfully!'
+        //                     })
+        //                 })
+        //                 .catch(err => {
+        //                     res.status(500).json({
+        //                         error: err,
+        //                         message: 'Ошибка сервера, не удалось обновить контакт'
+        //                     })
+        //                 })
+        //         }
+        //     })
+        //     .catch(err => {
+        //         res.status(500).json({
+        //             error: err,
+        //             message: 'Ошибка сервера, не удалось обновить контакт'
+        //         })
+        //     })
     },
 
     deleteContacts: async (req, res, next) => {
@@ -425,6 +447,7 @@ module.exports = {
         //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`,
         //         currentJob: `${i % 2 === 0 ? 'Programmer' : 'Tester'}`,
         //         email: `${i % 2 === 0 ? 'kleshchenok90@gmail.com' : 'kleshchenok.private@gmail.com'}`,
+        //         imagePath: ''
         //     })
         //
         //     await user.save()
@@ -458,6 +481,18 @@ module.exports = {
         //                     await user.save()
         //                 })
         //
+        //             const attachment = new Attachment({
+        //                 uploadDate: `${i % 2 === 0 ? '12.03.2021' : '17.04.2021'}`,
+        //                 filePath: `${i % 2 === 0 ? 'test' : 'notFound'}`,
+        //                 comment: `${i % 2 === 0 ? 'Super comment' : 'Super Puper comment'}`
+        //             })
+        //
+        //             await attachment.save()
+        //                 .then(async attachment => {
+        //                     user.attachments.push(attachment)
+        //                     await user.save()
+        //                 })
+        //
         //         }).catch(error => console.log(error))
         //
         //     i++
@@ -465,8 +500,8 @@ module.exports = {
 
         // User.find().populate('addresses').then(documents => res.json({users: documents}))
         //
-        // User.deleteMany({}).then(result =>  res.json({deleted: result}))
-        // Address.deleteMany({}).then(result =>  res.json({deleted: result}))
-        // Phone.deleteMany({}).then(result =>  res.json({deleted: result}))
+        // User.deleteMany({}).then(result => res.json({deleted: result}))
+        // Address.deleteMany({}).then(result => res.json({deleted: result}))
+        // Phone.deleteMany({}).then(result => res.json({deleted: result}))
     }
 }

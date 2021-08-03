@@ -48,7 +48,7 @@ const Logo = () => {
 
     const handleFileChange = (e) => {
         let url = URL.createObjectURL(e.target.files[0]);
-        console.log(url);
+
         setPicture({
             ...picture,
             img: url,

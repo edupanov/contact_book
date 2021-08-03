@@ -9,6 +9,7 @@ import {NavLink} from 'react-router-dom';
 
 export default function HeaderMainPage() {
 
+
     return (
         <div className={style.root}>
             <AppBar position="static">

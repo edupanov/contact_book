@@ -7,6 +7,6 @@ export interface HttpClient {
 
     delete<T>(url: string, body: {}, headers?: {}): Promise<Request>
 
-    postFormData<T>(url: string, body: FormData, headers?: {},): Promise<Request>
+    postFormData<T>(url: string, body: any, headers?: {},): Promise<Request>
 }
 
