@@ -20,8 +20,14 @@ export interface PhoneInterface {
 
 export interface AttachmentInterface {
     id: string
-    file: File,
+    date: string
+    file: string
     comment: string
+}
+
+export interface AvatarInterface {
+    file: string
+    name: string
 }
 
 export interface ContactInterface {
@@ -35,6 +41,8 @@ export interface ContactInterface {
     nationality: string
     email: string
     currentJob: string
+    logo: AvatarInterface
+    attachments: Array<AttachmentInterface>
     address: AddressInterface
     phones: Array<PhoneInterface>
 }
