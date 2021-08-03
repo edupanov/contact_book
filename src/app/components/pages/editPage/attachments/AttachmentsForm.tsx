@@ -16,13 +16,12 @@ type AttachmentsPropsType = {
 
 const AttachmentsForm = (props: AttachmentsPropsType) => {
     const currentDate = new Date()
-    // console.log(currentDate)
 
     const {contact, setAttachments} = props
 
     const columns: GridColDef[] = [
         {field: 'file', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
-        {field: 'date', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false },
+        {field: 'date', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false},
         {
             field: 'edit', headerName: '', width: 100, filterable: false, sortable: false, editable: true,
@@ -49,22 +48,25 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         },
     ]
 
-    const attachments = contact.attachments
-
-
     const [open, setOpen] = useState(false);
     const [attachment, setAttachment] = useState({} as AttachmentInterface);
-    let [newAttachment, setNewAttachment] = useState({} as AttachmentInterface);
-
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons, setButtons] = useState<JSX.Element>(<div/>);
-    let [newAttachments, setUpdateAttachments] = useState([{id:'1ыва', file: 'test', date: '03.08.2021', comment: 'test'}] as AttachmentInterface[])
+    let [newAttachments, setUpdateAttachments] = useState([] as AttachmentInterface[])
 
-    const handleCloseModal = () => {
+    let attachments: AttachmentInterface = {} as AttachmentInterface
+
+    const onAddAttachment = () => {
+        setUpdateAttachments([...newAttachments, attachments])
         setOpen(false);
-    };
+    }
+
+    const onChangeAttachment = (attach: any) => {
+        attachments = {...attachments, ...attach}
+    }
+
     const attachmentClickHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
         const currentAttachment = newAttachments.find(target => target.id === targetID) || {} as AttachmentInterface;
@@ -77,21 +79,22 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
 
     const addAttachmentChangeHandler = (event: SyntheticEvent) => {
         setTitle('Добавить вложения');
-        setBody(<AddAttachmentForm newAttachment={newAttachment} setNewAttachment={setNewAttachment} newId={newAttachments.length + 1}/>)
-        setButtons(<ButtonsForm onSubmitModal={onAddAttachmentSubmit}/>)
+        setBody(<AddAttachmentForm setNewAttachment={onChangeAttachment} newId={newAttachments.length + 1}/>)
+        setButtons(<ButtonsForm onSubmitModal={onAddAttachment}/>)
         setOpen(true);
     }
-    console.log(newAttachment)
-    const onSubmitModal = () => {
-        handleCloseModal()
-    }
-    const onAddAttachmentSubmit = () => {
-        console.log(newAttachment)
-        setUpdateAttachments([...newAttachments, newAttachment])
-        setOpen(false);
-    }
+
+
     const checkedCurrenAttachment = (params: GridRowId[]) => {
         setSelectionModel(params)
+    }
+
+    const handleCloseModal = () => {
+        setOpen(false);
+    };
+
+    const onSubmitModal = () => {
+        handleCloseModal()
     }
 
     return (

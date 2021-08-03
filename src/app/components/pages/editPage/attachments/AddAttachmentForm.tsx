@@ -4,7 +4,6 @@ import {AttachmentInterface, AvatarInterface} from "../../../contactList/types/c
 import {useStyles} from "../styles/editContactStyles";
 
 interface AddPhoneFormInterface {
-    newAttachment: AttachmentInterface
     setNewAttachment: Dispatch<SetStateAction<AttachmentInterface>>
     newId: number
 }
@@ -12,15 +11,13 @@ interface AddPhoneFormInterface {
 export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
 
     const classes = useStyles();
-    let { newAttachment, setNewAttachment, newId} = props
+    let {setNewAttachment, newId} = props
 
     const changeAttachmentInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
+        const newAttachment: any = {[name]: value, id: String(newId)}
 
-        const newAttachment1: any = {...newAttachment, [name]: value, id: String(newId)}
-
-        setNewAttachment(newAttachment1)
-
+        setNewAttachment(newAttachment)
         // value.split('.')
         // console.log( value.split('.')[0].split('\\').reverse()[0])
     }
@@ -56,12 +53,6 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
                                                type="datetime-local"
                                                onChange={changeAttachmentInfoHandler}
                                     />
-                                    {/*<TextField className={classes.input}*/}
-                                    {/*           label="id"*/}
-                                    {/*           name={"id"}*/}
-                                    {/*           type="search"*/}
-                                    {/*           onChange={changeAttachmentInfoHandler}*/}
-                                    {/*/>*/}
                                 </div>
                             </FormGroup>
                         </FormControl>
