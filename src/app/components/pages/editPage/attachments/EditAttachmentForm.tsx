@@ -9,18 +9,18 @@ interface EditAttachmentFormInterface {
     setAttachment: Dispatch<SetStateAction<AttachmentInterface>>
 }
 
-export const EditAttachmentForm = () => {
+export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
     const classes = useStyles();
 
-    // let {attachment, setAttachment} = props
+    let {attachment, setAttachment} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        // if (attachment) {
-        //     attachment = {...attachment, [target.name]: target.value}
-        // }
-        // sessionStorage.setItem('phone', JSON.stringify(attachment));
-        // setAttachment(attachment)
+        if (attachment) {
+            attachment = {...attachment, [target.name]: target.value}
+        }
+        sessionStorage.setItem('attachment', JSON.stringify(attachment));
+        setAttachment(attachment)
     }
     return (
         <div>
@@ -32,24 +32,18 @@ export const EditAttachmentForm = () => {
                                 <div className={classes.wrapperInput}>
                                     <TextField className={classes.input}
                                                label="Имя файла"
-                                               name={"fileName"}
+                                               name={"file"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
-                                              // defaultValue={attachment.file ? attachment.file : ''}
+                                               defaultValue={attachment.file ? attachment.file : ''}
                                     />
-                                    <TextField className={classes.input}
-                                               label="Описание"
-                                               name={"description"}
-                                               type="search"
-                                               onChange={changePhoneInfoHandler}
-                                              // defaultValue={attachment.comment ? attachment.comment : ''}
-                                    />
+
                                     <TextField className={classes.input}
                                                label="Коментарий"
                                                name={"comment"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
-                                             //  defaultValue={attachment.comment ? attachment.comment : ''}
+                                               defaultValue={attachment.comment ? attachment.comment : ''}
                                     />
                                 </div>
                             </FormGroup>

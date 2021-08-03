@@ -3,7 +3,7 @@ import {DataGrid, GridColDef, GridRowId} from "@material-ui/data-grid";
 import {Button, IconButton} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
+import {AttachmentInterface, ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
 import {ButtonsForm} from "../phone/editForm/ButtonsForm";
 import {PhoneModal} from "../phone/PhoneModal";
 import {EditAttachmentForm} from "./EditAttachmentForm";
@@ -71,9 +71,10 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         const targetID = event.currentTarget.id
         const currentAttachment = newAttachments.find(target => target.id === targetID) || {} as AttachmentInterface;
         setAttachment(currentAttachment)
+        console.log(currentAttachment)
         setTitle('Редактирование вложений');
-        setBody(<EditAttachmentForm/>)
-        setButtons(<ButtonsForm onSubmitModal={() => onSubmitModal()}/>)
+        setBody(<EditAttachmentForm attachment={currentAttachment} setAttachment={setAttachment}/>)
+        setButtons(<ButtonsForm onSubmitModal={onSubmitModal}/>)
         setOpen(true);
     }
 
@@ -84,7 +85,6 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setOpen(true);
     }
 
-
     const checkedCurrenAttachment = (params: GridRowId[]) => {
         setSelectionModel(params)
     }
@@ -92,10 +92,18 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     const handleCloseModal = () => {
         setOpen(false);
     };
+    const savedAttachment: AttachmentInterface = JSON.parse(sessionStorage.getItem('attachment') || '{}');
 
     const onSubmitModal = () => {
+        console.log(savedAttachment)
+        setAttachment(savedAttachment)
+
         handleCloseModal()
     }
+
+    console.log(newAttachments)
+
+
 
     return (
         <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>
