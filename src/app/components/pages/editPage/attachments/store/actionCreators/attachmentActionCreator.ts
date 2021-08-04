@@ -42,21 +42,19 @@ export const updateAttachment = (attachment: AttachmentInterface, contactId: str
 
         const {data, maxUsers} = getState().contacts
 
-        const updatedContacts = data.map((contact: ContactInterface) => {
-            const copyContact = JSON.parse(JSON.stringify(contact))
-            if (copyContact.id === contactId) {
-            }
+        console.log(data)
+
+        const updatedContact = data.filter((contact: ContactInterface) => contact.id === contactId)
+        const currentAttach = updatedContact.attachments.map((item: AttachmentInterface) => item.id === attachmentId ? attachment : item)
+        console.log(currentAttach)
 
 
-            return contact
-        })
 
-
-        dispatch({
-            type: ContactActionTypes.GET_CONTACTS_SUCCESS,
-            payload: {
-                users: updatedContacts as Array<ContactInterface>,
-                maxUsers: maxUsers
-            }
-        })
+        // dispatch({
+        //     type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+        //     payload: {
+        //         users: updatedContacts as Array<ContactInterface>,
+        //         maxUsers: maxUsers
+        //     }
+        // })
     }
