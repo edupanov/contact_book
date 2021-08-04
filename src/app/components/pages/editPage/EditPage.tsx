@@ -8,7 +8,12 @@ import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
 import {LocationType} from "./type/editPage.type";
-import {ContactInterface, EditionTableType, PhoneInterface} from "../../contactList/types/contact.interface";
+import {
+    AttachmentInterface,
+    AvatarInterface,
+    ContactInterface,
+    PhoneInterface
+} from "../../contactList/types/contact.interface";
 import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 import {RootState} from "../../../store/rootReducer";
 import styles from "../../mainForm/HeaderContactList.module.scss";
@@ -21,19 +26,18 @@ const EditPage = () => {
     const location = useLocation<LocationType>()
     const contactId = location.pathname.split('/').reverse()[0]
     const defaultContact = contacts?.find(el => el.id === contactId)!
-
     let [currentContact, setCurrentContact] = useState<ContactInterface>(defaultContact)
 
     useEffect(() => {
         const newContact: ContactInterface = contacts?.find(el => el.id === contactId)!
         setCurrentContact(newContact)
-        if(!contacts) {
+        if (!contacts) {
             getContacts()
         }
     }, [contacts])
 
 
-    if(!contacts || !currentContact) {
+    if (!contacts || !currentContact) {
         return <CircularProgress
             className={styles.preloader}
             size={60}
@@ -51,15 +55,34 @@ const EditPage = () => {
     }
     const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        currentContact = {...currentContact, address: {...currentContact.address, id: currentContact.address.id, [target.name]: target.value}}
+        currentContact = {
+            ...currentContact,
+            address: {...currentContact.address, id: currentContact.address.id, [target.name]: target.value}
+        }
     }
 
-    const setContact = (data: EditionTableType, tableName: string) => {
+    const setPhone = (data: PhoneInterface, tableName: string) => {
         let updatedPhones: PhoneInterface[] = currentContact.phones
         updatedPhones = updatedPhones.filter(phone => phone.id !== data.id)
-        updatedPhones = [...updatedPhones, data as PhoneInterface]
+        updatedPhones = [...updatedPhones, data]
         currentContact = {...currentContact, [tableName]: updatedPhones}
     }
+
+    const setAvatar = (file: string, name: string) => {
+        const newLogo: AvatarInterface = {
+            file: file,
+            name: name
+        }
+        currentContact = {...currentContact, logo: newLogo}
+    }
+
+    const setAttachments = (data: AttachmentInterface, tableName: string) => {
+        let updatedAttachments: AttachmentInterface[] = currentContact.attachments
+        updatedAttachments = updatedAttachments.filter(attachment => attachment.id !== data.id)
+        updatedAttachments = [...updatedAttachments, data]
+        currentContact = {...currentContact, [tableName]: updatedAttachments}
+    }
+
 
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
@@ -67,9 +90,11 @@ const EditPage = () => {
         sessionStorage.clear()
     }
 
+    console.log(currentContact)
+
     return (
         <div className={classes.editForm}>
-            <div className={classes.avatar}><Avatar/></div>
+            <div className={classes.avatar}><Avatar setAvatar={setAvatar}/></div>
             <div>
                 <h2 className={classes.title}>Редактирование контакта </h2>
                 <Grid container justifyContent="center">
@@ -188,8 +213,9 @@ const EditPage = () => {
                                         </div>
                                     </div>
 
-                                    <PhoneForm contact={currentContact} setContact={setContact}/>
-                                    <AttachmentsForm contact={currentContact} setContact={setContact}/>
+                                    <PhoneForm contact={currentContact} setContact={setPhone}
+                                               setCurrentContact={setCurrentContact}/>
+                                    <AttachmentsForm setAttachments={setAttachments} contact={currentContact}/>
 
                                     <div className={classes.submitButton}>
                                         <Button

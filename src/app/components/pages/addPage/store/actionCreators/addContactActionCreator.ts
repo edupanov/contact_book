@@ -6,8 +6,7 @@ import {RootState} from "../../../../../store/rootReducer";
 import * as ContactRequests from "../../requests/addContactRequests";
 import * as ContactListRequests from "../../../../contactList/requests/contactListRequests";
 import {ContactInterface} from "../../../../contactList/types/contact.interface";
-import {CallHistoryMethodAction, push} from "connected-react-router";
-import {PATH} from "../../../../../routes/Routes";
+import {CallHistoryMethodAction} from "connected-react-router";
 
 
 export const addContact = (contact: {contact: CreateContactInterface}) =>

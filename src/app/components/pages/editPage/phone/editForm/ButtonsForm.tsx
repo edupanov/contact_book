@@ -6,7 +6,7 @@ interface ButtonsEditFormInterface {
     onSubmitModal: () => void
 }
 
-export const ButtonsEditForm = (props: ButtonsEditFormInterface) => {
+export const ButtonsForm = (props: ButtonsEditFormInterface) => {
     const classes = useStyles();
     const {onSubmitModal} = props
 

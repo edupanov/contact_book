@@ -7,6 +7,8 @@ import * as deleteContactActionCreators from '../components/pages/deleteModal/st
 import * as addPhoneActionCreators from '../components/pages/editPage/phone/addForm/store/actionCreators/addPhoneActionCreator'
 import * as deletePhoneActionCreators from '../components/pages/editPage/phone/deletePhone/store/actionCreators/deletePhoneActionCreator'
 import * as sendMailActionCreator from '../components/pages/emailPage/store/actionCtreators/sendMailActionCreator'
+import * as saveAvatarActionCreator from '../components/pages/editPage/avatar/store/actionsCreators/avatarActionCreator'
+import * as AttachmentActionCreator from '../components/pages/editPage/attachments/store/actionCreators/attachmentActionCreator'
 
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -19,5 +21,8 @@ export default  {
     ...deleteContactActionCreators,
     ...addPhoneActionCreators,
     ...deletePhoneActionCreators,
-    ...sendMailActionCreator
+    ...sendMailActionCreator,
+    ...saveAvatarActionCreator,
+    ...AttachmentActionCreator,
+
 }

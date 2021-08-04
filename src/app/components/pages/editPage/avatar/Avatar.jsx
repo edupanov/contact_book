@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import Button from "@material-ui/core/Button";
 import Avatar from '@material-ui/core/Avatar'
 import AvatarEditor from "react-avatar-editor";
 import {Box, Slider} from "@material-ui/core";
 
-const Logo = () => {
+
+
+const Logo = (props) => {
+
     let editor = "";
     const [picture, setPicture] = useState({
         cropperOpen: false,
@@ -14,7 +17,7 @@ const Logo = () => {
             "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
     });
 
-    const handleSlider = (event, value) => {
+    const handleSlider = (event: ChangeEvent<{}>, value: any) => {
         setPicture({
             ...picture,
             zoom: value
@@ -28,33 +31,34 @@ const Logo = () => {
         });
     };
 
-    const setEditorRef = (ed) => {
+    const setEditorRef = (ed: any) => {
         editor = ed;
     };
 
     const handleSave = () => {
-        if (setEditorRef) {
-            const canvasScaled = editor.getImageScaledToCanvas();
-            const croppedImg = canvasScaled.toDataURL();
 
-            setPicture({
-                ...picture,
-                img: null,
-                cropperOpen: false,
-                croppedImg: croppedImg
-            });
-        }
-    };
-
-    const handleFileChange = (e) => {
-        let url = URL.createObjectURL(e.target.files[0]);
+        const canvasScaled = editor.getImageScaledToCanvas();
+        const croppedImg = canvasScaled.toDataURL();
 
         setPicture({
             ...picture,
-            img: url,
+            img: null,
+            cropperOpen: false,
+            croppedImg: croppedImg
+        });
+
+        props.setAvatar(croppedImg, picture.img.name)
+    };
+    const handleFileChange = (e) => {
+        setPicture({
+            ...picture,
+            img: e.target.files[0],
             cropperOpen: true
         });
+
+        // console.log(e.target.files[0])
     };
+
 
     return (
         <div>
@@ -62,12 +66,12 @@ const Logo = () => {
                 <Box width="500%">
                     <Avatar
                         src={picture.croppedImg}
-                        style={{width: "100%", height: "auto", padding: "10", marginBottom: 10 }}
+                        style={{width: "100%", height: "auto", padding: "10", marginBottom: 10}}
                     />
                     <Button
                         variant="contained"
                         width="100%"
-                        style={{ backgroundColor: "#3451b9", color: "white"}}
+                        style={{backgroundColor: "#3451b9", color: "white"}}
                     >
                         <input type="file" accept="image/*" onChange={handleFileChange}/>
                     </Button>
