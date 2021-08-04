@@ -1,14 +1,14 @@
-import React, {ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
+import React, {ChangeEvent, Dispatch, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {AttachmentInterface, ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
+import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
 import {useStyles} from "../../deleteModal/style/styleModal";
-import {TargetType} from "../../searchPage/SearchPage";
 import {useActions} from "../../../../store/hooks/useActions";
 
 interface EditAttachmentFormInterface {
     setOpen: Function
     contact: ContactInterface
     attachment: AttachmentInterface
+    setAttachment: Dispatch<React.SetStateAction<AttachmentInterface>>
 }
 
 export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
@@ -18,12 +18,12 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
 
     const {updateAttachment} = useActions()
 
-    const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const target: TargetType = (event.target)
-        if (attachment) {
-            attachment = {...attachment, [target.name]: target.value}
-        }
+    const changeAttachmentHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target
+        attachment = {...attachment, [name]: value}//??????
         setNewAttachment(attachment)
+        console.log(attachment)
+
     }
 
     const onSubmit = () => {
@@ -43,7 +43,7 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                                                label="Имя файла"
                                                name={"file"}
                                                type="search"
-                                              onChange={changePhoneInfoHandler}
+                                              onChange={changeAttachmentHandler}
                                               defaultValue={attachment.file ? attachment.file : ''}
                                     />
 
@@ -51,7 +51,7 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                                                label="Коментарий"
                                                name={"comment"}
                                                type="search"
-                                              onChange={changePhoneInfoHandler}
+                                              onChange={changeAttachmentHandler}
                                               defaultValue={attachment.comment ? attachment.comment : ''}
                                     />
                                 </div>

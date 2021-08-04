@@ -51,6 +51,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons, setButtons] = useState<JSX.Element>(<div/>);
 
+
     const addAttachmentChangeHandler = () => {
         setTitle('Добавить вложения');
         setBody(<AddAttachmentForm setOpen={setOpen} contact={contact}/>)
@@ -61,7 +62,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setTitle('Редактирование вложений');
         setOpen(true);
         const targetID = event.currentTarget.id
-        const currentAttachment = contact.attachments.find(target => target.id === targetID) || {} as AttachmentInterface;
+        const currentAttachment = contact.attachments.find(target => target.id === targetID)!;
         setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
     }
 
