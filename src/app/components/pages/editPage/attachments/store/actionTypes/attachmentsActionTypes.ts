@@ -1,18 +1,33 @@
 import {AttachmentInterface} from "../../../../../contactList/types/contact.interface";
 
 export interface AttachmentsStateInterface {
-    attachments: Array<AttachmentInterface>
+    isLoading: boolean
+    errors: object
 }
 
 export enum AttachmentActionTypes {
-    EDIT_ATTACHMENTS = '[Attachment List] Get Attachments',
+    UPDATE_ATTACHMENTS = '[Update Attachment] Update Attachments',
+    ADD_ATTACHMENTS = '[Add Attachment] Add Attachments',
+    UPDATE_ATTACHMENTS_FAILURE = '[Update Attachment Failure] Update Attachments Failure'
 }
 
-interface editAttachments {
-    type: AttachmentActionTypes.EDIT_ATTACHMENTS
-    payload: Array<AttachmentInterface>
+interface updateAttachments {
+    type: AttachmentActionTypes.UPDATE_ATTACHMENTS
+    payload:{
+        attachments: Array<AttachmentInterface>
+        attachmentId: string
+    }
+
+}
+
+interface addAttachments {
+    type: AttachmentActionTypes.ADD_ATTACHMENTS
+}
+
+interface updateAttachmentsFailure {
+    type: AttachmentActionTypes.UPDATE_ATTACHMENTS_FAILURE,
+    errors: {}
 }
 
 
-
-export type AttachmentsActionType = editAttachments
+export type AttachmentsActionType = updateAttachments | addAttachments | updateAttachmentsFailure

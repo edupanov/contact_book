@@ -5,15 +5,20 @@ import {
 } from "../actionTypes/attachmentsActionTypes";
 
 const initialState: AttachmentsStateInterface = {
-    attachments: [],
+    isLoading: false,
+    errors: {}
 }
 
 export const attachmentsReducer = (state: AttachmentsStateInterface = initialState, action: AttachmentsActionType): AttachmentsStateInterface => {
     switch (action.type) {
-        case AttachmentActionTypes.EDIT_ATTACHMENTS:
+        case AttachmentActionTypes.ADD_ATTACHMENTS:
             return {
                 ...state,
-                attachments: action.payload,
+                isLoading: false
+            }
+        case AttachmentActionTypes.UPDATE_ATTACHMENTS_FAILURE:
+            return {
+                ...state, errors: {}
             }
         default:
             return state

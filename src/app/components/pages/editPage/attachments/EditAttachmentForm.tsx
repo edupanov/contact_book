@@ -1,27 +1,36 @@
-import React, {ChangeEvent, Dispatch, SetStateAction} from 'react';
-import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {AttachmentInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
+import React, {ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
+import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {AttachmentInterface, ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
 import {useStyles} from "../../deleteModal/style/styleModal";
 import {TargetType} from "../../searchPage/SearchPage";
+import {useActions} from "../../../../store/hooks/useActions";
 
 interface EditAttachmentFormInterface {
-    attachment: AttachmentInterface,
-    setAttachment: Dispatch<SetStateAction<AttachmentInterface>>
+    setOpen: Function
+    contact: ContactInterface
+    attachment: AttachmentInterface
 }
 
 export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
     const classes = useStyles();
+    let {setOpen, contact, attachment} = props
+    const [newAttachment, setNewAttachment] = useState({} as AttachmentInterface)
 
-    let {attachment, setAttachment} = props
+    const {updateAttachment} = useActions()
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
         if (attachment) {
             attachment = {...attachment, [target.name]: target.value}
         }
-        sessionStorage.setItem('attachment', JSON.stringify(attachment));
-        setAttachment(attachment)
+        setNewAttachment(attachment)
     }
+
+    const onSubmit = () => {
+        setOpen(false)
+        updateAttachment(newAttachment, contact.id, attachment.id)
+    }
+
     return (
         <div>
             <Grid container justifyContent="center">
@@ -34,21 +43,29 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                                                label="Имя файла"
                                                name={"file"}
                                                type="search"
-                                               onChange={changePhoneInfoHandler}
-                                               defaultValue={attachment.file ? attachment.file : ''}
+                                              onChange={changePhoneInfoHandler}
+                                              defaultValue={attachment.file ? attachment.file : ''}
                                     />
 
                                     <TextField className={classes.input}
                                                label="Коментарий"
                                                name={"comment"}
                                                type="search"
-                                               onChange={changePhoneInfoHandler}
-                                               defaultValue={attachment.comment ? attachment.comment : ''}
+                                              onChange={changePhoneInfoHandler}
+                                              defaultValue={attachment.comment ? attachment.comment : ''}
                                     />
                                 </div>
                             </FormGroup>
                         </FormControl>
                     </form>
+                    <div>
+                        <Button
+                            className={classes.button}
+                            variant={'contained'}
+                            onClick={onSubmit}
+                            color={'primary'}
+                        >Сохранить изменения</Button>
+                    </div>
                 </Grid>
             </Grid>
         </div>

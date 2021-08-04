@@ -29,7 +29,7 @@ export const createRootReducer = (history: History) => {
         addPhone: createPhoneReducer,
         deletePhone: deletePhoneReducer,
         sendMail: sendMailReducer,
-        attachments: attachmentsReducer,
+        addAttachments: attachmentsReducer,
         avatar: avatarReducer
 
     })

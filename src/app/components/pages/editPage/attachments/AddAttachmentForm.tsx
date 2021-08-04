@@ -1,25 +1,31 @@
-import React, {ChangeEvent, Dispatch, SetStateAction} from 'react';
-import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {AttachmentInterface, AvatarInterface} from "../../../contactList/types/contact.interface";
+import React, {ChangeEvent, useState} from 'react';
+import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
 import {useStyles} from "../styles/editContactStyles";
+import {useActions} from "../../../../store/hooks/useActions";
 
 interface AddPhoneFormInterface {
-    setNewAttachment: Dispatch<SetStateAction<AttachmentInterface>>
-    newId: number
+    setOpen: Function
+    contact: ContactInterface
 }
 
 export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
-
     const classes = useStyles();
-    let {setNewAttachment, newId} = props
+    let {setOpen, contact} = props
+
+    const {addAttachment} = useActions()
+    const [attachment, setAttachment] = useState<AttachmentInterface>({} as AttachmentInterface)
+    const attachId = contact.attachments ? contact.attachments.length + 1 : 1
 
     const changeAttachmentInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
-        const newAttachment: any = {[name]: value, id: String(newId)}
+        const updatedAttachment = {...attachment, [name]: value, id: String(attachId)}
+        setAttachment(updatedAttachment)
+    }
 
-        setNewAttachment(newAttachment)
-        // value.split('.')
-        // console.log( value.split('.')[0].split('\\').reverse()[0])
+    const onSubmit = () => {
+        addAttachment(attachment, contact.id)
+        setOpen(false)
     }
 
     return (
@@ -57,6 +63,14 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
                             </FormGroup>
                         </FormControl>
                     </form>
+                    <div>
+                        <Button
+                            className={classes.button}
+                            variant={'contained'}
+                            onClick={onSubmit}
+                            color={'primary'}
+                        >Сохранить изменения</Button>
+                    </div>
                 </Grid>
             </Grid>
         </div>

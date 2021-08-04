@@ -15,6 +15,9 @@ import {PATH} from "../../routes/Routes";
 
 const ContactList = () => {
 
+    const test = useTypeSelector((state => state.contacts.data))
+    console.log(test)
+
     const columns: GridColDef[] = [
         {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false, hide: true},

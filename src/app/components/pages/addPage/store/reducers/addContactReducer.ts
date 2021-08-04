@@ -3,7 +3,6 @@ import {
     CreateUserStateInterface,
     CreateContactActionTypes
 } from "../actionType/addContactActionTypes";
-import {CreateContactInterface} from "../../types/createContactInterface";
 
 const initialState: CreateUserStateInterface = {
     isLoading: false,

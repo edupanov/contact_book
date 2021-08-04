@@ -90,6 +90,8 @@ const EditPage = () => {
         sessionStorage.clear()
     }
 
+    console.log(currentContact)
+
     return (
         <div className={classes.editForm}>
             <div className={classes.avatar}><Avatar setAvatar={setAvatar}/></div>

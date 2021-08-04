@@ -1,13 +1,12 @@
-import React, {SyntheticEvent, useEffect, useState} from 'react';
+import React, {SyntheticEvent, useState} from 'react';
 import {DataGrid, GridColDef, GridRowId} from "@material-ui/data-grid";
 import {Button, IconButton} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import {AttachmentInterface, ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
-import {ButtonsForm} from "../phone/editForm/ButtonsForm";
+import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
 import {PhoneModal} from "../phone/PhoneModal";
-import {EditAttachmentForm} from "./EditAttachmentForm";
 import {AddAttachmentForm} from "./AddAttachmentForm";
+import {EditAttachmentForm} from "./EditAttachmentForm";
 
 type AttachmentsPropsType = {
     setAttachments: (data: any, tableName: string) => void
@@ -15,9 +14,7 @@ type AttachmentsPropsType = {
 }
 
 const AttachmentsForm = (props: AttachmentsPropsType) => {
-    const currentDate = new Date()
-
-    const {contact, setAttachments} = props
+    const {contact} = props
 
     const columns: GridColDef[] = [
         {field: 'file', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
@@ -29,7 +26,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
                 return <IconButton
                     id={String(el.id)}
                     aria-label="edit"
-                    onClick={attachmentClickHandler}
+                    onClick={editAttachmentChangeHandler}
                 >
                     <EditIcon/>
                 </IconButton>
@@ -49,40 +46,23 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     ]
 
     const [open, setOpen] = useState(false);
-    const [attachment, setAttachment] = useState({} as AttachmentInterface);
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons, setButtons] = useState<JSX.Element>(<div/>);
-    let [newAttachments, setUpdateAttachments] = useState([] as AttachmentInterface[])
 
-    let attachments: AttachmentInterface = {} as AttachmentInterface
-
-    const onAddAttachment = () => {
-        setUpdateAttachments([...newAttachments, attachments])
-        setOpen(false);
-    }
-
-    const onChangeAttachment = (attach: any) => {
-        attachments = {...attachments, ...attach}
-    }
-
-    const attachmentClickHandler = (event: SyntheticEvent) => {
-        const targetID = event.currentTarget.id
-        const currentAttachment = newAttachments.find(target => target.id === targetID) || {} as AttachmentInterface;
-        setAttachment(currentAttachment)
-        console.log(currentAttachment)
-        setTitle('Редактирование вложений');
-        setBody(<EditAttachmentForm attachment={currentAttachment} setAttachment={setAttachment}/>)
-        setButtons(<ButtonsForm onSubmitModal={onSubmitModal}/>)
-        setOpen(true);
-    }
-
-    const addAttachmentChangeHandler = (event: SyntheticEvent) => {
+    const addAttachmentChangeHandler = () => {
         setTitle('Добавить вложения');
-        setBody(<AddAttachmentForm setNewAttachment={onChangeAttachment} newId={newAttachments.length + 1}/>)
-        setButtons(<ButtonsForm onSubmitModal={onAddAttachment}/>)
+        setBody(<AddAttachmentForm setOpen={setOpen} contact={contact}/>)
         setOpen(true);
+    }
+
+    const editAttachmentChangeHandler = (event: SyntheticEvent) => {
+        setTitle('Редактирование вложений');
+        setOpen(true);
+        const targetID = event.currentTarget.id
+        const currentAttachment = contact.attachments.find(target => target.id === targetID) || {} as AttachmentInterface;
+        setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
     }
 
     const checkedCurrenAttachment = (params: GridRowId[]) => {
@@ -92,17 +72,6 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     const handleCloseModal = () => {
         setOpen(false);
     };
-    const savedAttachment: AttachmentInterface = JSON.parse(sessionStorage.getItem('attachment') || '{}');
-
-    const onSubmitModal = () => {
-        console.log(savedAttachment)
-        setAttachment(savedAttachment)
-
-        handleCloseModal()
-    }
-
-    console.log(newAttachments)
-
 
 
     return (
@@ -117,7 +86,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
             </Button>
 
             <DataGrid
-                rows={newAttachments}
+                rows={contact.attachments! || []}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick
