@@ -42,11 +42,9 @@ export const updateAttachment = (attachment: AttachmentInterface, contactId: str
 
         const {data, maxUsers} = getState().contacts
 
-        console.log(data)
-
-        const updatedContact = data.filter((contact: ContactInterface) => contact.id === contactId)
-        const currentAttach = updatedContact.attachments.map((item: AttachmentInterface) => item.id === attachmentId ? attachment : item)
-        console.log(currentAttach)
+        const updatedContact = data.find((contact: ContactInterface) => contact.id === contactId)
+        console.log(updatedContact)
+        const currentAttach = updatedContact.attachments.find((item: AttachmentInterface) => item.id === attachmentId ? attachment : item)
 
 
 
