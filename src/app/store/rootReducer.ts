@@ -8,6 +8,10 @@ import {createContactReducer} from "../components/pages/addPage/store/reducers/a
 import {updateContactReducer} from "../components/pages/editPage/store/reducers/updateContactReducer";
 import {deleteContactReducer} from "../components/pages/deleteModal/store/reducer/deleteContactReducer";
 import {createPhoneReducer} from "../components/pages/editPage/phone/addForm/store/reducers/addPhoneReducer";
+import {deletePhoneReducer} from "../components/pages/editPage/phone/deletePhone/store/reducers/deletePhoneReducer";
+import {sendMailReducer} from "../components/pages/emailPage/store/reducers/sendMailReducer";
+import {attachmentsReducer} from "../components/pages/editPage/attachments/store/reducers/attachmentsReducer";
+import {avatarReducer} from "../components/pages/editPage/avatar/store/reducers/avatarReducer";
 
 let rootState = {} as CombinedState<any>
 
@@ -22,7 +26,11 @@ export const createRootReducer = (history: History) => {
         createContact: createContactReducer,
         updateContact: updateContactReducer,
         delete: deleteContactReducer,
-        addPhone: createPhoneReducer
+        addPhone: createPhoneReducer,
+        deletePhone: deletePhoneReducer,
+        sendMail: sendMailReducer,
+        addAttachments: attachmentsReducer,
+        avatar: avatarReducer
 
     })
 

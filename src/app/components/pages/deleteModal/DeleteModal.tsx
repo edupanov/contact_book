@@ -17,6 +17,13 @@ type DeleteType = {
 export default function DeleteModal(props: DeleteType) {
 
     const classes = useStyles();
+    const deleteAll = () => {
+        if(props.selectionModel.length >= 5) {
+            props.deleteAll()
+        }
+    }
+
+
 
     return (
         <div>
@@ -36,7 +43,7 @@ export default function DeleteModal(props: DeleteType) {
                     <div className={classes.paper}>
                         <h2 id="transition-modal-title">Вы действительно хотите удалить выбранные контакты?</h2>
                         <Button
-                            onClick={props.deleteCheckedContacts || props.deleteAll}
+                            onClick={props.deleteCheckedContacts || deleteAll}
                             variant="contained"
                             color="secondary"
                         >

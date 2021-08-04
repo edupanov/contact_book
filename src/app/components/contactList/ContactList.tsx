@@ -2,13 +2,7 @@ import React, {SyntheticEvent, useEffect, useRef, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
-import {
-    DataGrid,
-    GridCellParams,
-    GridColDef,
-    GridPageChangeParams,
-    GridRowId,
-} from "@material-ui/data-grid";
+import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams, GridRowId,} from "@material-ui/data-grid";
 import styles from "../mainForm/HeaderContactList.module.scss";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
@@ -21,6 +15,9 @@ import {PATH} from "../../routes/Routes";
 
 const ContactList = () => {
 
+    const test = useTypeSelector((state => state.contacts.data))
+    console.log(test)
+
     const columns: GridColDef[] = [
         {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false, hide: true},
@@ -32,21 +29,29 @@ const ContactList = () => {
             }
         },
         {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
-        {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false},
-        {field: 'maritalStatus', headerName: 'Семейное положение', width: 200, filterable: false, sortable: false},
-        {field: 'nationality', headerName: 'Гражданство', width: 140, filterable: false, sortable: false},
+        {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false, hide: true},
+        {
+            field: 'maritalStatus',
+            headerName: 'Семейное положение',
+            width: 200,
+            filterable: false,
+            sortable: false,
+            hide: true
+        },
+        {field: 'nationality', headerName: 'Гражданство', width: 140, filterable: false, sortable: false, hide: true},
         {
             field: 'address',
             headerName: 'Адрес',
             flex: 1,
             width: 350,
             filterable: false,
-
             sortable: false,
             renderCell: (params: GridCellParams) => {
                 return <span>{params.row.address.fullAddress}</span>
             }
         },
+        {field: 'email', headerName: 'Email', width: 140, filterable: false, sortable: false, hide: true},
+        {field: 'currentJob', headerName: 'Место работы', width: 160, filterable: false, sortable: false},
         {
             field: 'edit', headerName: '', width: 100, filterable: false, sortable: false, editable: true,
             renderCell: (el) => {
@@ -54,7 +59,6 @@ const ContactList = () => {
                     aria-label="edit"
                     id={String(el.id)}
                     onClick={contactClickHandler}
-
                 >
                     <NavLink to={'/contacts/edit'}>
                         <EditIcon/>
@@ -87,18 +91,16 @@ const ContactList = () => {
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
     const [openSearch, setOpenSearch] = React.useState(false);
-
     const {getContacts, setPage, setTake, deleteContacts, deleteAll} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
     const prevVal = usePrevious(data)
-
     const history = useHistory()
-
+    sessionStorage.setItem('contactsId', JSON.stringify(selectionModel));
+    sessionStorage.setItem('contacts', JSON.stringify(items));
     const handleOpenModal = () => {
         setOpen(true);
     };
-
     const handleCloseModal = () => {
         setOpen(false);
     };
@@ -125,13 +127,13 @@ const ContactList = () => {
         const targetID = event.currentTarget.id
         const contactsForUpdate = [...data]
         const currentContact: ContactInterface = contactsForUpdate.find(target => target.id === targetID);
-        history.push(PATH.EDIT, {contact: currentContact})
+        history.push(`${PATH.EDIT}/${currentContact.id}`, {contact: currentContact})
     }
 
     const searchClickHandler = (event: SyntheticEvent) => {
-      if(event.currentTarget) {
-          setOpenSearch(true)
-      }
+        if (event.currentTarget) {
+            setOpenSearch(true)
+        }
     }
 
     const searchClickHandlerClose = () => {
@@ -181,7 +183,7 @@ const ContactList = () => {
                 className={styles.headerWrapper}
                 container
                 direction="row"
-                justify="space-between"
+                justifyContent="space-between"
                 alignItems="center"
             > <NavLink className={styles.link} to={'/contacts/create'}>
                 <Button
@@ -192,15 +194,6 @@ const ContactList = () => {
                 </Button>
             </NavLink>
                 <div>
-                    <Button
-                        onClick={deleteAll}
-                        className={selectionModel.length >= 5 ? styles.deleteButton : styles.hideButton}
-                        variant="outlined"
-                        color="secondary"
-                    >
-                        Удалить все
-                        <Delete/>
-                    </Button>
                     <Button
                         onClick={handleOpenModal}
                         disabled={selectionModel.length === 0}
@@ -213,26 +206,44 @@ const ContactList = () => {
                     </Button>
                     <Button
 
-                       onClick={searchClickHandler}
+                        onClick={searchClickHandler}
                         className={styles.searchButton}
                         variant="outlined"
                         color="primary"
                     >
-                            Поиск
-                            <SearchIcon/>
+                        Поиск
+                        <SearchIcon/>
                     </Button>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        color="primary"
-                        target="_top"
-                        rel="noopener noreferrer"
-                        href={``}
-                    >
-                        <Typography variant="button" style={{fontSize: '0.79rem'}}>
-                            Отправить E-mail
-                        </Typography>
-                    </Button>
+                    {selectionModel.length === 0
+                        ? <Button
+                            disabled
+                            variant="contained"
+                            size="large"
+                            color="primary"
+                            target="_top"
+                            rel="noopener noreferrer"
+                            href={``}
+                        >
+                            <Typography variant="button" style={{fontSize: '0.79rem'}}>
+                                Отправить E-mail
+                            </Typography>
+                        </Button>
+                        : <NavLink className={styles.link} to={'/contacts/email'}>
+                            <Button
+                                variant="contained"
+                                size="large"
+                                color="primary"
+                                target="_top"
+                                rel="noopener noreferrer"
+                                href={``}
+                            >
+                                <Typography variant="button" style={{fontSize: '0.79rem'}}>
+                                    Отправить E-mail
+                                </Typography>
+                            </Button>
+                        </NavLink>
+                    }
+
                 </div>
             </Grid>
 
@@ -256,8 +267,11 @@ const ContactList = () => {
                       selectionModel={selectionModel}
             />
 
-            <DeleteModal open={open} onClose={handleCloseModal} selectionModel={selectionModel}
-                         deleteCheckedContacts={deleteCheckedContacts} deleteAll={deleteAll}/>
+            <DeleteModal open={open}
+                         onClose={handleCloseModal}
+                         selectionModel={selectionModel}
+                         deleteCheckedContacts={deleteCheckedContacts}
+                         deleteAll={deleteAll}/>
         </div>
     );
 }

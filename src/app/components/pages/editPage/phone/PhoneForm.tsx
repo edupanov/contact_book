@@ -1,19 +1,21 @@
-import React, {SyntheticEvent, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
 import {DataGrid, GridCellParams, GridColDef, GridRowId} from "@material-ui/data-grid";
 import './phone.module.scss'
 import {Button, IconButton} from "@material-ui/core";
-import {useLocation} from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
 import {PhoneInterface} from "../../../contactList/types/contact.interface";
-import {LocationType, PhoneFormProps} from "../type/editPage.type";
+import {PhoneFormProps} from "../type/editPage.type";
 import {PhoneModal} from "./PhoneModal";
 import {EditPhoneForm} from "./editForm/EditPhoneForm";
-import {ButtonsEditForm} from "./editForm/ButtonsEditForm";
+import {ButtonsForm} from "./editForm/ButtonsForm";
 import {AddPhoneForm} from "./addForm/AddPhoneForm";
 import {useActions} from "../../../../store/hooks/useActions";
+import {useStyles} from "../styles/formStyles";
 
 const PhoneForm = (props: PhoneFormProps) => {
+
+    const classes = useStyles()
 
     const {addPhone} = useActions()
 
@@ -42,7 +44,7 @@ const PhoneForm = (props: PhoneFormProps) => {
                 return <IconButton
                     id={String(el.id)}
                     aria-label="edit"
-                    onClick={contactClickHandler}
+                    onClick={changePhoneHandler}
                 >
                     <EditIcon/>
                 </IconButton>
@@ -53,59 +55,69 @@ const PhoneForm = (props: PhoneFormProps) => {
             renderCell: (el) =>
                 <IconButton
                     aria-label="del"
+                    id={String(el.id)}
+                    onClick={deleteCurrentPhone}
                 >
                     <Delete/>
                 </IconButton>
         },
     ]
 
-    const {setContact} = props
+    const {setContact, contact, setCurrentContact} = props
 
-    const location = useLocation<LocationType>()
-
-    let data = location.state.contact.phones
-
+    const {deletePhone} = useActions()
     const [open, setOpen] = useState(false);
-    const [phone, setPhone] = useState({} as PhoneInterface);
-    const [newPhone, setNewPhone] = useState({} as PhoneInterface);
+    const [phone, setPhone] = useState({} as PhoneInterface); //edit phone
+    const [newPhone, setNewPhone] = useState({} as PhoneInterface); //add phone
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons, setButtons] = useState<JSX.Element>(<div/>);
 
+    let phones = contact.phones
+    const newPhones = phones.map(item => item.id === phone.id ? phone : item);
+    let [updatePhones, setUpdatePhones] = useState(phones)
+
+    useEffect(() => {
+        setUpdatePhones(newPhones)
+    }, [phone])
+
+    const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
+    const result = equals(phones, newPhones)
+
+
     const handleCloseModal = () => {
         setOpen(false);
     };
 
-    const contactClickHandler = (event: SyntheticEvent) => {
+
+// EDIT PHONE HANDLER
+    const changePhoneHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const phonesForUpdate = Object.keys(phone).length === 0 ? [...data] : [phone]
-        const currentPhone = phonesForUpdate.find(target => target.id === targetID) || {} as PhoneInterface;
+        const currentPhone = updatePhones.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
         setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
-        setButtons(<ButtonsEditForm onSubmitModal={() => onSubmitModal()}/>)
+        setButtons(<ButtonsForm onSubmitModal={() => onEditPhoneSubmit()}/>)
         setOpen(true);
     }
 
-    const addPhoneClickHandler = (event: SyntheticEvent) => {
+  // ADD PHONE HANDLER
+    const addPhoneChangeHandler = (event: SyntheticEvent) => {
         setTitle('Добавить номер телефона');
         setBody(<AddPhoneForm newPhone={newPhone} setNewPhone={setNewPhone}/>)
-        setButtons(<ButtonsEditForm onSubmitModal={() => onAddPhoneSubmit()}/>)
+        setButtons(<ButtonsForm onSubmitModal={() => onAddPhoneSubmit()}/>)
         setOpen(true);
     }
 
-    const onSubmitModal = () => {
+    const onEditPhoneSubmit = () => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
         setContact(savedPhone, 'phones')
-        handleCloseModal()
+        setOpen(false);
     }
-
-
 
     const onAddPhoneSubmit = () => {
         const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('newPhone') || '{}');
-
         addPhone(savedPhone, props.contact!.id)
         setOpen(false);
     }
@@ -114,25 +126,32 @@ const PhoneForm = (props: PhoneFormProps) => {
         setSelectionModel(params)
     }
 
-    if (Object.keys(phone).length !== 0) {
-        data = [...data, newPhone]
+    const deleteCurrentPhone = (event: SyntheticEvent) => {
+        const phoneId = event.currentTarget.id
+        const contactId = contact.id
+        deletePhone(contactId, phoneId)
     }
 
+    useEffect(() => {
+        updatePhones = [...updatePhones, newPhone]
+    }, [newPhone])
+
+
     return (
-        <div style={{height: 162, width: '100%', marginBottom: 30}}>
+        <div style={{height: 'auto', width: '100%'}}>
             <h2>Контактные телефоны</h2>
             <Button
+                className={classes.button}
                 variant="outlined"
                 color="primary"
-                onClick={addPhoneClickHandler}
-
+                onClick={addPhoneChangeHandler}
             >
                 Добавить новый номер
             </Button>
             <DataGrid
-                rows={Object.keys(phone).length === 0 ? data : [phone]}
+                rows={result ? phones : newPhones}
                 columns={columns}
-                pageSize={3}
+                autoHeight
                 disableSelectionOnClick
                 hideFooter
                 checkboxSelection
@@ -152,5 +171,3 @@ const PhoneForm = (props: PhoneFormProps) => {
 };
 
 export default PhoneForm;
-
-

@@ -3,11 +3,13 @@ import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@mate
 import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
 import {useStyles} from "../editPage/styles/editContactStyles";
-import { NavLink } from 'react-router-dom';
+import {NavLink, useHistory} from 'react-router-dom';
 import {GridCloseIcon} from "@material-ui/data-grid";
+import {PATH} from "../../../routes/Routes";
 
 const AddPage: FC = () => {
     const classes = useStyles()
+    const history = useHistory()
 
     const {addContact} = useActions()
 
@@ -45,6 +47,7 @@ const AddPage: FC = () => {
            }
         }
         addContact(contact)
+        history.push(PATH.HOME)
     }
 
     return (
@@ -55,7 +58,7 @@ const AddPage: FC = () => {
                     <GridCloseIcon/>
                 </IconButton>
             </NavLink>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
                         <FormControl className={classes.form}>

@@ -1,6 +1,5 @@
 import React, {ChangeEvent, Dispatch, SetStateAction} from 'react';
 import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {TargetType} from "../../../searchPage/SearchPage";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 import {useStyles} from "../../../deleteModal/style/styleModal";
 
@@ -10,22 +9,23 @@ interface AddPhoneFormInterface {
 }
 
 export const AddPhoneForm = (props: AddPhoneFormInterface) => {
-    const classes = useStyles();
 
+    const classes = useStyles();
     let {newPhone, setNewPhone} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const target: TargetType = (event.target)
+        const {name, value} = event.target
+
         if (newPhone) {
-            newPhone = {...newPhone, [target.name]: target.value}
+            newPhone = {...newPhone, [name]: value}
         }
         sessionStorage.setItem('newPhone', JSON.stringify(newPhone));
-
         setNewPhone(newPhone)
     }
+
     return (
         <div>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form>
                         <FormControl>
@@ -48,7 +48,7 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                name={"phoneNumber"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
-                                    />
+                                   />
                                     <TextField className={classes.input}
                                                label="Тип"
                                                name={"phoneType"}
@@ -71,4 +71,3 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
 
     );
 };
-
