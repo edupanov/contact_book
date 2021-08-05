@@ -46,6 +46,16 @@ const MainPage = () => {
                     </Toolbar>
                 </AppBar>
             </div>
+            <div>
+                <h1 className={style.title}>Книга Контактов</h1>
+
+            </div>
+
+            <div className={style.footer}>
+                <span>by Egor Dupanov (Bostil Support)</span>
+                <span>P.S. дизайнер с меня так себе</span>
+            </div>
+
             {openLogin ? <LoginForm openLoginFormClickHandler={openLoginFormClickHandler}/> : null}
         </div>
     );

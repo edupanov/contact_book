@@ -61,13 +61,6 @@ const EditPage = () => {
         }
     }
 
-    const setPhone = (data: PhoneInterface, tableName: string) => {
-        let updatedPhones: PhoneInterface[] = currentContact.phones
-        updatedPhones = updatedPhones.filter(phone => phone.id !== data.id)
-        updatedPhones = [...updatedPhones, data]
-        currentContact = {...currentContact, [tableName]: updatedPhones}
-    }
-
     const setAvatar = (file: string, name: string) => {
         const newLogo: AvatarInterface = {
             file: file,
@@ -75,14 +68,6 @@ const EditPage = () => {
         }
         currentContact = {...currentContact, logo: newLogo}
     }
-
-    const setAttachments = (data: AttachmentInterface, tableName: string) => {
-        let updatedAttachments: AttachmentInterface[] = currentContact.attachments
-        updatedAttachments = updatedAttachments.filter(attachment => attachment.id !== data.id)
-        updatedAttachments = [...updatedAttachments, data]
-        currentContact = {...currentContact, [tableName]: updatedAttachments}
-    }
-
 
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
