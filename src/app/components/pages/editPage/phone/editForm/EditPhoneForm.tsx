@@ -15,12 +15,13 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
     let {phone, setPhone} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const target: TargetType = (event.target)
+        const {name, value} = event.target
         if (phone) {
-            phone = {...phone, [target.name]: target.value}
+            phone = {...phone, [name]: value}
         }
         sessionStorage.setItem('phone', JSON.stringify(phone));
         setPhone(phone)
+        console.log(phone)
     }
     return (
         <div>
@@ -46,7 +47,7 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
                                     />
                                     <TextField className={classes.input}
                                                label="Телефонный номер"
-                                               name={"phone"}
+                                               name={"phoneNumber"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
                                                defaultValue={phone.phoneNumber ? phone.phoneNumber : ''}
