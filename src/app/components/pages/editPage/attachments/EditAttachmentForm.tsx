@@ -15,18 +15,22 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
     let {setOpen, contact, attachment} = props
     let [newAttachment, setNewAttachment] = useState({} as AttachmentInterface)
 
-    const {updateAttachment} = useActions()
 
     const changeAttachmentHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
-        attachment = {...attachment, [name]: value}//??????
+        // attachment = {...attachment, [name]: value}
+        if (name === 'file') {
+            attachment.file = value
+        }
+        if (name === 'comment') {
+            attachment.comment = value
+        }
         setNewAttachment(attachment)
-
     }
 
     const onSubmit = () => {
         setOpen(false)
-        updateAttachment(newAttachment, contact.id, attachment.id)
+        // updateAttachment(newAttachment, contact.id, attachment.id)
     }
 
     return (
@@ -41,16 +45,16 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                                                label="Имя файла"
                                                name={"file"}
                                                type="search"
-                                              onChange={changeAttachmentHandler}
-                                              defaultValue={attachment.file ? attachment.file : ''}
+                                               onChange={changeAttachmentHandler}
+                                               defaultValue={attachment.file ? attachment.file : ''}
                                     />
 
                                     <TextField className={classes.input}
                                                label="Коментарий"
                                                name={"comment"}
                                                type="search"
-                                              onChange={changeAttachmentHandler}
-                                              defaultValue={attachment.comment ? attachment.comment : ''}
+                                               onChange={changeAttachmentHandler}
+                                               defaultValue={attachment.comment ? attachment.comment : ''}
                                     />
                                 </div>
                             </FormGroup>
@@ -70,4 +74,3 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
 
     );
 };
-

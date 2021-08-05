@@ -43,12 +43,7 @@ export const updateAttachment = (attachment: AttachmentInterface, contactId: str
         const {data, maxUsers} = getState().contacts
 
         const updatedContact = data.find((contact: ContactInterface) => contact.id === contactId)
-        // console.log(updatedContact)
         const updateAttachments = updatedContact.attachments.map((item: AttachmentInterface) => item.id === attachmentId ? attachment : item)
-             // console.log(updateAttachments)
-
-
-
 
         // dispatch({
         //     type: ContactActionTypes.GET_CONTACTS_SUCCESS,
@@ -57,4 +52,29 @@ export const updateAttachment = (attachment: AttachmentInterface, contactId: str
         //         maxUsers: maxUsers
         //     }
         // })
+    }
+
+export const deleteAttachment = (contactId: string, attachmentId: string) =>
+    async (dispatch: Dispatch<ContactsActionType | AttachmentsActionType>, getState: () => RootState) => {
+        dispatch({type: ContactActionTypes.GET_CONTACTS})
+
+        const {data, maxUsers} = getState().contacts
+
+        const updatedContacts = data.map((contact: ContactInterface) => {
+            const copyContact = JSON.parse(JSON.stringify(contact))
+
+            if (copyContact.id === contactId) {
+                copyContact.attachments = copyContact.attachments.filter((item: AttachmentInterface) => item.id !== attachmentId)
+                return copyContact
+            }
+            return contact
+        })
+
+        dispatch({
+            type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+            payload: {
+                users: updatedContacts as Array<ContactInterface>,
+                maxUsers: maxUsers
+            }
+        })
     }
