@@ -4,13 +4,11 @@ export const formatDate = (date: string, format: string) => {
     return moment(new Date(date)).format(format)
 }
 
-export const toBase64 = async (file: File) => {
+export const getBase64 = (file: File) => {
     return new Promise((resolve, reject) => {
-        const fileReader = new FileReader()
-        fileReader.readAsDataURL(file)
-        fileReader.onload = () => resolve(fileReader.result)
-        fileReader.onerror = error => reject(error)
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error);
     })
-
 }
-

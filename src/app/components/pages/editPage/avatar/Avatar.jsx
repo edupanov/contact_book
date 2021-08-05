@@ -55,8 +55,6 @@ const Logo = (props) => {
             img: e.target.files[0],
             cropperOpen: true
         });
-
-        // console.log(e.target.files[0])
     };
 
 

@@ -1,8 +1,7 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
 import {useStyles} from "../../deleteModal/style/styleModal";
-import {useActions} from "../../../../store/hooks/useActions";
 
 interface EditAttachmentFormInterface {
     setOpen: Function
@@ -12,25 +11,21 @@ interface EditAttachmentFormInterface {
 
 export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
     const classes = useStyles();
-    let {setOpen, contact, attachment} = props
-    let [newAttachment, setNewAttachment] = useState({} as AttachmentInterface)
+    let {setOpen, attachment} = props
 
 
     const changeAttachmentHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
-        // attachment = {...attachment, [name]: value}
         if (name === 'file') {
             attachment.file = value
         }
         if (name === 'comment') {
             attachment.comment = value
         }
-        setNewAttachment(attachment)
     }
 
     const onSubmit = () => {
         setOpen(false)
-        // updateAttachment(newAttachment, contact.id, attachment.id)
     }
 
     return (

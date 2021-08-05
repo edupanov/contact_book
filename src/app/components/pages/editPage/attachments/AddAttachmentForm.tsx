@@ -19,6 +19,10 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
 
     const changeAttachmentInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
+        // let file = getBase64(event.target.files![0]).then(result => {
+        //     return result
+        // })
+        // console.log(file)
         const updatedAttachment = {...attachment, [name]: value, id: String(attachId)}
         setAttachment(updatedAttachment)
     }

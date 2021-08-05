@@ -3,7 +3,7 @@ import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
 import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams, GridRowId,} from "@material-ui/data-grid";
-import styles from "../mainForm/HeaderContactList.module.scss";
+import styles from "../pages/editPage/styles/HeaderContactList.module.scss";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
@@ -12,18 +12,28 @@ import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
+import {makeStyles} from "@material-ui/styles";
+
+const useStyles = makeStyles({
+    root: {
+        '& .column': {
+            backgroundColor: 'rgba(255, 255, 255)',
+        },
+    },
+});
 
 const ContactList = () => {
 
+
     const columns: GridColDef[] = [
-        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true},
+        {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true, headerAlign: 'center'},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false, hide: true},
         {
-            field: '', headerName: 'ФИО', width: 250, filterable: false, sortable: false,
+            field: '', headerName: 'ФИО', width: 250, filterable: false, headerClassName: 'column', sortable: false,
             renderCell: (params: GridCellParams) => {
                 return <span>{`${params.row.name} ${params.row.surname} ${params.row.patronymic}`}</span>
-            }
+            },
         },
         {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
         {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false, hide: true},
@@ -83,7 +93,7 @@ const ContactList = () => {
         });
         return ref.current;
     }
-
+    const classes = useStyles();
     const [items, setItems] = useState<ContactInterface[]>([])
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
@@ -175,7 +185,7 @@ const ContactList = () => {
     }
 
     return (
-        <div style={{height: 400, width: '100%'}}>
+        <div style={{height: 400, width: '100%'}} className={classes.root}>
             <Grid
                 className={styles.headerWrapper}
                 container

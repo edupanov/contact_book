@@ -16,7 +16,7 @@ import {
 } from "../../contactList/types/contact.interface";
 import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 import {RootState} from "../../../store/rootReducer";
-import styles from "../../mainForm/HeaderContactList.module.scss";
+import styles from "./styles/HeaderContactList.module.scss";
 
 const EditPage = () => {
 
@@ -211,9 +211,8 @@ const EditPage = () => {
                                         </div>
                                     </div>
 
-                                    <PhoneForm contact={currentContact} setContact={setPhone}
-                                               setCurrentContact={setCurrentContact}/>
-                                    <AttachmentsForm setAttachments={setAttachments} contact={currentContact}/>
+                                    <PhoneForm contact={currentContact}/>
+                                    <AttachmentsForm contact={currentContact}/>
 
                                     <div className={classes.submitButton}>
                                         <Button
