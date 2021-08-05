@@ -1,7 +1,6 @@
 import React, {ChangeEvent, Dispatch, SetStateAction} from 'react';
 import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useStyles} from "../../../deleteModal/style/styleModal";
-import {TargetType} from "../../../searchPage/SearchPage";
 import {PhoneInterface} from "../../../../contactList/types/contact.interface";
 
 interface EditPhoneFormInterface {

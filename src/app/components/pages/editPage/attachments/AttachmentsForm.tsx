@@ -7,6 +7,7 @@ import {AttachmentInterface, ContactInterface} from "../../../contactList/types/
 import {PhoneModal} from "../phone/PhoneModal";
 import {AddAttachmentForm} from "./AddAttachmentForm";
 import {EditAttachmentForm} from "./EditAttachmentForm";
+import {useActions} from "../../../../store/hooks/useActions";
 
 type AttachmentsPropsType = {
     setAttachments: (data: any, tableName: string) => void
@@ -36,15 +37,15 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
             field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
             renderCell: (el) =>
                 <IconButton
+                    id={String(el.id)}
                     aria-label="del"
-
-
+                    onClick={deleteCurrentAttachment}
                 >
                     <Delete/>
                 </IconButton>
         },
     ]
-
+    const {deleteAttachment} = useActions()
     const [open, setOpen] = useState(false);
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
@@ -65,6 +66,12 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         const currentAttachment = contact.attachments.find(target => target.id === targetID)!;
         setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
     }
+    const deleteCurrentAttachment = (event: SyntheticEvent) => {
+        const targetID = event.currentTarget.id
+        // const updateAttachments = contact.attachments.filter(target => target.id !== targetID)!;
+        // console.log(updateAttachments)
+        deleteAttachment(contact.id, targetID)
+    }
 
     const checkedCurrenAttachment = (params: GridRowId[]) => {
         setSelectionModel(params)
@@ -74,7 +81,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setOpen(false);
     };
 
-
+    console.log(contact.attachments)
     return (
         <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>
             <h2>Вложения</h2>
