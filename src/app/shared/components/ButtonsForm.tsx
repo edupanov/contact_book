@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from "@material-ui/core";
-import {useStyles} from "../../../deleteModal/style/styleModal";
+import {useStyles} from "../../components/pages/deleteModal/style/styleModal";
 
 interface ButtonsEditFormInterface {
     onSubmitModal: () => void

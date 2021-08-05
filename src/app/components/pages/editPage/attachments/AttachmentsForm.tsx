@@ -3,14 +3,13 @@ import {DataGrid, GridColDef, GridRowId} from "@material-ui/data-grid";
 import {Button, IconButton} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
-import {PhoneModal} from "../phone/PhoneModal";
+import {ContactInterface} from "../../../contactList/types/contact.interface";
+import {ModalForEditForm} from "../../../../shared/components/ModalForEditForm";
 import {AddAttachmentForm} from "./AddAttachmentForm";
 import {EditAttachmentForm} from "./EditAttachmentForm";
 import {useActions} from "../../../../store/hooks/useActions";
 
 type AttachmentsPropsType = {
-    setAttachments: (data: any, tableName: string) => void
     contact: ContactInterface
 }
 
@@ -50,15 +49,15 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
-    const [buttons, setButtons] = useState<JSX.Element>(<div/>);
+    const [buttons] = useState<JSX.Element>(<div/>);
 
-
+    // ADD ATTACHMENT
     const addAttachmentChangeHandler = () => {
         setTitle('Добавить вложения');
         setBody(<AddAttachmentForm setOpen={setOpen} contact={contact}/>)
         setOpen(true);
     }
-
+    //EDIT ATTACHMENT
     const editAttachmentChangeHandler = (event: SyntheticEvent) => {
         setTitle('Редактирование вложений');
         setOpen(true);
@@ -66,10 +65,9 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         const currentAttachment = contact.attachments.find(target => target.id === targetID)!;
         setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
     }
+    //DELETE ATTACHMENT
     const deleteCurrentAttachment = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        // const updateAttachments = contact.attachments.filter(target => target.id !== targetID)!;
-        // console.log(updateAttachments)
         deleteAttachment(contact.id, targetID)
     }
 
@@ -81,7 +79,6 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setOpen(false);
     };
 
-    console.log(contact.attachments)
     return (
         <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>
             <h2>Вложения</h2>
@@ -103,7 +100,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
                 onSelectionModelChange={checkedCurrenAttachment}
                 selectionModel={selectionModel}
             />
-            <PhoneModal
+            <ModalForEditForm
                 open={open}
                 onClose={handleCloseModal}
                 title={title}

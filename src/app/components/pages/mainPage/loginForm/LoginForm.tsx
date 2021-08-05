@@ -1,15 +1,19 @@
 import React, {useEffect} from 'react';
-import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {Button, CircularProgress, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {useFormik} from "formik";
 import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
 import {useActions} from "../../../../store/hooks/useActions";
+import {GridCloseIcon} from "@material-ui/data-grid";
 
 type FormikErrorType = {
     email?: string
     password?: string
 }
+type LoginFormType = {
+    openLoginFormClickHandler: ()=> void
+}
 
-const LoginForm: React.FC = () => {
+const LoginForm = (props:LoginFormType) => {
 
     const {isLoading, data} = useTypeSelector(state => state.login )
     const{getLogin} = useActions()
@@ -49,7 +53,13 @@ const LoginForm: React.FC = () => {
 
        return (
         <div>
-            <Grid container justify="center">
+            <IconButton
+                // className={classes.close}
+                onClick={props.openLoginFormClickHandler}
+                aria-label="close">
+                <GridCloseIcon/>
+            </IconButton>
+            <Grid container justifyContent="center">
                 <Grid item xs={4}>
                     <form onSubmit={formik.handleSubmit}>
                         <FormControl>
