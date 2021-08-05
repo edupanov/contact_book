@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Dispatch, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
 import {useStyles} from "../../deleteModal/style/styleModal";
@@ -8,13 +8,12 @@ interface EditAttachmentFormInterface {
     setOpen: Function
     contact: ContactInterface
     attachment: AttachmentInterface
-    setAttachment: Dispatch<React.SetStateAction<AttachmentInterface>>
 }
 
 export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
     const classes = useStyles();
     let {setOpen, contact, attachment} = props
-    const [newAttachment, setNewAttachment] = useState({} as AttachmentInterface)
+    let [newAttachment, setNewAttachment] = useState({} as AttachmentInterface)
 
     const {updateAttachment} = useActions()
 
@@ -22,7 +21,6 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
         const {name, value} = event.target
         attachment = {...attachment, [name]: value}//??????
         setNewAttachment(attachment)
-        console.log(attachment)
 
     }
 
