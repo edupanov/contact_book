@@ -31,7 +31,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         modalButtonClose: {
           position:  "absolute",
-            left: '93%'
+            left: '90%'
         },
 
     }),

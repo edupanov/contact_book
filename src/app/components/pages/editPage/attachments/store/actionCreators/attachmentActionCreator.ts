@@ -1,6 +1,5 @@
 import {AttachmentInterface, ContactInterface} from "../../../../../contactList/types/contact.interface";
 import {Dispatch} from "redux";
-import {AttachmentsActionType} from "../actionTypes/attachmentsActionTypes";
 import {RootState} from "../../../../../../store/rootReducer";
 import {
     ContactActionTypes,
@@ -8,7 +7,7 @@ import {
 } from "../../../../../contactList/store/actionTypes/contactListActiontypes";
 
 export const addAttachment = (newAttachment: AttachmentInterface, contactId: string) =>
-    async (dispatch: Dispatch<ContactsActionType | AttachmentsActionType>, getState: () => RootState) => {
+    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
         dispatch({type: ContactActionTypes.GET_CONTACTS})
 
         const {data, maxUsers} = getState().contacts
@@ -37,7 +36,7 @@ export const addAttachment = (newAttachment: AttachmentInterface, contactId: str
     }
 
 export const updateAttachment = (attachment: AttachmentInterface, contactId: string, attachmentId: string) =>
-    async (dispatch: Dispatch<ContactsActionType | AttachmentsActionType>, getState: () => RootState) => {
+    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
         dispatch({type: ContactActionTypes.GET_CONTACTS})
 
         const {data, maxUsers} = getState().contacts
@@ -55,7 +54,7 @@ export const updateAttachment = (attachment: AttachmentInterface, contactId: str
     }
 
 export const deleteAttachment = (contactId: string, attachmentId: string) =>
-    async (dispatch: Dispatch<ContactsActionType | AttachmentsActionType>, getState: () => RootState) => {
+    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
         dispatch({type: ContactActionTypes.GET_CONTACTS})
 
         const {data, maxUsers} = getState().contacts

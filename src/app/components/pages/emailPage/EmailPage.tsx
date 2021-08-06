@@ -1,13 +1,12 @@
 import TextField from '@material-ui/core/TextField';
 import React, {ChangeEvent, useState} from 'react';
-import {Button, FormControl, IconButton, InputLabel, NativeSelect} from "@material-ui/core";
+import {Button, FormControl, IconButton, InputLabel, MenuItem, NativeSelect, Select} from "@material-ui/core";
 import {useStyles} from "./styles/emailStyles";
 import {ContactInterface} from "../../contactList/types/contact.interface";
 import {TargetType} from "../searchPage/SearchPage";
 import {EmailInterface} from "./types/email.interface";
 import {useActions} from "../../../store/hooks/useActions";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import {GridArrowUpwardIcon, GridCloseIcon} from "@material-ui/data-grid";
 import {useHistory} from "react-router-dom";
 import {PATH} from "../../../routes/Routes";
 
@@ -113,8 +112,9 @@ const history = useHistory()
 
                 />
                 <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="name-native-error">Шаблон</InputLabel>
+                    <InputLabel htmlFor="name-native-error" className={classes.titleTemplate}>Шаблон</InputLabel>
                     <NativeSelect
+                        className={classes.select}
                         value={state.name}
                         onChange={handleChange}
                         name="name"
@@ -135,7 +135,7 @@ const history = useHistory()
                 <TextField className={classes.inputStyle}
                            autoFocus
                            id="outlined-textarea"
-                           label="Текст сообщения"
+                           label={state.name !== '' ? '' : "Текст сообщения"}
                            name={'text'}
                            multiline
                            variant="outlined"

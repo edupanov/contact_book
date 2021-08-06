@@ -4,6 +4,7 @@ import {useFormik} from "formik";
 import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
 import {useActions} from "../../../../store/hooks/useActions";
 import {GridCloseIcon} from "@material-ui/data-grid";
+import {Redirect} from "react-router";
 
 type FormikErrorType = {
     email?: string
@@ -17,6 +18,9 @@ const LoginForm = (props:LoginFormType) => {
 
     const {isLoading, data} = useTypeSelector(state => state.login )
     const{getLogin} = useActions()
+    function deepEqual (obj1: any, obj2: any){
+        return JSON.stringify(obj1)===JSON.stringify(obj2);
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -50,6 +54,13 @@ const LoginForm = (props:LoginFormType) => {
     if (isLoading || !data) {
         return <CircularProgress color="secondary"/>
     }
+    const formikValues = formik.values
+    const defaultValues = {email: "test@test.test", password: "11112"}
+    const result = deepEqual(formikValues, defaultValues)
+    if(result) {
+        return <Redirect to={'/contacts'}/>
+    }
+
 
        return (
         <div>
