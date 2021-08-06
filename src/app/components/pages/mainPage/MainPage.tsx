@@ -12,8 +12,6 @@ import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 
 const MainPage = () => {
 
-    const {isLoading} = useTypeSelector(state => state.contacts)
-
     const [openLogin, setOpenLogin] = React.useState(false);
 
     const openLoginFormClickHandler = () => {

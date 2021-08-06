@@ -53,11 +53,6 @@ const AddPage: FC = () => {
     return (
         <div className={classes.searchPanel}>
             <h2 className={classes.title}>Добавление нового контакта</h2>
-            <NavLink className={classes.close} to={'/contacts'} exact >
-                <IconButton aria-label="close">
-                    <GridCloseIcon/>
-                </IconButton>
-            </NavLink>
             <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
@@ -157,9 +152,16 @@ const AddPage: FC = () => {
                                     </div>
 
                                 </div>
-                                <div>
+                                <div className={classes.buttonWrapper}>
                                     <Button type={'submit'} variant={'contained'} color={'primary'}
-                                            className={classes.button}>Создать новый контак</Button>
+                                            >Создать новый контак</Button>
+                                    <NavLink   to={'/contacts'} exact >
+                                        <IconButton aria-label="close" className={classes.button}>
+                                            <Button variant={'contained'} color={'primary'}
+                                                   >Выйти</Button>
+                                        </IconButton>
+                                    </NavLink>
+
                                 </div>
                             </FormGroup>
                         </FormControl>
