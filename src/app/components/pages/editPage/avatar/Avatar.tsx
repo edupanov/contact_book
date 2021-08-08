@@ -1,12 +1,14 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, ChangeEventHandler, useState} from 'react';
 import Button from "@material-ui/core/Button";
 import Avatar from '@material-ui/core/Avatar'
 import AvatarEditor from "react-avatar-editor";
 import {Box, Slider} from "@material-ui/core";
 
+type AvatarPropsType ={
+    setAvatar: (file: string, name: string)=> void
+}
 
-
-const Logo = (props) => {
+const Logo = (props: AvatarPropsType) => {
 
     let editor = "";
     const [picture, setPicture] = useState({
@@ -37,6 +39,7 @@ const Logo = (props) => {
 
     const handleSave = () => {
 
+        // @ts-ignore
         const canvasScaled = editor.getImageScaledToCanvas();
         const croppedImg = canvasScaled.toDataURL();
 
@@ -47,17 +50,17 @@ const Logo = (props) => {
             croppedImg: croppedImg
         });
 
+        // @ts-ignore
         props.setAvatar(croppedImg, picture.img.name)
     };
-    const handleFileChange = (e) => {
+    const handleFileChange = (e: any) => {
         setPicture({
             ...picture,
-            img: e.target.files[0],
+            img: e.target.files![0],
             cropperOpen: true
         });
-
-        // console.log(e.target.files[0])
     };
+
 
 
     return (
@@ -68,9 +71,9 @@ const Logo = (props) => {
                         src={picture.croppedImg}
                         style={{width: "100%", height: "auto", padding: "10", marginBottom: 10}}
                     />
+
                     <Button
                         variant="contained"
-                        width="100%"
                         style={{backgroundColor: "#3451b9", color: "white"}}
                     >
                         <input type="file" accept="image/*" onChange={handleFileChange}/>
@@ -81,7 +84,7 @@ const Logo = (props) => {
                     <Box display="block">
                         <AvatarEditor
                             ref={setEditorRef}
-                            image={picture.img}
+                            image={picture.img!}
                             width={200}
                             height={200}
                             border={5}

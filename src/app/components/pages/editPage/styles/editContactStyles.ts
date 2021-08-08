@@ -60,10 +60,13 @@ export const useStyles = makeStyles({
         justifyContent: "center",
         flexWrap: "wrap"
     },
+    buttonWrapper:{
+        display: "flex",
+        justifyContent: "space-around",
+        marginTop: 20
+    },
     button: {
-        left: '50%',
-        marginRight: '-50%',
-        transform: 'translate(-50%, 50%)',
+        padding: 0
     },
 
     submitButton:{

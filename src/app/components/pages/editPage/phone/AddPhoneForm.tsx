@@ -1,27 +1,36 @@
-import React, {ChangeEvent, Dispatch, SetStateAction} from 'react';
-import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {useStyles} from "../../../deleteModal/style/styleModal";
-import {TargetType} from "../../../searchPage/SearchPage";
-import {PhoneInterface} from "../../../../contactList/types/contact.interface";
+import React, {ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
+import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
+import {useStyles} from "../../deleteModal/style/styleModal";
+import {useActions} from "../../../../store/hooks/useActions";
 
-interface EditPhoneFormInterface {
-    phone: PhoneInterface,
-    setPhone: Dispatch<SetStateAction<PhoneInterface>>,
+interface AddPhoneFormInterface {
+    setOpen: Function
+    contact: ContactInterface
 }
 
-export const EditPhoneForm = (props: EditPhoneFormInterface) => {
+export const AddPhoneForm = (props: AddPhoneFormInterface) => {
 
     const classes = useStyles();
-    let {phone, setPhone} = props
+    let {setOpen, contact} = props
+
+    const {addPhone} = useActions()
+    const [phone, setPhone] = useState({} as PhoneInterface)
+    const phoneId = contact.phones ? contact.phones.length + 1 : 1
+
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const target: TargetType = (event.target)
-        if (phone) {
-            phone = {...phone, [target.name]: target.value}
-        }
-        sessionStorage.setItem('phone', JSON.stringify(phone));
-        setPhone(phone)
+        const {name, value} = event.target
+
+        const updatePhone = {...phone, [name]: value, id: String(phoneId)}
+        setPhone(updatePhone)
     }
+
+    const onSubmit = () => {
+        addPhone(phone, contact.id)
+        setOpen(false)
+    }
+
     return (
         <div>
             <Grid container justifyContent="center">
@@ -35,44 +44,46 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
                                                name={"countryCode"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
-                                               defaultValue={phone.countryCode ? phone.countryCode : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Код оператора"
                                                name={"operatorID"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
-                                               defaultValue={phone.operatorID ? phone.operatorID : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Телефонный номер"
-                                               name={"phone"}
+                                               name={"phoneNumber"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
-                                               defaultValue={phone.phoneNumber ? phone.phoneNumber : ''}
                                     />
                                     <TextField className={classes.input}
-                                               label="Описание"
+                                               label="Тип"
                                                name={"phoneType"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
-                                               defaultValue={phone.comment ? phone.comment : ''}
                                     />
                                     <TextField className={classes.input}
                                                label="Коментарий"
-                                               name={"description"}
+                                               name={"comment"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
-                                               defaultValue={phone.phoneType ? phone.phoneType : ''}
                                     />
                                 </div>
                             </FormGroup>
                         </FormControl>
                     </form>
+                    <div>
+                        <Button
+                            className={classes.button}
+                            variant={'contained'}
+                            onClick={onSubmit}
+                            color={'primary'}
+                        >Сохранить изменения</Button>
+                    </div>
                 </Grid>
             </Grid>
         </div>
 
     );
 };
-

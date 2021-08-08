@@ -65,12 +65,6 @@ const SearchPanel = (props: SearchPanelType) => {
         <div
             className={classes.searchPanel}>
             <h2 className={classes.title}>Поиск контакта</h2>
-            <IconButton
-                className={classes.close}
-                onClick={props.searchClickHandlerClose}
-                aria-label="close">
-                <GridCloseIcon/>
-            </IconButton>
             <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form onSubmit={onSubmit}>
@@ -209,12 +203,14 @@ const SearchPanel = (props: SearchPanelType) => {
                                     </div>
 
                                 </div>
-                                <div>
-                                    <Button type={'submit'} variant={'contained'} color={'primary'}
-                                            className={classes.button}>Поиск</Button>
-                                    <Button type={'submit'} variant={'contained'} color={'primary'}
-                                            className={classes.button} onClick={discharge}>Сбросить</Button>
+                                <div className={classes.buttonWrapper}>
 
+                                    <Button type={'submit'} variant={'contained'} color={'primary'}
+                                            onClick={discharge}>Сбросить</Button>
+                                    <Button type={'submit'} variant={'contained'} color={'primary'}
+                                    >Поиск</Button>
+                                    <Button type={'submit'} variant={'contained'} color={'primary'}
+                                            onClick={props.searchClickHandlerClose}>Свернуть</Button>
                                 </div>
                             </FormGroup>
                         </FormControl>

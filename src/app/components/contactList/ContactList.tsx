@@ -3,7 +3,7 @@ import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
 import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams, GridRowId,} from "@material-ui/data-grid";
-import styles from "../mainForm/HeaderContactList.module.scss";
+import styles from "../pages/editPage/styles/HeaderContactList.module.scss";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
@@ -12,24 +12,46 @@ import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
+import {makeStyles} from "@material-ui/styles";
+import {useStylesContactList} from "./styles/contactListStyles";
+
 
 const ContactList = () => {
-
-    const test = useTypeSelector((state => state.contacts.data))
-    console.log(test)
 
     const columns: GridColDef[] = [
         {field: 'name', headerName: 'Имя', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'surname', headerName: 'Фамилия', width: 160, filterable: false, sortable: false, hide: true},
         {field: 'patronymic', headerName: 'Отчество', width: 160, filterable: false, sortable: false, hide: true},
         {
-            field: '', headerName: 'ФИО', width: 250, filterable: false, sortable: false,
+            field: '',
+            headerName: 'ФИО',
+            width: 250,
+            filterable: false,
+            headerClassName: 'column',
+            headerAlign: 'center',
+            sortable: false,
             renderCell: (params: GridCellParams) => {
                 return <span>{`${params.row.name} ${params.row.surname} ${params.row.patronymic}`}</span>
-            }
+            },
         },
-        {field: 'birthDate', headerName: 'Дата рождения', width: 170, filterable: false, sortable: false},
-        {field: 'gender', headerName: 'Пол', width: 80, filterable: false, sortable: false, hide: true},
+        {
+            field: 'birthDate',
+            headerName: 'Дата рождения',
+            width: 170,
+            filterable: false,
+            headerClassName: 'column',
+            sortable: false,
+            headerAlign: 'center'
+        },
+        {
+            field: 'gender',
+            headerName: 'Пол',
+            width: 80,
+            filterable: false,
+            sortable: false,
+            hide: true,
+            headerAlign: 'center'
+        },
         {
             field: 'maritalStatus',
             headerName: 'Семейное положение',
@@ -42,6 +64,8 @@ const ContactList = () => {
         {
             field: 'address',
             headerName: 'Адрес',
+            headerAlign: 'center',
+            headerClassName: 'column',
             flex: 1,
             width: 350,
             filterable: false,
@@ -51,9 +75,24 @@ const ContactList = () => {
             }
         },
         {field: 'email', headerName: 'Email', width: 140, filterable: false, sortable: false, hide: true},
-        {field: 'currentJob', headerName: 'Место работы', width: 160, filterable: false, sortable: false},
         {
-            field: 'edit', headerName: '', width: 100, filterable: false, sortable: false, editable: true,
+            field: 'currentJob',
+            headerName: 'Место работы',
+            width: 160,
+            filterable: false,
+            headerClassName: 'column',
+            sortable: false,
+            headerAlign: 'center',
+        },
+        {
+            field: 'edit',
+            headerName: '',
+            width: 100,
+            filterable: false,
+            sortable: false,
+            editable: true,
+            headerClassName: 'column',
+            headerAlign: 'center',
             renderCell: (el) => {
                 return <IconButton
                     aria-label="edit"
@@ -67,7 +106,13 @@ const ContactList = () => {
             }
         },
         {
-            field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
+            field: 'del',
+            headerName: '',
+            width: 100,
+            filterable: false,
+            sortable: false,
+            headerAlign: 'center',
+            headerClassName: 'column',
             renderCell: (el) =>
                 <IconButton
                     aria-label="del"
@@ -86,7 +131,7 @@ const ContactList = () => {
         });
         return ref.current;
     }
-
+    const classes = useStylesContactList();
     const [items, setItems] = useState<ContactInterface[]>([])
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
@@ -171,21 +216,21 @@ const ContactList = () => {
 
     if (isLoading || !data) {
         return <CircularProgress
-            className={styles.preloader}
+            className={classes.preloader}
             size={60}
             color="secondary"
         />
     }
 
     return (
-        <div style={{height: 400, width: '100%'}}>
+        <div className={classes.root}>
             <Grid
-                className={styles.headerWrapper}
+                className={classes.headerWrapper}
                 container
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
-            > <NavLink className={styles.link} to={'/contacts/create'}>
+            > <NavLink className={classes.link} to={'/contacts/create'}>
                 <Button
                     variant="outlined"
                     color="primary"
@@ -197,7 +242,7 @@ const ContactList = () => {
                     <Button
                         onClick={handleOpenModal}
                         disabled={selectionModel.length === 0}
-                        className={styles.deleteButton}
+                        className={classes.deleteButton}
                         variant="outlined"
                         color="secondary"
                     >
@@ -207,7 +252,7 @@ const ContactList = () => {
                     <Button
 
                         onClick={searchClickHandler}
-                        className={styles.searchButton}
+                        className={classes.searchButton}
                         variant="outlined"
                         color="primary"
                     >
@@ -224,11 +269,11 @@ const ContactList = () => {
                             rel="noopener noreferrer"
                             href={``}
                         >
-                            <Typography variant="button" style={{fontSize: '0.79rem'}}>
+                            <Typography variant="button" className={classes.emailButtonText}>
                                 Отправить E-mail
                             </Typography>
                         </Button>
-                        : <NavLink className={styles.link} to={'/contacts/email'}>
+                        : <NavLink className={classes.link} to={'/contacts/email'}>
                             <Button
                                 variant="contained"
                                 size="large"
@@ -237,7 +282,7 @@ const ContactList = () => {
                                 rel="noopener noreferrer"
                                 href={``}
                             >
-                                <Typography variant="button" style={{fontSize: '0.79rem'}}>
+                                <Typography variant="button" className={classes.emailButtonText}>
                                     Отправить E-mail
                                 </Typography>
                             </Button>
@@ -249,7 +294,9 @@ const ContactList = () => {
 
             {openSearch ? <SearchPage searchClickHandlerClose={searchClickHandlerClose}/> : null}
 
-            <DataGrid rows={items}
+            <DataGrid
+                className={classes.grid}
+                rows={items}
                       columns={columns}
                       pageSize={take}
                       page={page - 1 || 0}

@@ -7,46 +7,22 @@ import {TargetType} from "../searchPage/SearchPage";
 import {EmailInterface} from "./types/email.interface";
 import {useActions} from "../../../store/hooks/useActions";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import {GridArrowUpwardIcon, GridCloseIcon} from "@material-ui/data-grid";
 import {useHistory} from "react-router-dom";
 import {PATH} from "../../../routes/Routes";
-
-const messageTemplate = {
-    template1: 'Пусть хорошее случается,\n' +
-        'Пусть приходят чудеса,\n' +
-        'И мечты все исполняются.\n' +
-        'С Новым годом всех! Ура!\n' +
-        '\n',
-    template2: 'Тебе желаю море счастья,\n' +
-        'Улыбок, солнца и тепла.\n' +
-        'Чтоб жизнь была еще прекрасней,\n' +
-        'Удача за руку вела!\n' +
-        '\n' +
-        'Пусть в доме будет только радость,\n' +
-        'Уют, достаток и покой.\n' +
-        'Друзья, родные будут рядом,\n' +
-        'Беда обходит стороной!\n' +
-        '\n' +
-        'Здоровья крепкого желаю\n' +
-        'И легких жизненных дорог.\n' +
-        'И пусть всегда, благословляя,\n' +
-        'Тебя хранит твой ангелок!\n' +
-        '\n',
-    template3: 'Поздравляю с днем рождения! Пусть жизнь дарит тебе побольше ярких моментов и сбудутся все твои самые смелые и заветные желания! Желаю, чтобы в твоем доме всегда царили счастье и понимание. И пусть тебя окружают только искренние, верные, надежные друзья и добрые люди!\n',
-}
+import {messageTemplate} from "./messageTemplates";
 
 const EmailPage = () => {
-const history = useHistory()
+    const history = useHistory()
     const classes = useStyles();
 
     const {sendMail} = useActions()
     let [email, setEmail] = useState({} as EmailInterface)
     const contactsId = JSON.parse(sessionStorage.getItem('contactsId') || '[]');
     const contacts = JSON.parse(sessionStorage.getItem('contacts') || '[]');
-    const [state, setState] = React.useState<{ name: string }>({name: ''});
+    const [template, setTemplate] = React.useState<{ name: string }>({name: ''});
+    console.log(email)
 
-
-    const findEqualObjects =(someArray: any, otherArray: any) => {
+    const findEqualObjects = (someArray: any, otherArray: any) => {
         let equalObjects: ContactInterface[] = [];
         someArray.forEach((i: ContactInterface) => {
             otherArray.forEach((j: string) => {
@@ -58,7 +34,6 @@ const history = useHistory()
 
         return equalObjects;
     }
-
     const currentContacts = findEqualObjects(contacts, contactsId)
     // имена выбранных пользователей для поля кому
     const valueContact = currentContacts.map(el => `${el.name} ${el.surname}`).join(', ')
@@ -66,18 +41,20 @@ const history = useHistory()
     const emails = currentContacts.map(el => `${el.email}`)
 
     const handleChange = (event: React.ChangeEvent<{ name: string; value: unknown }>) => {
-        const name = event.target.name;
-        setState({
-            ...state,
-            [name]: event.target.value,
+        const text = event.target.name;
+        setTemplate({
+            ...template,
+            [text]: event.target.value,
         });
+        // @ts-ignore
+        setEmail({...email, text: event.target.value})
     };
-
     const changeMailHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
         if (email) {
             email = {...email, [target.name]: target.value}
         }
+        setTemplate({...template, name: target.value})
         setEmail(email)
     }
 
@@ -88,7 +65,7 @@ const history = useHistory()
     return (
         <>
             <IconButton
-                onClick={()=>history.push(PATH.HOME)}
+                onClick={() => history.push(PATH.HOME)}
                 aria-label="close">
                 <ArrowBackIcon/>
             </IconButton>
@@ -113,16 +90,17 @@ const history = useHistory()
 
                 />
                 <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="name-native-error">Шаблон</InputLabel>
+                    <InputLabel htmlFor="name-native-error" className={classes.titleTemplate}>Шаблон</InputLabel>
                     <NativeSelect
-                        value={state.name}
+                        className={classes.select}
+                        value={template.name}
                         onChange={handleChange}
                         name="name"
                         inputProps={{
                             id: 'name-native-error',
                         }}
                     >
-                        <option aria-label="None" value="" />
+                        <option aria-label="None" value=""/>
                         <optgroup label="С Новым Годом!">
                             <option value={messageTemplate.template1}>Шаблон1</option>
                         </optgroup>
@@ -135,12 +113,12 @@ const history = useHistory()
                 <TextField className={classes.inputStyle}
                            autoFocus
                            id="outlined-textarea"
-                           label="Текст сообщения"
+                           label={template.name !== '' ? '' : "Текст сообщения"}
                            name={'text'}
                            multiline
                            variant="outlined"
                            onChange={changeMailHandler}
-                           defaultValue={state.name}
+                           value={email.text}
                 />
                 <Button
                     variant="outlined"
