@@ -1,14 +1,20 @@
-import React, {ChangeEvent, ChangeEventHandler, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import Button from "@material-ui/core/Button";
 import Avatar from '@material-ui/core/Avatar'
 import AvatarEditor from "react-avatar-editor";
 import {Box, Slider} from "@material-ui/core";
+import {useActions} from "../../../../store/hooks/useActions";
+import {ContactInterface} from "../../../contactList/types/contact.interface";
 
 type AvatarPropsType ={
-    setAvatar: (file: string, name: string)=> void
+    contact: ContactInterface
 }
 
+
 const Logo = (props: AvatarPropsType) => {
+    const {contact} = props
+
+    const {saveAvatar} = useActions()
 
     let editor = "";
     const [picture, setPicture] = useState({
@@ -51,7 +57,8 @@ const Logo = (props: AvatarPropsType) => {
         });
 
         // @ts-ignore
-        props.setAvatar(croppedImg, picture.img.name)
+        saveAvatar(croppedImg, picture.img.name, contact.id)
+
     };
     const handleFileChange = (e: any) => {
         setPicture({

@@ -11,5 +11,8 @@ export const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
         },
+        errorForm : {
+            color: 'red'
+        }
     }),
 );

@@ -3,7 +3,6 @@ import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
 import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams, GridRowId,} from "@material-ui/data-grid";
-import styles from "../pages/editPage/styles/HeaderContactList.module.scss";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
@@ -12,7 +11,6 @@ import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
-import {makeStyles} from "@material-ui/styles";
 import {useStylesContactList} from "./styles/contactListStyles";
 
 
@@ -297,21 +295,21 @@ const ContactList = () => {
             <DataGrid
                 className={classes.grid}
                 rows={items}
-                      columns={columns}
-                      pageSize={take}
-                      page={page - 1 || 0}
-                      rowCount={maxUsers}
-                      autoHeight
-                      loading={isDeleteLoading}
-                      paginationMode={'server'}
-                      rowsPerPageOptions={[5, 10, 25]}
-                      onPageChange={handlePaginationChange}
-                      onPageSizeChange={handlePaginationChange}
-                      sortingMode={'server'}
-                      disableSelectionOnClick
-                      checkboxSelection
-                      onSelectionModelChange={checkedCurrenContacts}
-                      selectionModel={selectionModel}
+                columns={columns}
+                pageSize={take}
+                page={page - 1 || 0}
+                rowCount={maxUsers}
+                autoHeight
+                loading={isDeleteLoading}
+                paginationMode={'server'}
+                rowsPerPageOptions={[5, 10, 25]}
+                onPageChange={handlePaginationChange}
+                onPageSizeChange={handlePaginationChange}
+                sortingMode={'server'}
+                disableSelectionOnClick
+                checkboxSelection
+                onSelectionModelChange={checkedCurrenContacts}
+                selectionModel={selectionModel}
             />
 
             <DeleteModal open={open}

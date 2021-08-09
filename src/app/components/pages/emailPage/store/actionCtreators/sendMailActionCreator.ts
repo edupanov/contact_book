@@ -3,12 +3,11 @@ import {Dispatch} from "redux";
 import * as SendMailRequest from '../../requests/emailRequests'
 import {RootState} from "../../../../../store/rootReducer";
 import {MailActionType, MailActionTypes} from "../actionTypes/mailActionTypes";
-import {ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
 import {CallHistoryMethodAction, push} from "connected-react-router";
 import {PATH} from "../../../../../routes/Routes";
 
 export const sendMail = (emails: Array<string>, theme: string, text: string) =>
-    async (dispatch: Dispatch<MailActionType | ContactsActionType | CallHistoryMethodAction>, getState: () => RootState) => {
+    async (dispatch: Dispatch<MailActionType | CallHistoryMethodAction>, getState: () => RootState) => {
         dispatch({type: MailActionTypes.SEND_MAIL})
 
         await SendMailRequest.sendMail(emails, theme, text)
@@ -19,3 +18,4 @@ export const sendMail = (emails: Array<string>, theme: string, text: string) =>
             })
             .catch(error=> {dispatch({type: MailActionTypes.SEND_MAIL_FAILURE, errors: error})})
     }
+

@@ -1,14 +1,11 @@
 import React, {SyntheticEvent} from 'react';
-import {Container} from "@material-ui/core";
 import style from './mainPage.module.scss'
-import ContactList from "../../contactList/ContactList";
 import LoginForm from "./loginForm/LoginForm";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import {NavLink} from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 
 const MainPage = () => {
 

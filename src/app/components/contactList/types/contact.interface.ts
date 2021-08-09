@@ -32,6 +32,7 @@ export interface AvatarInterface {
 }
 
 export interface ContactInterface {
+    reminder?: string
     id: string
     name: string
     surname: string
