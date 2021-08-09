@@ -24,10 +24,6 @@ const SearchPanel = (props: SearchPanelType) => {
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        console.log(target.name)
-        // if(target.name === 'email') {
-        //     target.value = ``
-        // }
         const isDate = target.name === 'dateFrom' || target.name === 'dateTo'
         let replaceStr
         if (isDate && target.value.length === 10) {
