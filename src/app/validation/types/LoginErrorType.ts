@@ -1,4 +1,4 @@
-export type FormikErrorType = {
+export type LoginErrorType = {
     email?: string
     password?: string
 }

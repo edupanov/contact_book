@@ -1,11 +1,9 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
-import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
+import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "../editPage/styles/editContactStyles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
-import {GridCloseIcon} from "@material-ui/data-grid";
 import {formatDate} from "../../../utils/utils";
-import {useFormik} from "formik";
 
 export type TargetType = {
     name: string
@@ -16,37 +14,7 @@ type SearchPanelType = {
     searchClickHandlerClose: () => void
 }
 
-type FormikErrorType = {
-    email?: string
-    password?: string
-}
 const SearchPanel = (props: SearchPanelType) => {
-
-
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-        validate: (values) => {
-
-            const errors: FormikErrorType = {};
-            if (!values.email) {
-                errors.email = 'Email is required';
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = 'Invalid email address';
-            }
-
-            if (!values.password) {
-                errors.password = 'Password is required';
-            }
-            return errors;
-        },
-        onSubmit: values => {
-
-            formik.resetForm()
-        }
-    })
 
     const classes = useStyles()
 

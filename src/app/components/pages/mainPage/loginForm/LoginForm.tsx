@@ -3,7 +3,7 @@ import {Button, FormControl, FormGroup, FormLabel, Grid, TextField} from "@mater
 import {useFormik} from "formik";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "./loginStyles";
-import {FormikErrorType} from "../../../../validation/types/formikErrorType";
+import {LoginErrorType} from "../../../../validation/types/LoginErrorType";
 import {Redirect} from 'react-router';
 import {getContactsBirthday} from "../../../contactList/store/actionCreators/contactActionCreators";
 
@@ -28,7 +28,7 @@ const LoginForm = (props: LoginFormType) => {
         },
         validate: (values) => {
 
-            const errors: FormikErrorType = {};
+            const errors: LoginErrorType = {};
             if (!values.email) {
                 errors.email = 'Email is required';
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
