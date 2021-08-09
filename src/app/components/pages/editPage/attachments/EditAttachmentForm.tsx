@@ -1,30 +1,36 @@
-import React, {ChangeEvent, Dispatch, SetStateAction} from 'react';
-import {FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {AttachmentInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
+import React, {ChangeEvent} from 'react';
+import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
 import {useStyles} from "../../deleteModal/style/styleModal";
-import {TargetType} from "../../searchPage/SearchPage";
 
 interface EditAttachmentFormInterface {
-    attachment: AttachmentInterface,
-    setAttachment: Dispatch<SetStateAction<AttachmentInterface>>
+    setOpen: Function
+    contact: ContactInterface
+    attachment: AttachmentInterface
 }
 
 export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
     const classes = useStyles();
+    let {setOpen, attachment} = props
 
-    let {attachment, setAttachment} = props
 
-    const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const target: TargetType = (event.target)
-        if (attachment) {
-            attachment = {...attachment, [target.name]: target.value}
+    const changeAttachmentHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target
+        if (name === 'file') {
+            attachment.file = value
         }
-        sessionStorage.setItem('phone', JSON.stringify(attachment));
-        setAttachment(attachment)
+        if (name === 'comment') {
+            attachment.comment = value
+        }
     }
+
+    const onSubmit = () => {
+        setOpen(false)
+    }
+
     return (
         <div>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
                 <Grid item xs={10}>
                     <form>
                         <FormControl>
@@ -32,33 +38,34 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                                 <div className={classes.wrapperInput}>
                                     <TextField className={classes.input}
                                                label="Имя файла"
-                                               name={"fileName"}
+                                               name={"file"}
                                                type="search"
-                                               onChange={changePhoneInfoHandler}
+                                               onChange={changeAttachmentHandler}
                                                defaultValue={attachment.file ? attachment.file : ''}
                                     />
-                                    <TextField className={classes.input}
-                                               label="Описание"
-                                               name={"description"}
-                                               type="search"
-                                               onChange={changePhoneInfoHandler}
-                                               defaultValue={attachment.comment ? attachment.comment : ''}
-                                    />
+
                                     <TextField className={classes.input}
                                                label="Коментарий"
                                                name={"comment"}
                                                type="search"
-                                               onChange={changePhoneInfoHandler}
+                                               onChange={changeAttachmentHandler}
                                                defaultValue={attachment.comment ? attachment.comment : ''}
                                     />
                                 </div>
                             </FormGroup>
                         </FormControl>
                     </form>
+                    <div>
+                        <Button
+                            className={classes.button}
+                            variant={'contained'}
+                            onClick={onSubmit}
+                            color={'primary'}
+                        >Сохранить изменения</Button>
+                    </div>
                 </Grid>
             </Grid>
         </div>
 
     );
 };
-

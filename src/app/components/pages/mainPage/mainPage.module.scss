@@ -1,8 +1,41 @@
- .wrapper {
+.wrapper {
+  position:relative;
+  height: 98vh;
+  background: no-repeat center url("https://img.wallpapersafari.com/desktop/1920/1080/82/83/Nb6B82.jpg") ;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .container {
+    max-width: 100%;
+    padding: 0;
+    margin-top: 10px
+  }
+}
 
-    .container {
-      max-width: 100%;
-      padding: 0;
-      margin-top: 10px
-    }
- }
+.root {
+  width: 100%;
+}
+
+.link {
+  text-decoration: none;
+  color: #fff;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  margin-top: 10%;
+  text-align: center;
+  color: #d02828;
+  font-size: 40px;
+}
+.footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position:absolute;
+  bottom:0;
+}
