@@ -5,7 +5,7 @@ export enum ContactsUrls  {
     UPDATE_CONTACTS_URL = '/contacts/update',
     DELETE_CONTACTS_URL = '/contacts/delete',
     DELETE_ALL_CONTACTS_URL = '/contacts/deleteAll',
-    GET_LOGIN_URL = '/login',
+    GET_LOGIN_URL = '/contacts/login',
     SEND_MAIL = '/contacts/sendEmails'
 
 }

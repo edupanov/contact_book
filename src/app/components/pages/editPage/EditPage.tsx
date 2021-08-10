@@ -64,8 +64,8 @@ const EditPage = () => {
     //         logo: avatar
     //     })
     // }
-    const copyContact = JSON.parse(JSON.stringify(currentContact))
-    copyContact.attachments.map((el: AttachmentInterface) => {
+    let copyContact = JSON.parse(JSON.stringify(currentContact))
+    const attachmentSubmit = copyContact.attachments.map((el: AttachmentInterface) => {
         if (el.base64File) {
 
             return {
@@ -74,13 +74,12 @@ const EditPage = () => {
                 date: el.date,
                 fileName: el.fileName
             }
-            console.log(el.base64File)
         }
 
         return el
     })
 
-    copyContact.phones.map((el: any) => {
+   const phoneSubmit = copyContact.phones.map((el: any) => {
         if (el.id.includes('phone')) {
             return {
                 comment: el.comment,
@@ -93,11 +92,15 @@ const EditPage = () => {
         return el
     })
 
-    console.log(copyContact)
+    const contactSubmit = {
+        ...copyContact,
+        phones: phoneSubmit,
+        attachments: attachmentSubmit
+    }
 
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
-        updateContact({contact: copyContact})
+        updateContact({contact: contactSubmit})
         sessionStorage.clear()
     }
     return (

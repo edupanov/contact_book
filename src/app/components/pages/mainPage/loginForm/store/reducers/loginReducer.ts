@@ -1,7 +1,7 @@
 import {LoginActionType, LoginActionTypes, LoginStateInterface} from "../ActionTypes/loginActionTypes";
 
 const initialState: LoginStateInterface = {
-    isLogged: false,
+    isSuccess: false,
     errors: {}
 }
 
@@ -10,12 +10,12 @@ export const LoginReducer = (state = initialState, action: LoginActionType): Log
         case LoginActionTypes.GET_LOGIN:
             return {
                 ...state,
-                isLogged: false
+                isSuccess: false
             }
         case LoginActionTypes.GET_LOGIN_SUCCESS:
             return {
                 ...state,
-                isLogged: true,
+                isSuccess: true,
             }
         case LoginActionTypes.GET_LOGIN_FAILURE:
             return {

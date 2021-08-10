@@ -4,11 +4,9 @@ import {useFormik} from "formik";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "./loginStyles";
 import {LoginErrorType} from "../../../../validation/types/LoginErrorType";
-import {Redirect} from 'react-router';
 import {getContactsBirthday} from "../../../contactList/store/actionCreators/contactActionCreators";
-import {ContactInterface} from "../../../contactList/types/contact.interface";
 import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
-import {RootState} from "../../../../store/rootReducer";
+import {Redirect} from "react-router";
 
 
 type LoginFormType = {
@@ -18,13 +16,9 @@ type LoginFormType = {
 const LoginForm = (props: LoginFormType) => {
     const styles = useStyles()
 
-    const {getContactsBirthday} = useActions()
+    const {getContactsBirthday, getLogin} = useActions()
 
-    const login = useTypeSelector((state: RootState) => state.login.isLogged)
-
-    function deepEqual(obj1: any, obj2: any) {
-        return JSON.stringify(obj1) === JSON.stringify(obj2);
-    }
+    const isSuccess = useTypeSelector(state => state.login.isSuccess)
 
     const formik = useFormik({
         initialValues: {
@@ -46,15 +40,12 @@ const LoginForm = (props: LoginFormType) => {
             return errors;
         },
         onSubmit: values => {
-            getContactsBirthday(values.email, values.password)
+            getLogin(values.email, values.password)
             formik.resetForm()
         }
     })
 
-    const formikValues = formik.values
-    const defaultValues = {email: "edupanov@gmail.com", password: "11112"}
-    const result = deepEqual(formikValues, defaultValues)
-    if (login === true) {
+    if (isSuccess) {
         return <Redirect to={'/contacts'}/>
     }
 
@@ -76,7 +67,8 @@ const LoginForm = (props: LoginFormType) => {
                                         margin="normal"
                                         {...formik.getFieldProps("email")}
                                     />
-                                    {formik.errors.email ? <div className={styles.errorForm}>{formik.errors.email}</div> : null}
+                                    {formik.errors.email ?
+                                        <div className={styles.errorForm}>{formik.errors.email}</div> : null}
                                     <TextField
                                         type="password"
                                         label="Password"
@@ -85,7 +77,8 @@ const LoginForm = (props: LoginFormType) => {
                                     />
                                 </div>
 
-                                {formik.errors.password ? <div className={styles.errorForm}>{formik.errors.password}</div> : null}
+                                {formik.errors.password ?
+                                    <div className={styles.errorForm}>{formik.errors.password}</div> : null}
                                 <div className={styles.buttonWrapper}>
                                     <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
                                     <Button variant={'contained'} color={'primary'}

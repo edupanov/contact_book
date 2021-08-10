@@ -13,8 +13,9 @@ module.exports = {
         const password = req.body.password
 
         await User.find({email: email})
-            .then(async user => {
-                if (!user) {
+            .then( user => {
+                console.log(user)
+                if (!user[0]._id) {
                     res.status(404).json({
                         message: `Пользователь с email: ${email} не найден!`,
                         isSuccess: false,

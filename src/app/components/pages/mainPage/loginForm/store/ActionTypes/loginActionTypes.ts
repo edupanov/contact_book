@@ -1,5 +1,5 @@
 export interface LoginStateInterface {
-    isLogged: boolean
+    isSuccess: boolean
     errors: {}
 }
 
