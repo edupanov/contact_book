@@ -3,18 +3,13 @@ import Button from "@material-ui/core/Button";
 import Avatar from '@material-ui/core/Avatar'
 import AvatarEditor from "react-avatar-editor";
 import {Box, Slider} from "@material-ui/core";
-import {useActions} from "../../../../store/hooks/useActions";
-import {ContactInterface} from "../../../contactList/types/contact.interface";
 
-type AvatarPropsType ={
-    contact: ContactInterface
+type AvatarPropsType = {
+    setAvatar: Function
 }
 
 
-const Logo = (props: AvatarPropsType) => {
-    const {contact} = props
-
-    const {saveAvatar} = useActions()
+const Logo = ({setAvatar}: AvatarPropsType) => {
 
     let editor = "";
     const [picture, setPicture] = useState({
@@ -57,7 +52,11 @@ const Logo = (props: AvatarPropsType) => {
         });
 
         // @ts-ignore
-        saveAvatar(croppedImg, picture.img.name, contact.id)
+        setAvatar({
+            file: croppedImg,
+            // @ts-ignore
+            name: picture.img?.name!
+        })
 
     };
     const handleFileChange = (e: any) => {
@@ -67,7 +66,6 @@ const Logo = (props: AvatarPropsType) => {
             cropperOpen: true
         });
     };
-
 
 
     return (

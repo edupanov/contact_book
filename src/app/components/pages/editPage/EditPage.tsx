@@ -55,6 +55,13 @@ const EditPage = () => {
         }
     }
 
+    const setAvatar = (avatar: any) => {
+        currentContact = {
+            ...currentContact,
+            logo: avatar
+        }
+    }
+
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         updateContact({contact: currentContact})
@@ -63,7 +70,7 @@ const EditPage = () => {
 
     return (
         <div className={classes.editForm}>
-            <div className={classes.avatar}><Avatar contact={currentContact}/></div>
+            <div className={classes.avatar}><Avatar setAvatar={setAvatar}/></div>
             <div>
                 <h2 className={classes.title}>Редактирование контакта </h2>
                 <Grid container justifyContent="center">

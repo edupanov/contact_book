@@ -225,17 +225,15 @@ module.exports = {
     },
 
     updateContact: async (req, res, next) => {
-        // console.log(req.body)
+        const contact = req.body.contact
 
         const url = req.protocol + '://' + req.get('host')
-        const path = url + '/backend/src/attachments/' + req.body.test.fvf
-        const path1 = 'backend/src/attachments/' + req.body.test.fvf + '.jpeg'
+        const logoPath = url + '/backend/src/attachments/' + contact.logo.name
+        const attachmentPaths = []
 
-        console.log(path)
+        let base64Image = contact.logo.file.split(';base64,').pop();
 
-        let base64Image = req.body.img.split(';base64,').pop();
-
-        fs.writeFile(path1, base64Image, {encoding: 'base64'}, () => {
+        fs.writeFile(logoPath, base64Image, {encoding: 'base64'}, () => {
             console.log('Файл успешно сохранен')
         });
 

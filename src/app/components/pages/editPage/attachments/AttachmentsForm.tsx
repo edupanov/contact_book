@@ -62,7 +62,10 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setTitle('Редактирование вложений');
         setOpen(true);
         const targetID = event.currentTarget.id
-        const currentAttachment = contact.attachments.find(target => target.id === targetID)!;
+        const currentAttachment = contact.attachments.find(target => {
+            console.log(target)
+            return target.id === targetID
+        })!;
         setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
     }
     //DELETE ATTACHMENT
@@ -79,34 +82,36 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setOpen(false);
     };
 
+    console.log(contact.attachments)
+
     return (
         <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>
             <h2>Вложения</h2>
-            <Button
-                variant="outlined"
-                color="primary"
-                onClick={addAttachmentChangeHandler}
-            >
-                Добавить вложение
-            </Button>
+            {/*<Button*/}
+            {/*    variant="outlined"*/}
+            {/*    color="primary"*/}
+            {/*    onClick={addAttachmentChangeHandler}*/}
+            {/*>*/}
+            {/*    Добавить вложение*/}
+            {/*</Button>*/}
 
-            <DataGrid
-                rows={contact.attachments! || []}
-                columns={columns}
-                autoHeight
-                disableSelectionOnClick
-                hideFooter
-                checkboxSelection
-                onSelectionModelChange={checkedCurrenAttachment}
-                selectionModel={selectionModel}
-            />
-            <ModalForEditForm
-                open={open}
-                onClose={handleCloseModal}
-                title={title}
-                body={body}
-                buttons={buttons}
-            />
+            {/*<DataGrid*/}
+            {/*    rows={contact.attachments! || []}*/}
+            {/*    columns={columns}*/}
+            {/*    autoHeight*/}
+            {/*    disableSelectionOnClick*/}
+            {/*    hideFooter*/}
+            {/*    checkboxSelection*/}
+            {/*    onSelectionModelChange={checkedCurrenAttachment}*/}
+            {/*    selectionModel={selectionModel}*/}
+            {/*/>*/}
+            {/*<ModalForEditForm*/}
+            {/*    open={open}*/}
+            {/*    onClose={handleCloseModal}*/}
+            {/*    title={title}*/}
+            {/*    body={body}*/}
+            {/*    buttons={buttons}*/}
+            {/*/>*/}
         </div>
     );
 };
