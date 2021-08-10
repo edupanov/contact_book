@@ -56,10 +56,10 @@ const EditPage = () => {
     }
 
     const setAvatar = (avatar: any) => {
-        currentContact = {
+        setCurrentContact({
             ...currentContact,
             logo: avatar
-        }
+        })
     }
 
     const onSubmit = (event: FormEvent) => {
@@ -67,7 +67,7 @@ const EditPage = () => {
         updateContact({contact: currentContact})
         sessionStorage.clear()
     }
-
+    console.log(currentContact)
     return (
         <div className={classes.editForm}>
             <div className={classes.avatar}><Avatar setAvatar={setAvatar}/></div>

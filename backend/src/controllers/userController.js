@@ -234,81 +234,125 @@ module.exports = {
     },
 
     updateContact: async (req, res, next) => {
-        const contact = req.body.contact
+        let contactForUpdate = req.body.contact
+        const contactId = contactForUpdate.id
+        const addressId = contactForUpdate.address.id
+        const phones = contactForUpdate.phones
+        const logo = contactForUpdate.logo
+        const attachments = contactForUpdate.attachments
 
-        const url = req.protocol + '://' + req.get('host')
-        const logoPath = url + '/backend/src/attachments/' + contact.logo.name
-        const attachmentPaths = []
+        const filePathUrl = req.protocol + '://' + req.get('host')
 
-        let base64Image = contact.logo.file.split(';base64,').pop();
+        await User.findById({_id: contactId})
+            .then(user => {
+                if (user._id) {
+                    const addressIndex = user.addresses.findIndex(item => item._id.equals(addressId))
 
-        fs.writeFile(logoPath, base64Image, {encoding: 'base64'}, () => {
-            console.log('Файл успешно сохранен')
-        });
+                    user.name = contactForUpdate.name
+                    user.surname = contactForUpdate.surname
+                    user.patronymic = contactForUpdate.patronymic
+                    user.birthDate = contactForUpdate.birthDate
+                    user.gender = contactForUpdate.gender
+                    user.maritalStatus = contactForUpdate.maritalStatus
+                    user.nationality = contactForUpdate.nationality
+                    user.currentJob = contactForUpdate.currentJob
+                    user.email = contactForUpdate.email
 
-        // let contactForUpdate = req.body.contact
-        // const contactId = contactForUpdate.id
-        // const addressId = contactForUpdate.address.id
-        // const phones = contactForUpdate.phones
-        //
-        // await User.findById({_id: contactId})
-        //     .then(user => {
-        //         if (user._id) {
-        //             const index = user.addresses.findIndex(item => item._id.equals(addressId))
-        //
-        //             user.name = contactForUpdate.name
-        //             user.surname = contactForUpdate.surname
-        //             user.patronymic = contactForUpdate.patronymic
-        //             user.birthDate = contactForUpdate.birthDate
-        //             user.gender = contactForUpdate.gender
-        //             user.maritalStatus = contactForUpdate.maritalStatus
-        //             user.nationality = contactForUpdate.nationality
-        //             user.currentJob = contactForUpdate.currentJob
-        //             user.email = contactForUpdate.email
-        //
-        //             if (index >= 0) {
-        //                 user.addresses[index].city = contactForUpdate.address.city
-        //                 user.addresses[index].country = contactForUpdate.address.country
-        //                 user.addresses[index].street = contactForUpdate.address.street
-        //                 user.addresses[index].building = contactForUpdate.address.building
-        //                 user.addresses[index].flat = contactForUpdate.address.flat
-        //                 user.addresses[index].zipCode = contactForUpdate.address.zipCode
-        //                 user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
-        //             }
-        //
-        //             phones.map(phone => {
-        //                 const phoneIndex = user.phones.findIndex(item => item._id.equals(phone.id))
-        //                 if (phoneIndex >= 0) {
-        //                     user.phones[phoneIndex].countryCode = phone.countryCode
-        //                     user.phones[phoneIndex].operatorID = phone.operatorID
-        //                     user.phones[phoneIndex].phoneNumber = phone.phoneNumber
-        //                     user.phones[phoneIndex].phoneType = phone.phoneType
-        //                     user.phones[phoneIndex].comment = phone.comment
-        //                 }
-        //             })
-        //
-        //             user.save()
-        //                 .then(() => {
-        //                     res.status(200).json({
-        //                         code: 200,
-        //                         isSuccess: true,
-        //                         message: 'Contact updated successfully!'
-        //                     })
-        //                 })
-        //                 .catch(err => {
-        //                     res.status(500).json({
-        //                         error: err,
-        //                         message: 'Ошибка сервера, не удалось обновить контакт'
-        //                     })
-        //                 })
-        //         }
-        //     })
-        //     .catch(err => {
-        //         res.status(500).json({
-        //             error: err,
-        //             message: 'Ошибка сервера, не удалось обновить контакт'
-        //         })
-        //     })
+                    if (addressIndex >= 0) {
+                        user.addresses[addressIndex].city = contactForUpdate.address.city
+                        user.addresses[addressIndex].country = contactForUpdate.address.country
+                        user.addresses[addressIndex].street = contactForUpdate.address.street
+                        user.addresses[addressIndex].building = contactForUpdate.address.building
+                        user.addresses[addressIndex].flat = contactForUpdate.address.flat
+                        user.addresses[addressIndex].zipCode = contactForUpdate.address.zipCode
+                        user.addresses[addressIndex].fullAddress = contactForUpdate.address.fullAddress
+                    }
+
+                    user.phones.forEach(phone => {
+                        if (!phones.includes(phone)) {
+                            user.phones.pull(phone._id)
+                        }
+                    })
+
+                    phones.forEach(phoneForUpdate => {
+                        const phoneIndex = user.phones.findIndex(item => item._id.equals(phoneForUpdate.id))
+                        if (phoneForUpdate.id) {
+                            if (phoneIndex >= 0) {
+                                user.phones[phoneIndex].countryCode = phoneForUpdate.countryCode
+                                user.phones[phoneIndex].operatorID = phoneForUpdate.operatorID
+                                user.phones[phoneIndex].phoneNumber = phoneForUpdate.phoneNumber
+                                user.phones[phoneIndex].phoneType = phoneForUpdate.phoneType
+                                user.phones[phoneIndex].comment = phoneForUpdate.comment
+                            } else {
+                                user.phones.push(phoneForUpdate)
+                            }
+                        }
+
+                    })
+
+                    if (logo.file) {
+                        if (user.imagePath) {
+                            fs.unlink(user.imagePath, () => {
+                                console.log('Logo успешно удален')
+                            })
+                        }
+                        const logoPath = filePathUrl + '/backend/src/attachments/' + logo.name
+                        const logoBase64Image = logo.file.split(';base64,').pop();
+                        fs.writeFile(logoPath, logoBase64Image, {encoding: 'base64'}, () => {
+                            console.log('Logo успешно сохранен')
+                        });
+                        user.imagePath = logoPath
+                    }
+
+                    user.attachments.forEach(attachment => {
+                        if (!attachments.includes(attachment)) {
+                            user.attachments.pull(attachment._id)
+                            fs.unlink(attachment.filePath, () => {
+                                console.log('Attachment успешно удален')
+                            })
+                        }
+                    })
+
+                    attachments.forEach(attachmentForUpdate => {
+                        if (attachmentForUpdate.id) {
+                            const attachmentPath = filePathUrl + '/backend/src/attachments/' + attachmentForUpdate.fileName
+                            const attachmentBase64Image = logo.file.split(';base64,').pop();
+                            fs.writeFile(attachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
+                                console.log('Attachment успешно сохранен')
+                            });
+                            const attachmentIndex = user.attachments.findIndex(item => item._id.equals(attachmentForUpdate.id))
+                            if (attachmentIndex >= 0) {
+                                user.attachments[attachmentIndex].imagePath = attachmentPath
+                                user.attachments[attachmentIndex].uploadDate = attachmentForUpdate.date
+                                user.attachments[attachmentIndex].comment = attachmentForUpdate.comment
+                            }
+                        } else {
+                            user.attachments.push(attachmentForUpdate)
+                        }
+                    })
+
+                    user.save()
+                        .then(() => {
+                            res.status(200).json({
+                                code: 200,
+                                isSuccess: true,
+                                message: 'Contact updated successfully!'
+                            })
+                        })
+                        .catch(err => {
+                            res.status(500).json({
+                                error: err,
+                                message: 'Ошибка сервера, не удалось обновить контакт'
+                            })
+                        })
+                }
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: err,
+                    message: 'Ошибка сервера, не удалось обновить контакт'
+                })
+            })
     },
 
     deleteContacts: async (req, res, next) => {
