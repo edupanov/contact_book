@@ -4,6 +4,33 @@ const nodemailer = require('nodemailer')
 
 module.exports = {
 
+    login: async (req, res, next) => {
+        const email = req.body.email
+        const password = req.body.password
+
+        await User.find({email: email})
+            .then(async user => {
+                if (!user) {
+                    res.status(404).json({
+                        message: `Пользователь с email: ${email} не найден!`,
+                        isSuccess: false,
+                    })
+                }
+                res.status(200).json({
+                    message: 'Авторизация прошла успешно!',
+                    isSuccess: true,
+                    user
+                })
+            })
+            .catch(error => {
+                res.status(500).json({
+                    message: 'Fetching contacts failed!',
+                    isSuccess: false,
+                    error
+                })
+            })
+    },
+
     getContacts: async (req, res, next) => {
         const pageSize = req.body.take
         const currentPage = req.body.page
