@@ -6,6 +6,9 @@ import {useStyles} from "./loginStyles";
 import {LoginErrorType} from "../../../../validation/types/LoginErrorType";
 import {Redirect} from 'react-router';
 import {getContactsBirthday} from "../../../contactList/store/actionCreators/contactActionCreators";
+import {ContactInterface} from "../../../contactList/types/contact.interface";
+import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
+import {RootState} from "../../../../store/rootReducer";
 
 
 type LoginFormType = {
@@ -16,6 +19,8 @@ const LoginForm = (props: LoginFormType) => {
     const styles = useStyles()
 
     const {getContactsBirthday} = useActions()
+
+    const login = useTypeSelector((state: RootState) => state.login.isLogged)
 
     function deepEqual(obj1: any, obj2: any) {
         return JSON.stringify(obj1) === JSON.stringify(obj2);
@@ -47,9 +52,9 @@ const LoginForm = (props: LoginFormType) => {
     })
 
     const formikValues = formik.values
-    const defaultValues = {email: "test@test.test", password: "11112"}
+    const defaultValues = {email: "edupanov@gmail.com", password: "11112"}
     const result = deepEqual(formikValues, defaultValues)
-    if (result) {
+    if (login === true) {
         return <Redirect to={'/contacts'}/>
     }
 

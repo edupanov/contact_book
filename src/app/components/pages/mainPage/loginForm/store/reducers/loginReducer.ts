@@ -10,7 +10,7 @@ export const LoginReducer = (state = initialState, action: LoginActionType): Log
         case LoginActionTypes.GET_LOGIN:
             return {
                 ...state,
-                isLogged: true
+                isLogged: false
             }
         case LoginActionTypes.GET_LOGIN_SUCCESS:
             return {

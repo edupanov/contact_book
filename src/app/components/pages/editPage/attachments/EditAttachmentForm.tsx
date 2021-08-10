@@ -16,8 +16,8 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
 
     const changeAttachmentHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
-        if (name === 'file') {
-            attachment.file = value
+        if (name === 'fileName') {
+            attachment.fileName = value
         }
         if (name === 'comment') {
             attachment.comment = value
@@ -41,7 +41,7 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                                                name={"file"}
                                                type="search"
                                                onChange={changeAttachmentHandler}
-                                               defaultValue={attachment.file ? attachment.file : ''}
+                                               defaultValue={attachment.fileName ? attachment.fileName : ''}
                                     />
 
                                     <TextField className={classes.input}

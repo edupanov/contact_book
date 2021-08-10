@@ -17,14 +17,13 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
     const {addAttachment} = useActions()
     const [attachment, setAttachment] = useState<AttachmentInterface>({} as AttachmentInterface)
     const attachId = contact.attachments ? contact.attachments.length + 1 : 1
-    console.log(attachment)
 
     const changeAttachmentBase64File = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files![0]
         const fileName = event.target.files![0].name
 
         const base64File: any = await toBase64(file)
-        const newAttachment = {...attachment, base64File: base64File, file: fileName}
+        const newAttachment = {...attachment, base64File: base64File, fileName: fileName}
         setAttachment(newAttachment)
     }
 

@@ -8,7 +8,7 @@ import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
 import {LocationType} from "./type/editPage.type";
-import {ContactInterface} from "../../contactList/types/contact.interface";
+import {AttachmentInterface, ContactInterface} from "../../contactList/types/contact.interface";
 import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 import {RootState} from "../../../store/rootReducer";
 import styles from "./styles/HeaderContactList.module.scss";
@@ -44,33 +44,65 @@ const EditPage = () => {
         const isDate = target.name === 'birthDate'
         const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
         if (currentContact) {
-            currentContact = {...currentContact, [target.name]: isDate ? replaceStr : target.value}
+            const contact = {...currentContact, [target.name]: isDate ? replaceStr : target.value}
+            setCurrentContact(contact)
         }
     }
     const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        currentContact = {
+
+        const address = {
             ...currentContact,
             address: {...currentContact.address, id: currentContact.address.id, [target.name]: target.value}
         }
+        setCurrentContact(address)
     }
 
-    const setAvatar = (avatar: any) => {
-        setCurrentContact({
-            ...currentContact,
-            logo: avatar
-        })
-    }
+    // const setAvatar = (avatar: any) => {
+    //     setCurrentContact({
+    //         ...currentContact,
+    //         logo: avatar
+    //     })
+    // }
+    const copyContact = JSON.parse(JSON.stringify(currentContact))
+    copyContact.attachments.map((el: AttachmentInterface) => {
+        if (el.base64File) {
+
+            return {
+                comment: el.comment,
+                base64File: el.base64File,
+                date: el.date,
+                fileName: el.fileName
+            }
+            console.log(el.base64File)
+        }
+
+        return el
+    })
+
+    copyContact.phones.map((el: any) => {
+        if (el.id.includes('phone')) {
+            return {
+                comment: el.comment,
+                countryCode: el.countryCode,
+                operatorID: el.operatorID,
+                phoneNumber: el.phoneNumber,
+                phoneType: el.phoneType
+            }
+        }
+        return el
+    })
+
+    console.log(copyContact)
 
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
-        updateContact({contact: currentContact})
+        updateContact({contact: copyContact})
         sessionStorage.clear()
     }
-    console.log(currentContact)
     return (
         <div className={classes.editForm}>
-            <div className={classes.avatar}><Avatar setAvatar={setAvatar}/></div>
+            <div className={classes.avatar}><Avatar contact={currentContact}/></div>
             <div>
                 <h2 className={classes.title}>Редактирование контакта </h2>
                 <Grid container justifyContent="center">
@@ -194,7 +226,7 @@ const EditPage = () => {
 
                                     <div className={classes.submitButton}>
                                         <Button
-                                            className={classes.button}
+                                            className={classes.editButton}
                                             type={'submit'}
                                             variant={'contained'}
                                             color={'primary'}

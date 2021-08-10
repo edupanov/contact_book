@@ -33,7 +33,6 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
             phone.comment = value
         }
     }
-    console.log(phone)
 
     const onSubmit = () => {
         setOpen(false)

@@ -134,7 +134,7 @@ const ContactList = () => {
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
     const [openSearch, setOpenSearch] = React.useState(false);
-    const {getContacts, setPage, setTake, deleteContacts, deleteAll} = useActions()
+    const {getContacts, setPage, setTake, deleteContacts, deleteAll, getContactsBirthday} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
     const prevVal = usePrevious(data)
@@ -211,6 +211,11 @@ const ContactList = () => {
             setItems([])
         }
     }, [data])
+
+    useEffect(()=> {
+        const mailMe = setTimeout(()=>getContactsBirthday, 3000)
+        return () => clearTimeout(mailMe);
+    }, [])
 
     if (isLoading || !data) {
         return <CircularProgress

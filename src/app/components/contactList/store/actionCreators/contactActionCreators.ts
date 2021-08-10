@@ -42,11 +42,11 @@ export const getContacts = () => // передаем то что хотим по
 
 export const getContactsBirthday = (email: string, password: string) =>
     async (dispatch: Dispatch<ContactsActionType | LoginActionType | MailActionType | CallHistoryMethodAction>, getState: () => RootState) => { // передаем наш диспатч
-        dispatch({type: ContactActionTypes.GET_CONTACTS})
+        dispatch({type: LoginActionTypes.GET_LOGIN})
 
         await LoginRequests.login(email, password)
             .then(async response => {
-               debugger
+                console.log(response)
                 const result = await response.json()
                 if (result.isSuccess) {
                     dispatch({type: LoginActionTypes.GET_LOGIN_SUCCESS})
@@ -57,8 +57,9 @@ export const getContactsBirthday = (email: string, password: string) =>
             })
 
         const {isLogged} = getState().login
-
-        if (isLogged === false) {
+        console.log(isLogged)
+        dispatch({type: ContactActionTypes.GET_CONTACTS})
+        if (isLogged === true) {
             await ContactListRequests.getContactsBirthday()
                 .then(async (response: DefaultPagedResponse<Array<ContactInterface>>) => {
                     if (response.isSuccess) {

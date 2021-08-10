@@ -17,7 +17,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     const {contact} = props
 
     const columns: GridColDef[] = [
-        {field: 'file', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
+        {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
         {field: 'date', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false},
         {
@@ -81,7 +81,6 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     const handleCloseModal = () => {
         setOpen(false);
     };
-
 
     return (
         <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>

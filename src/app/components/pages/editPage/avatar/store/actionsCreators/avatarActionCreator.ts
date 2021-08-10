@@ -18,7 +18,7 @@ export const saveAvatar = (name: string, fileBAse64: string, contactId: string) 
 
             if (copyContact.id === contactId) {
                 if  (copyContact.id === contactId){
-                    copyContact.logo = [name, fileBAse64]
+                    copyContact.logo = {name: name, file: fileBAse64}
                 }
                 return copyContact
             }

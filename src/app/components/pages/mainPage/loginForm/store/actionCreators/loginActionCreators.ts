@@ -9,8 +9,6 @@ export const getLogin = (email: string, password: string) =>
         dispatch({type: LoginActionTypes.GET_LOGIN})
 
 
-
-
         await LoginRequests.login(email, password)
             .then(async response => {
                 const result = await response.json()

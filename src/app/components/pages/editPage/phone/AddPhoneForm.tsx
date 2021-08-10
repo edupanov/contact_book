@@ -22,7 +22,7 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
 
-        const updatePhone = {...phone, [name]: value, id: String(phoneId)}
+        const updatePhone = {...phone, [name]: value, id: `phone${String(phoneId)}`}
         setPhone(updatePhone)
     }
 
