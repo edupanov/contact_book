@@ -1,23 +1,23 @@
-import React, {SyntheticEvent, useEffect, useState} from 'react';
+import React, {SyntheticEvent, useState} from 'react';
 import {DataGrid, GridCellParams, GridColDef, GridRowId} from "@material-ui/data-grid";
-import './phone.module.scss'
+import './styles/phone.module.scss'
 import {Button, IconButton} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import {PhoneInterface} from "../../../contactList/types/contact.interface";
-import {PhoneFormProps} from "../type/editPage.type";
-import {PhoneModal} from "./PhoneModal";
-import {EditPhoneForm} from "./editForm/EditPhoneForm";
-import {ButtonsForm} from "./editForm/ButtonsForm";
-import {AddPhoneForm} from "./addForm/AddPhoneForm";
+import {ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
+import {ModalForEditForm} from "../../../../shared/components/ModalForEditForm";
+import {EditPhoneForm} from "./EditPhoneForm";
+import {AddPhoneForm} from "./AddPhoneForm";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "../styles/formStyles";
+
+interface PhoneFormProps {
+    contact: ContactInterface
+}
 
 const PhoneForm = (props: PhoneFormProps) => {
 
     const classes = useStyles()
-
-    const {addPhone} = useActions()
 
     const columns: GridColDef[] = [
         {
@@ -63,28 +63,16 @@ const PhoneForm = (props: PhoneFormProps) => {
         },
     ]
 
-    const {setContact, contact, setCurrentContact} = props
+    const {contact} = props
+    let phones = contact.phones
 
     const {deletePhone} = useActions()
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState({} as PhoneInterface); //edit phone
-    const [newPhone, setNewPhone] = useState({} as PhoneInterface); //add phone
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
-    const [buttons, setButtons] = useState<JSX.Element>(<div/>);
-
-    let phones = contact.phones
-    const newPhones = phones.map(item => item.id === phone.id ? phone : item);
-    let [updatePhones, setUpdatePhones] = useState(phones)
-
-    useEffect(() => {
-        setUpdatePhones(newPhones)
-    }, [phone])
-
-    const equals = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
-    const result = equals(phones, newPhones)
-
+    const [buttons] = useState<JSX.Element>(<div/>);
 
     const handleCloseModal = () => {
         setOpen(false);
@@ -94,32 +82,18 @@ const PhoneForm = (props: PhoneFormProps) => {
 // EDIT PHONE HANDLER
     const changePhoneHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const currentPhone = updatePhones.find(target => target.id === targetID)!;
+        const currentPhone = contact.phones.find(target => target.id === targetID)!;
         setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
-        setBody(<EditPhoneForm phone={currentPhone} setPhone={setPhone}/>)
-        setButtons(<ButtonsForm onSubmitModal={() => onEditPhoneSubmit()}/>)
+        setBody(<EditPhoneForm phone={currentPhone} setOpen={setOpen} contact={contact}/>)
         setOpen(true);
     }
 
   // ADD PHONE HANDLER
     const addPhoneChangeHandler = (event: SyntheticEvent) => {
         setTitle('Добавить номер телефона');
-        setBody(<AddPhoneForm newPhone={newPhone} setNewPhone={setNewPhone}/>)
-        setButtons(<ButtonsForm onSubmitModal={() => onAddPhoneSubmit()}/>)
+        setBody(<AddPhoneForm setOpen={setOpen} contact={contact}/>)
         setOpen(true);
-    }
-
-    const onEditPhoneSubmit = () => {
-        const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('phone') || '{}');
-        setContact(savedPhone, 'phones')
-        setOpen(false);
-    }
-
-    const onAddPhoneSubmit = () => {
-        const savedPhone: PhoneInterface = JSON.parse(sessionStorage.getItem('newPhone') || '{}');
-        addPhone(savedPhone, props.contact!.id)
-        setOpen(false);
     }
 
     const checkedCurrenPhone = (params: GridRowId[]) => {
@@ -131,10 +105,6 @@ const PhoneForm = (props: PhoneFormProps) => {
         const contactId = contact.id
         deletePhone(contactId, phoneId)
     }
-
-    useEffect(() => {
-        updatePhones = [...updatePhones, newPhone]
-    }, [newPhone])
 
 
     return (
@@ -149,7 +119,7 @@ const PhoneForm = (props: PhoneFormProps) => {
                 Добавить новый номер
             </Button>
             <DataGrid
-                rows={result ? phones : newPhones}
+                rows={phones! || []}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick
@@ -159,7 +129,7 @@ const PhoneForm = (props: PhoneFormProps) => {
                 selectionModel={selectionModel}
             />
 
-            <PhoneModal
+            <ModalForEditForm
                 open={open}
                 onClose={handleCloseModal}
                 title={title}

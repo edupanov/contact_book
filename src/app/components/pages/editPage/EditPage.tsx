@@ -8,15 +8,10 @@ import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
 import {LocationType} from "./type/editPage.type";
-import {
-    AttachmentInterface,
-    AvatarInterface,
-    ContactInterface,
-    PhoneInterface
-} from "../../contactList/types/contact.interface";
+import {ContactInterface} from "../../contactList/types/contact.interface";
 import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 import {RootState} from "../../../store/rootReducer";
-import styles from "../../mainForm/HeaderContactList.module.scss";
+import styles from "./styles/HeaderContactList.module.scss";
 
 const EditPage = () => {
 
@@ -35,7 +30,6 @@ const EditPage = () => {
             getContacts()
         }
     }, [contacts])
-
 
     if (!contacts || !currentContact) {
         return <CircularProgress
@@ -61,40 +55,15 @@ const EditPage = () => {
         }
     }
 
-    const setPhone = (data: PhoneInterface, tableName: string) => {
-        let updatedPhones: PhoneInterface[] = currentContact.phones
-        updatedPhones = updatedPhones.filter(phone => phone.id !== data.id)
-        updatedPhones = [...updatedPhones, data]
-        currentContact = {...currentContact, [tableName]: updatedPhones}
-    }
-
-    const setAvatar = (file: string, name: string) => {
-        const newLogo: AvatarInterface = {
-            file: file,
-            name: name
-        }
-        currentContact = {...currentContact, logo: newLogo}
-    }
-
-    const setAttachments = (data: AttachmentInterface, tableName: string) => {
-        let updatedAttachments: AttachmentInterface[] = currentContact.attachments
-        updatedAttachments = updatedAttachments.filter(attachment => attachment.id !== data.id)
-        updatedAttachments = [...updatedAttachments, data]
-        currentContact = {...currentContact, [tableName]: updatedAttachments}
-    }
-
-
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         updateContact({contact: currentContact})
         sessionStorage.clear()
     }
 
-    console.log(currentContact)
-
     return (
         <div className={classes.editForm}>
-            <div className={classes.avatar}><Avatar setAvatar={setAvatar}/></div>
+            <div className={classes.avatar}><Avatar contact={currentContact}/></div>
             <div>
                 <h2 className={classes.title}>Редактирование контакта </h2>
                 <Grid container justifyContent="center">
@@ -213,9 +182,8 @@ const EditPage = () => {
                                         </div>
                                     </div>
 
-                                    <PhoneForm contact={currentContact} setContact={setPhone}
-                                               setCurrentContact={setCurrentContact}/>
-                                    <AttachmentsForm setAttachments={setAttachments} contact={currentContact}/>
+                                    <PhoneForm contact={currentContact}/>
+                                    <AttachmentsForm contact={currentContact}/>
 
                                     <div className={classes.submitButton}>
                                         <Button

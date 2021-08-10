@@ -12,4 +12,3 @@ export const sendMail = async (emails: Array<string>, theme: string, text: strin
 }
 
 
-

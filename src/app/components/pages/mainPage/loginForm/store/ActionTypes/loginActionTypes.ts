@@ -1,8 +1,5 @@
-import {LoginInterface} from "../../types/login.interface";
-
 export interface LoginStateInterface {
-    isLoading: boolean
-    data: LoginInterface
+    isLogged: boolean
     errors: {}
 }
 
@@ -18,7 +15,6 @@ interface GetLogin {
 
 interface GetLoginSuccess {
     type: LoginActionTypes.GET_LOGIN_SUCCESS,
-    payload: LoginInterface
 }
 
 interface GetLoginFailure {

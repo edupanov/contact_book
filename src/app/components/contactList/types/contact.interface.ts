@@ -22,6 +22,7 @@ export interface AttachmentInterface {
     id: string
     date: string
     file: string
+    base64File:  string
     comment: string
 }
 
@@ -31,6 +32,7 @@ export interface AvatarInterface {
 }
 
 export interface ContactInterface {
+    reminder?: string
     id: string
     name: string
     surname: string

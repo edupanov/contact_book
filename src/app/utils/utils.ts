@@ -6,11 +6,9 @@ export const formatDate = (date: string, format: string) => {
 
 export const toBase64 = async (file: File) => {
     return new Promise((resolve, reject) => {
-        const fileReader = new FileReader()
-        fileReader.readAsDataURL(file)
-        fileReader.onload = () => resolve(fileReader.result)
-        fileReader.onerror = error => reject(error)
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error);
     })
-
 }
-

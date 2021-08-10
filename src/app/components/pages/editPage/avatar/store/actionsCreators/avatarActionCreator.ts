@@ -1,43 +1,35 @@
 import {Dispatch} from "redux";
-import * as AvatarRequest from "../requests/avatarRequests";
-import {AvatarActionType, AvatarActionTypes} from "../actionsTypes/avatarActionTypes";
 import {
     ContactActionTypes,
     ContactsActionType
 } from "../../../../../contactList/store/actionTypes/contactListActiontypes";
 import {RootState} from "../../../../../../store/rootReducer";
-import * as ContactListRequests from "../../../../../contactList/requests/contactListRequests";
 import {ContactInterface} from "../../../../../contactList/types/contact.interface";
 
 
-export const saveAvatar = (file: string, name: string) =>
-    async (dispatch: Dispatch<AvatarActionType | ContactsActionType>, getState: () => RootState) => {
+export const saveAvatar = (name: string, fileBAse64: string, contactId: string) =>
+    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
+        dispatch({type: ContactActionTypes.GET_CONTACTS})
 
-        dispatch({type: AvatarActionTypes.GET_AVATAR})
+        const {data, maxUsers} = getState().contacts
 
-        await AvatarRequest.saveAvatar(file, name)
-            .then(async response => {
+        const updatedContacts = data.map((contact: ContactInterface) => {
+            const copyContact = JSON.parse(JSON.stringify(contact))
 
-                const {searchParams} = getState().search  //получаем парметры из текущего стейта
-                const {take, page} = getState().contacts
-
-                const search = {
-                    ...searchParams,
-                    page, take
+            if (copyContact.id === contactId) {
+                if  (copyContact.id === contactId){
+                    copyContact.logo = [name, fileBAse64]
                 }
+                return copyContact
+            }
+            return contact
+        })
 
-                if (response.isSuccess) {
-                    const updatedContacts = await ContactListRequests.getContact(search)
-                    dispatch({
-                        type: ContactActionTypes.GET_CONTACTS_SUCCESS,
-                        payload: {
-                            users: updatedContacts?.data as Array<ContactInterface>,
-                            maxUsers: response?.maxUsers
-                        }
-                    })
-                }
-            })
-            .catch(error => {
-                dispatch({type: AvatarActionTypes.GET_AVATAR_FAILURE, errors: error})
-            })
+        dispatch({
+            type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+            payload: {
+                users: updatedContacts as Array<ContactInterface>,
+                maxUsers: maxUsers
+            }
+        })
     }

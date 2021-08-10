@@ -1,12 +1,10 @@
-import {AttachmentInterface, ContactInterface} from "../../../../../contactList/types/contact.interface";
 import {Dispatch} from "redux";
-import {RootState} from "../../../../../../store/rootReducer";
-import {
-    ContactActionTypes,
-    ContactsActionType
-} from "../../../../../contactList/store/actionTypes/contactListActiontypes";
+import {ContactActionTypes, ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
+import {RootState} from "../../../../../store/rootReducer";
+import {ContactInterface, PhoneInterface} from "../../../../contactList/types/contact.interface";
 
-export const addAttachment = (newAttachment: AttachmentInterface, contactId: string) =>
+
+export const addPhone = (phone: PhoneInterface, contactId: string) =>
     async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
         dispatch({type: ContactActionTypes.GET_CONTACTS})
 
@@ -16,10 +14,10 @@ export const addAttachment = (newAttachment: AttachmentInterface, contactId: str
             const copyContact = JSON.parse(JSON.stringify(contact))
 
             if (copyContact.id === contactId) {
-                if (copyContact.attachments && copyContact.attachments.length > 0) {
-                    copyContact.attachments.push(newAttachment)
+                if (copyContact.phones && copyContact.phones.length > 0) {
+                    copyContact.phones.push(phone)
                 } else {
-                    copyContact.attachments = [newAttachment]
+                    copyContact.phones = [phone]
                 }
                 return copyContact
             }
@@ -35,7 +33,7 @@ export const addAttachment = (newAttachment: AttachmentInterface, contactId: str
         })
     }
 
-export const deleteAttachment = (contactId: string, attachmentId: string) =>
+export const deletePhone = (contactId: string, phoneId: string) =>
     async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
         dispatch({type: ContactActionTypes.GET_CONTACTS})
 
@@ -45,7 +43,7 @@ export const deleteAttachment = (contactId: string, attachmentId: string) =>
             const copyContact = JSON.parse(JSON.stringify(contact))
 
             if (copyContact.id === contactId) {
-                copyContact.attachments = copyContact.attachments.filter((item: AttachmentInterface) => item.id !== attachmentId)
+                copyContact.phones = copyContact.phones.filter((item: PhoneInterface) => item.id !== phoneId)
                 return copyContact
             }
             return contact
