@@ -155,6 +155,15 @@ module.exports = {
                         }
                     })
 
+                    const attachments = user.attachments.map(attachment => {
+                        return {
+                            id: attachment._id,
+                            comment: attachment.comment,
+                            filePath: attachment.filePath,
+                            uploadDate: attachment.uploadDate
+                        }
+                    })
+
                     return {
                         id: user._id,
                         name: user.name,
@@ -169,7 +178,7 @@ module.exports = {
                         edit: user.edit,
                         address: addr,
                         imagePath: user.imagePath,
-                        attachments: user.attachments,
+                        attachments,
                         phones
                     }
                 })
