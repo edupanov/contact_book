@@ -13,13 +13,11 @@ interface AppHistory {
 function App({history}: AppHistory) {
     const {getContactsBirthday} = useActions()
     const isSuccess = useTypeSelector(state => state.login.isSuccess)
-    console.log(isSuccess)
 
     useEffect(() => {
         if(isSuccess){
             getContactsBirthday()
         }
-
     }, [isSuccess])
 
 

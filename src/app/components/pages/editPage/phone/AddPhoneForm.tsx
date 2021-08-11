@@ -1,7 +1,7 @@
 import React, {ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
-import {useStyles} from "../../deleteModal/style/styleModal";
+import {useStylesModal} from "../../deleteModal/style/styleModal";
 import {useActions} from "../../../../store/hooks/useActions";
 
 interface AddPhoneFormInterface {
@@ -11,7 +11,7 @@ interface AddPhoneFormInterface {
 
 export const AddPhoneForm = (props: AddPhoneFormInterface) => {
 
-    const classes = useStyles();
+    const classes = useStylesModal();
     let {setOpen, contact} = props
 
     const {addPhone} = useActions()

@@ -3,7 +3,7 @@ import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from 
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
-import {useLocation} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
 import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
@@ -234,6 +234,15 @@ const EditPage = () => {
                                             variant={'contained'}
                                             color={'primary'}
                                         >Сохранить изменения</Button>
+                                        <NavLink to={'/contacts'} className={classes.prevButton}>
+                                            <Button
+                                                className={classes.editButton}
+
+                                                variant={'contained'}
+                                                color={'primary'}
+                                            >Назад</Button>
+                                        </NavLink>
+
                                     </div>
                                 </FormGroup>
                             </FormControl>

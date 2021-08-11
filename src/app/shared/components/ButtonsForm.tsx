@@ -1,13 +1,13 @@
 import React from 'react';
 import {Button} from "@material-ui/core";
-import {useStyles} from "../../components/pages/deleteModal/style/styleModal";
+import {useStylesModal} from "../../components/pages/deleteModal/style/styleModal";
 
 interface ButtonsEditFormInterface {
     onSubmitModal: () => void
 }
 
 export const ButtonsForm = (props: ButtonsEditFormInterface) => {
-    const classes = useStyles();
+    const classes = useStylesModal();
     const {onSubmitModal} = props
 
     return (

@@ -1,6 +1,6 @@
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
-export const useStyles = makeStyles((theme: Theme) =>
+export const useStylesModal = makeStyles((theme: Theme) =>
     createStyles({
         modal: {
             display: 'flex',
@@ -9,13 +9,18 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         paper: {
             position: 'relative',
+            width: '50%',
             backgroundColor: theme.palette.background.paper,
-
-            // border: '2px solid #000',
-            // boxShadow: theme.shadows[5],
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
             padding: theme.spacing(2, 4, 3),
         },
-        wrapperInput:{
+
+        modalTitle:{
+            paddingTop: 20
+        },
+        wrapperInput: {
             padding: '10px 0',
         },
         input: {
@@ -30,8 +35,9 @@ export const useStyles = makeStyles((theme: Theme) =>
             margin: '80px 0 20px 0',
         },
         modalButtonClose: {
-          position:  "absolute",
-            left: '90%'
+            position: "absolute",
+            top: 10,
+            right: 20
         },
 
     }),

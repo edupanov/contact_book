@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
-import {useStyles} from "../../deleteModal/style/styleModal";
+import {useStylesAttachment} from "./styles/attachment.style";
 
 interface EditAttachmentFormInterface {
     setOpen: Function
@@ -10,7 +10,7 @@ interface EditAttachmentFormInterface {
 }
 
 export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
-    const classes = useStyles();
+    const styles = useStylesAttachment();
     let {setOpen, attachment} = props
 
 
@@ -35,8 +35,8 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                     <form>
                         <FormControl>
                             <FormGroup>
-                                <div className={classes.wrapperInput}>
-                                    <TextField className={classes.input}
+                                <div className={styles.wrapperInput}>
+                                    <TextField className={styles.input}
                                                label="Имя файла"
                                                name={"file"}
                                                type="search"
@@ -44,7 +44,7 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                                                defaultValue={attachment.fileName ? attachment.fileName : ''}
                                     />
 
-                                    <TextField className={classes.input}
+                                    <TextField className={styles.input}
                                                label="Коментарий"
                                                name={"comment"}
                                                type="search"
@@ -57,7 +57,7 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                     </form>
                     <div>
                         <Button
-                            className={classes.button}
+                            className={styles.editButton}
                             variant={'contained'}
                             onClick={onSubmit}
                             color={'primary'}

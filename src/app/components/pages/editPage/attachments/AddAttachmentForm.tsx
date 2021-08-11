@@ -4,6 +4,7 @@ import {AttachmentInterface, ContactInterface} from "../../../contactList/types/
 import {useStyles} from "../styles/editContactStyles";
 import {useActions} from "../../../../store/hooks/useActions";
 import {toBase64} from "../../../../utils/utils";
+import {useStylesAttachment} from "./styles/attachment.style";
 
 interface AddPhoneFormInterface {
     setOpen: Function
@@ -11,7 +12,7 @@ interface AddPhoneFormInterface {
 }
 
 export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
-    const classes = useStyles();
+    const styles = useStylesAttachment();
     let {setOpen, contact} = props
 
     const {addAttachment} = useActions()
@@ -47,25 +48,21 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
                     <form>
                         <FormControl>
                             <FormGroup>
-                                <div className={classes.wrapperInput}>
-                                    <input
+                                <div className={styles.wrapperInput }>
+                                    <TextField
                                         name={'file'}
-                                        accept="image/*"
-                                        className={classes.input}
+                                        className={styles.input}
                                         id="contained-button-file"
-                                        multiple
                                         type="file"
                                         onChange={changeAttachmentBase64File}
                                     />
-                                    <label htmlFor="contained-button-file">
-                                    </label>
-                                    <TextField className={classes.input}
+                                    <TextField className={styles.input}
                                                label="Коментарий"
                                                name={"comment"}
                                                type="search"
                                                onChange={changeAttachmentInfoHandler}
                                     />
-                                    <TextField className={classes.input}
+                                    <TextField className={styles.input}
                                                helperText="Сегодняшняя дата"
                                                name={"date"}
                                                type="datetime-local"
@@ -77,7 +74,7 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
                     </form>
                     <div>
                         <Button
-                            className={classes.button}
+                            className={styles.editButton}
                             variant={'contained'}
                             onClick={onSubmit}
                             color={'primary'}

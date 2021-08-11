@@ -8,12 +8,14 @@ import {ModalForEditForm} from "../../../../shared/components/ModalForEditForm";
 import {AddAttachmentForm} from "./AddAttachmentForm";
 import {EditAttachmentForm} from "./EditAttachmentForm";
 import {useActions} from "../../../../store/hooks/useActions";
+import {useStyles} from "../styles/formStyles";
 
 type AttachmentsPropsType = {
     contact: ContactInterface
 }
 
 const AttachmentsForm = (props: AttachmentsPropsType) => {
+    const classes = useStyles()
     const {contact} = props
 
     const columns: GridColDef[] = [
@@ -63,7 +65,6 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setOpen(true);
         const targetID = event.currentTarget.id
         const currentAttachment = contact.attachments.find(target => {
-            console.log(target)
             return target.id === targetID
         })!;
         setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
@@ -86,6 +87,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>
             <h2>Вложения</h2>
             <Button
+                className={classes.button}
                 variant="outlined"
                 color="primary"
                 onClick={addAttachmentChangeHandler}

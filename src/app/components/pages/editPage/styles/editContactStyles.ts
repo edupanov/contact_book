@@ -41,6 +41,9 @@ export const useStyles = makeStyles({
     },
     wrapperInput: {
         padding: '10px 0',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center"
     },
     input: {
         marginLeft: 10,
@@ -68,7 +71,8 @@ export const useStyles = makeStyles({
     button: {
         padding: 0
     },
-    editButton: {padding: 10},
+    prevButton: {textDecoration: 'none'},
+     editButton: {padding: 10, margin: 20},
 
     submitButton: {
         position: "relative",

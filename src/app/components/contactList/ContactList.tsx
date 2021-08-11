@@ -115,7 +115,7 @@ const ContactList = () => {
                 <IconButton
                     aria-label="del"
                     id={String(el.id)}
-                    onClick={deleteContact}
+                    onClick={()=>handleOpenModal([String(el.id)])}
                 >
                     <Delete/>
                 </IconButton>
@@ -134,14 +134,17 @@ const ContactList = () => {
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
     const [openSearch, setOpenSearch] = React.useState(false);
-    const {getContacts, setPage, setTake, deleteContacts, deleteAll} = useActions()
+    const {getContacts, setPage, setTake, deleteContacts} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
+
     const prevVal = usePrevious(data)
     const history = useHistory()
     sessionStorage.setItem('contactsId', JSON.stringify(selectionModel));
     sessionStorage.setItem('contacts', JSON.stringify(items));
-    const handleOpenModal = () => {
+
+    const handleOpenModal = (id: GridRowId[]) => {
+        setSelectionModel(id)
         setOpen(true);
     };
     const handleCloseModal = () => {
@@ -186,13 +189,9 @@ const ContactList = () => {
     const deleteContact = (event: SyntheticEvent) => {
         const id = event.currentTarget.id
         const checkedContacts: Array<string> = []
-        deleteContacts([...checkedContacts, id])
-    }
-
-    const deleteCheckedContacts = () => {
-        deleteContacts(selectionModel)
+        setSelectionModel([...checkedContacts, id])
+        // deleteContacts([...checkedContacts, id])
         handleCloseModal()
-        setSelectionModel([])
     }
 
     useEffect(() => {
@@ -220,7 +219,6 @@ const ContactList = () => {
             color="secondary"
         />
     }
-    console.log(data)
     return (
         <div className={classes.root}>
             <Grid
@@ -239,7 +237,7 @@ const ContactList = () => {
             </NavLink>
                 <div>
                     <Button
-                        onClick={handleOpenModal}
+                        onClick={()=>handleOpenModal(selectionModel)}
                         disabled={selectionModel.length === 0}
                         className={classes.deleteButton}
                         variant="outlined"
@@ -316,8 +314,8 @@ const ContactList = () => {
             <DeleteModal open={open}
                          onClose={handleCloseModal}
                          selectionModel={selectionModel}
-                         deleteCheckedContacts={deleteCheckedContacts}
-                         deleteAll={deleteAll}/>
+                         deleteContact={deleteContact}
+            />
         </div>
     );
 }
