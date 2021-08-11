@@ -40,7 +40,7 @@ export const getContacts = () => // передаем то что хотим по
             })
     }
 
-export const getContactsBirthday = () =>
+export const getContactsBirthday = (mailTo: string) =>
     async (dispatch: Dispatch<ContactsActionType | LoginActionType | MailActionType | CallHistoryMethodAction>, getState: () => RootState) => { // передаем наш диспатч
         dispatch({type: ContactActionTypes.GET_CONTACTS})
 
@@ -56,7 +56,7 @@ export const getContactsBirthday = () =>
                     const contactNameBirthday = contactsBirthDay.map((el: any) => `${el.name} ${el.surname}`).join(', ')
 
 
-                    await SendMailRequest.sendMail(['edupanov@gmail.com'], 'Напоминание', `Сегодня День рождения у ${contactNameBirthday}`)
+                    await SendMailRequest.sendMail([`${mailTo}`], 'Напоминание', `Сегодня День рождения у ${contactNameBirthday}`)
                         .then(async response => {
                             if (response.isSuccess) {
                                 dispatch({type: MailActionTypes.SEND_MAIL_SUCCESS})

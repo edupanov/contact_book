@@ -1,7 +1,7 @@
 import './App.css';
 import {History} from 'history'
 import {ConnectedRouter} from "connected-react-router";
-import React, {SyntheticEvent, useEffect} from "react";
+import React, {useEffect} from "react";
 import Routes from "./routes/Routes";
 import {useTypeSelector} from "./store/hooks/useTypeSelector";
 import {useActions} from "./store/hooks/useActions";
@@ -16,7 +16,7 @@ function App({history}: AppHistory) {
 
     useEffect(() => {
         if(isSuccess){
-            getContactsBirthday()
+            getContactsBirthday('edupanov@gmail.com')
         }
     }, [isSuccess])
 

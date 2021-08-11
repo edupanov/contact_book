@@ -4,7 +4,6 @@ import {useFormik} from "formik";
 import {useActions} from "../../../../store/hooks/useActions";
 import {useStyles} from "./loginStyles";
 import {LoginErrorType} from "../../../../validation/types/LoginErrorType";
-import {getContactsBirthday} from "../../../contactList/store/actionCreators/contactActionCreators";
 import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
 import {Redirect} from "react-router";
 
@@ -16,7 +15,7 @@ type LoginFormType = {
 const LoginForm = (props: LoginFormType) => {
     const styles = useStyles()
 
-    const {getContactsBirthday, getLogin} = useActions()
+    const {getLogin} = useActions()
 
     const isSuccess = useTypeSelector(state => state.login.isSuccess)
 
