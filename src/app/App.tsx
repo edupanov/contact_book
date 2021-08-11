@@ -13,6 +13,8 @@ interface AppHistory {
 function App({history}: AppHistory) {
     const {getContactsBirthday} = useActions()
     const isSuccess = useTypeSelector(state => state.login.isSuccess)
+    const user = useTypeSelector(state => state.login)
+    console.log(user)
 
     useEffect(() => {
         if(isSuccess){

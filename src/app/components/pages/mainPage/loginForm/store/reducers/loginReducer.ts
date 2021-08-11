@@ -2,7 +2,7 @@ import {LoginActionType, LoginActionTypes, LoginStateInterface} from "../ActionT
 
 const initialState: LoginStateInterface = {
     isSuccess: false,
-    errors: {}
+    errors: {},
 }
 
 export const LoginReducer = (state = initialState, action: LoginActionType): LoginStateInterface => {
