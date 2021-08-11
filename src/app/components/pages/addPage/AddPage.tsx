@@ -153,13 +153,18 @@ const AddPage: FC = () => {
 
                                 </div>
                                 <div className={classes.buttonWrapper}>
-                                    <Button type={'submit'} variant={'contained'} color={'primary'}
-                                            >Создать новый контак</Button>
-                                    <NavLink   to={'/contacts'} exact >
-                                        <IconButton aria-label="close" className={classes.button}>
-                                            <Button variant={'contained'} color={'primary'}
-                                                   >Выйти</Button>
-                                        </IconButton>
+                                    <Button
+                                        className={classes.editButton}
+                                        type={'submit'}
+                                        variant={'contained'}
+                                        color={'primary'}
+                                    >Сохранить изменения</Button>
+                                    <NavLink to={'/contacts'} className={classes.prevButton}>
+                                        <Button
+                                            className={classes.editButton}
+                                            variant={'contained'}
+                                            color={'primary'}
+                                        >Назад</Button>
                                     </NavLink>
 
                                 </div>

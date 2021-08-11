@@ -9,8 +9,7 @@ const app = express()
 
 const url = "mongodb+srv://Egor:" + process.env.MONGO_ATLAS_PW + "@myclaster.yoacx.mongodb.net/contacts?retryWrites=true&w=majority"
 
-mongoose.connect( url
-    , {
+mongoose.connect( url, {
         useUnifiedTopology: true,
         useNewUrlParser: true
     })
@@ -23,12 +22,12 @@ mongoose.connect( url
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
-app.use('/images', express.static(path.join('backend/images')))
+app.use('/attachments', express.static(path.join('backend/src/attachments')))
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization, '
     )
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE')
     next()

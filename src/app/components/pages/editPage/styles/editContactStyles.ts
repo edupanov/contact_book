@@ -5,7 +5,7 @@ export const useStyles = makeStyles({
         width: 300
     },
     close: {
-      textDecoration: "none",
+        textDecoration: "none",
         position: "fixed",
         top: 160,
         right: 50,
@@ -24,9 +24,9 @@ export const useStyles = makeStyles({
     },
 
     editForm: {
-      display: "flex",
+        display: "flex",
 
-},
+    },
     form: {
         width: '100%'
     },
@@ -39,8 +39,11 @@ export const useStyles = makeStyles({
         textAlign: "center",
         color: "#3451b9"
     },
-    wrapperInput:{
+    wrapperInput: {
         padding: '10px 0',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center"
     },
     input: {
         marginLeft: 10,
@@ -60,7 +63,7 @@ export const useStyles = makeStyles({
         justifyContent: "center",
         flexWrap: "wrap"
     },
-    buttonWrapper:{
+    buttonWrapper: {
         display: "flex",
         justifyContent: "space-around",
         marginTop: 20
@@ -68,12 +71,16 @@ export const useStyles = makeStyles({
     button: {
         padding: 0
     },
+    prevButton: {textDecoration: 'none'},
+     editButton: {padding: 10, margin: 20},
 
-    submitButton:{
+    submitButton: {
         position: "relative",
+        display: 'flex',
+        justifyContent: 'center',
         margin: 80
     },
-    wrapperButtonEditPage:{
+    wrapperButtonEditPage: {
         display: "flex",
         justifyContent: "center"
     },

@@ -1,10 +1,8 @@
 import {LoginActionType, LoginActionTypes, LoginStateInterface} from "../ActionTypes/loginActionTypes";
-import {LoginInterface} from "../../types/login.interface";
 
 const initialState: LoginStateInterface = {
-    isLoading: false,
-    data: {} as LoginInterface,
-    errors: {}
+    isSuccess: false,
+    errors: {},
 }
 
 export const LoginReducer = (state = initialState, action: LoginActionType): LoginStateInterface => {
@@ -12,12 +10,17 @@ export const LoginReducer = (state = initialState, action: LoginActionType): Log
         case LoginActionTypes.GET_LOGIN:
             return {
                 ...state,
-                isLoading: true
+                isSuccess: false
             }
         case LoginActionTypes.GET_LOGIN_SUCCESS:
             return {
                 ...state,
-                data: action.payload
+                isSuccess: true,
+            }
+        case LoginActionTypes.LOGOUT_SUCCESS:
+            return {
+                ...state,
+                isSuccess: false,
             }
         case LoginActionTypes.GET_LOGIN_FAILURE:
             return {

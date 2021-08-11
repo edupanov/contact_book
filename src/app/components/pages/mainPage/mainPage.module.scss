@@ -1,6 +1,6 @@
 .wrapper {
   position:relative;
-  height: 98vh;
+  height: 100vh;
   background: no-repeat center url("https://img.wallpapersafari.com/desktop/1920/1080/82/83/Nb6B82.jpg") ;
   display: flex;
   flex-direction: column;
@@ -33,9 +33,14 @@
   font-size: 40px;
 }
 .footer {
+  background-color: #3f51b5;
   display: flex;
   justify-content: center;
   width: 100%;
   position:absolute;
   bottom:0;
+}
+
+.footerTitle{
+  color: #c5c5c5;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import {useStyles} from "../../components/pages/deleteModal/style/styleModal";
+import {useStylesModal} from "../../components/pages/deleteModal/style/styleModal";
 import {IconButton} from "@material-ui/core";
 import {GridCloseIcon} from "@material-ui/data-grid";
 
@@ -17,7 +17,7 @@ interface PhoneEditModalType  {
 
 export const ModalForEditForm = (props: PhoneEditModalType) => {
     let {title, body, buttons, open, onClose} = props
-    const classes = useStyles();
+    const classes = useStylesModal();
 
     return (
         <div>
@@ -41,7 +41,7 @@ export const ModalForEditForm = (props: PhoneEditModalType) => {
                             aria-label="close">
                             <GridCloseIcon/>
                         </IconButton>
-                        <h2 id="transition-modal-title">{title}</h2>
+                        <h2 className={classes.modalTitle} id="transition-modal-title">{title}</h2>
                         {body}
                         {buttons}
                     </div>

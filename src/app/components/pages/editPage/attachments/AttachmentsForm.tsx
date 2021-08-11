@@ -8,16 +8,18 @@ import {ModalForEditForm} from "../../../../shared/components/ModalForEditForm";
 import {AddAttachmentForm} from "./AddAttachmentForm";
 import {EditAttachmentForm} from "./EditAttachmentForm";
 import {useActions} from "../../../../store/hooks/useActions";
+import {useStyles} from "../styles/formStyles";
 
 type AttachmentsPropsType = {
     contact: ContactInterface
 }
 
 const AttachmentsForm = (props: AttachmentsPropsType) => {
+    const classes = useStyles()
     const {contact} = props
 
     const columns: GridColDef[] = [
-        {field: 'file', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
+        {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
         {field: 'date', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false},
         {
@@ -62,7 +64,9 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setTitle('Редактирование вложений');
         setOpen(true);
         const targetID = event.currentTarget.id
-        const currentAttachment = contact.attachments.find(target => target.id === targetID)!;
+        const currentAttachment = contact.attachments.find(target => {
+            return target.id === targetID
+        })!;
         setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
     }
     //DELETE ATTACHMENT
@@ -83,6 +87,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>
             <h2>Вложения</h2>
             <Button
+                className={classes.button}
                 variant="outlined"
                 color="primary"
                 onClick={addAttachmentChangeHandler}

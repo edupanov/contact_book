@@ -3,17 +3,12 @@ import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from 
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
-import {useLocation} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
 import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
 import {LocationType} from "./type/editPage.type";
-import {
-    AttachmentInterface,
-    AvatarInterface,
-    ContactInterface,
-    PhoneInterface
-} from "../../contactList/types/contact.interface";
+import {AttachmentInterface, ContactInterface} from "../../contactList/types/contact.interface";
 import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 import {RootState} from "../../../store/rootReducer";
 import styles from "./styles/HeaderContactList.module.scss";
@@ -36,7 +31,6 @@ const EditPage = () => {
         }
     }, [contacts])
 
-
     if (!contacts || !currentContact) {
         return <CircularProgress
             className={styles.preloader}
@@ -50,34 +44,68 @@ const EditPage = () => {
         const isDate = target.name === 'birthDate'
         const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
         if (currentContact) {
-            currentContact = {...currentContact, [target.name]: isDate ? replaceStr : target.value}
+            const contact = {...currentContact, [target.name]: isDate ? replaceStr : target.value}
+            setCurrentContact(contact)
         }
     }
     const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        currentContact = {
+
+        const address = {
             ...currentContact,
             address: {...currentContact.address, id: currentContact.address.id, [target.name]: target.value}
         }
+        setCurrentContact(address)
     }
 
-    const setAvatar = (file: string, name: string) => {
-        const newLogo: AvatarInterface = {
-            file: file,
-            name: name
+    // const setAvatar = (avatar: any) => {
+    //     setCurrentContact({
+    //         ...currentContact,
+    //         logo: avatar
+    //     })
+    // }
+    let copyContact = JSON.parse(JSON.stringify(currentContact))
+    const attachmentSubmit = copyContact.attachments.map((el: AttachmentInterface) => {
+        if (el.base64File) {
+
+            return {
+                comment: el.comment,
+                base64File: el.base64File,
+                date: el.date,
+                fileName: el.fileName
+            }
         }
-        currentContact = {...currentContact, logo: newLogo}
+
+        return el
+    })
+
+   const phoneSubmit = copyContact.phones.map((el: any) => {
+        if (el.id.includes('phone')) {
+            return {
+                comment: el.comment,
+                countryCode: el.countryCode,
+                operatorID: el.operatorID,
+                phoneNumber: el.phoneNumber,
+                phoneType: el.phoneType
+            }
+        }
+        return el
+    })
+
+    const contactSubmit = {
+        ...copyContact,
+        phones: phoneSubmit,
+        attachments: attachmentSubmit
     }
 
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
-        updateContact({contact: currentContact})
+        updateContact({contact: contactSubmit})
         sessionStorage.clear()
     }
-
     return (
         <div className={classes.editForm}>
-            <div className={classes.avatar}><Avatar setAvatar={setAvatar}/></div>
+            <div className={classes.avatar}><Avatar contact={currentContact}/></div>
             <div>
                 <h2 className={classes.title}>Редактирование контакта </h2>
                 <Grid container justifyContent="center">
@@ -201,11 +229,20 @@ const EditPage = () => {
 
                                     <div className={classes.submitButton}>
                                         <Button
-                                            className={classes.button}
+                                            className={classes.editButton}
                                             type={'submit'}
                                             variant={'contained'}
                                             color={'primary'}
                                         >Сохранить изменения</Button>
+                                        <NavLink to={'/contacts'} className={classes.prevButton}>
+                                            <Button
+                                                className={classes.editButton}
+
+                                                variant={'contained'}
+                                                color={'primary'}
+                                            >Назад</Button>
+                                        </NavLink>
+
                                     </div>
                                 </FormGroup>
                             </FormControl>

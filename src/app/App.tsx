@@ -1,14 +1,27 @@
 import './App.css';
 import {History} from 'history'
 import {ConnectedRouter} from "connected-react-router";
-import React from "react";
+import React, {useEffect} from "react";
 import Routes from "./routes/Routes";
+import {useTypeSelector} from "./store/hooks/useTypeSelector";
+import {useActions} from "./store/hooks/useActions";
 
 interface AppHistory {
     history: History
 }
 
 function App({history}: AppHistory) {
+    const {getContactsBirthday} = useActions()
+    const isSuccess = useTypeSelector(state => state.login.isSuccess)
+    const user = useTypeSelector(state => state.login)
+    console.log(user)
+
+    useEffect(() => {
+        if(isSuccess){
+            getContactsBirthday('edupanov@gmail.com')
+        }
+    }, [isSuccess])
+
 
     return (
         <ConnectedRouter history={history}>

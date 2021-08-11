@@ -10,9 +10,7 @@ import {PATH} from "../../../../../routes/Routes";
 
 export const updateContact = (contact: { contact: ContactInterface }) =>
     async (dispatch: Dispatch<UpdateContactActionType | ContactsActionType | CallHistoryMethodAction>, getState: () => RootState) => {
-
         dispatch({type: UpdateContactActionTypes.UPDATE_CONTACT})
-
         await EditRequest.updateContact(contact)
             .then(async response => {
                 if (response.isSuccess) {

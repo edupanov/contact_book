@@ -1,9 +1,8 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
-import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
+import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStyles} from "../editPage/styles/editContactStyles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
-import {GridCloseIcon} from "@material-ui/data-grid";
 import {formatDate} from "../../../utils/utils";
 
 export type TargetType = {
@@ -14,6 +13,7 @@ export type TargetType = {
 type SearchPanelType = {
     searchClickHandlerClose: () => void
 }
+
 const SearchPanel = (props: SearchPanelType) => {
 
     const classes = useStyles()
@@ -24,10 +24,6 @@ const SearchPanel = (props: SearchPanelType) => {
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
-        console.log(target.name)
-        // if(target.name === 'email') {
-        //     target.value = ``
-        // }
         const isDate = target.name === 'dateFrom' || target.name === 'dateTo'
         let replaceStr
         if (isDate && target.value.length === 10) {

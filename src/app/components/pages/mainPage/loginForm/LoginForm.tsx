@@ -1,27 +1,24 @@
 import React from 'react';
-import {Button, CircularProgress, FormControl, FormGroup, FormLabel, Grid, TextField} from "@material-ui/core";
+import {Button, FormControl, FormGroup, FormLabel, Grid, TextField} from "@material-ui/core";
 import {useFormik} from "formik";
-import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
 import {useActions} from "../../../../store/hooks/useActions";
-import {Redirect} from "react-router";
 import {useStyles} from "./loginStyles";
+import {LoginErrorType} from "../../../../validation/types/LoginErrorType";
+import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
+import {Redirect} from "react-router";
+import {locale} from "moment";
 
-type FormikErrorType = {
-    email?: string
-    password?: string
-}
+
 type LoginFormType = {
     openLoginFormClickHandler: () => void
 }
 
 const LoginForm = (props: LoginFormType) => {
     const styles = useStyles()
-    const {isLoading, data} = useTypeSelector(state => state.login)
+
     const {getLogin} = useActions()
 
-    function deepEqual(obj1: any, obj2: any) {
-        return JSON.stringify(obj1) === JSON.stringify(obj2);
-    }
+    const isSuccess = useTypeSelector(state => state.login.isSuccess)
 
     const formik = useFormik({
         initialValues: {
@@ -30,9 +27,9 @@ const LoginForm = (props: LoginFormType) => {
         },
         validate: (values) => {
 
-            const errors: FormikErrorType = {};
+            const errors: LoginErrorType = {};
             if (!values.email) {
-                errors.email = 'Required';
+                errors.email = 'Email is required';
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                 errors.email = 'Invalid email address';
             }
@@ -44,24 +41,15 @@ const LoginForm = (props: LoginFormType) => {
         },
         onSubmit: values => {
             getLogin(values.email, values.password)
+            formik.resetForm()
         }
     })
+       localStorage.setItem('email', JSON.stringify(formik.values.email))
 
-    // useEffect(() => {
-    //     getLogin(data.email, data.password)
-    //     console.log(formik.values)
-    // }, [])
 
-    if (isLoading || !data) {
-        return <CircularProgress color="secondary"/>
-    }
-    const formikValues = formik.values
-    const defaultValues = {email: "test@test.test", password: "11112"}
-    const result = deepEqual(formikValues, defaultValues)
-    if (result) {
+    if (isSuccess) {
         return <Redirect to={'/contacts'}/>
     }
-
 
     return (
         <div>
@@ -81,7 +69,8 @@ const LoginForm = (props: LoginFormType) => {
                                         margin="normal"
                                         {...formik.getFieldProps("email")}
                                     />
-                                    {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+                                    {formik.errors.email ?
+                                        <div className={styles.errorForm}>{formik.errors.email}</div> : null}
                                     <TextField
                                         type="password"
                                         label="Password"
@@ -90,7 +79,8 @@ const LoginForm = (props: LoginFormType) => {
                                     />
                                 </div>
 
-                                {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+                                {formik.errors.password ?
+                                    <div className={styles.errorForm}>{formik.errors.password}</div> : null}
                                 <div className={styles.buttonWrapper}>
                                     <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
                                     <Button variant={'contained'} color={'primary'}

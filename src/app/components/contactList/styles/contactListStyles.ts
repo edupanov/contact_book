@@ -2,7 +2,7 @@ import {makeStyles} from "@material-ui/styles";
 
 export const useStylesContactList = makeStyles({
         root: {
-            height: '100vh',
+            height: '100%',
             headerClassName: 'column',
             width: '100%',
             backgroundImage: 'url(https://png.pngtree.com/thumb_back/fh260/background/20200808/pngtree-white-gray-gradient-abstract-background-image_388903.jpg)',
@@ -14,7 +14,7 @@ export const useStylesContactList = makeStyles({
             },
         },
         headerWrapper: {
-            border: '1px solid #3f51b5',
+            // border: '1px solid #3f51b5',
             padding: '5px 25px',
         },
         grid: {

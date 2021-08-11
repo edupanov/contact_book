@@ -3,17 +3,16 @@ import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
 import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams, GridRowId,} from "@material-ui/data-grid";
-import styles from "../pages/editPage/styles/HeaderContactList.module.scss";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
-import {NavLink, useHistory} from 'react-router-dom';
+import {NavLink, Redirect, useHistory} from 'react-router-dom';
 import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
-import {makeStyles} from "@material-ui/styles";
 import {useStylesContactList} from "./styles/contactListStyles";
+import Menu from "../../shared/components/Menu";
 
 
 const ContactList = () => {
@@ -117,7 +116,7 @@ const ContactList = () => {
                 <IconButton
                     aria-label="del"
                     id={String(el.id)}
-                    onClick={deleteContact}
+                    onClick={() => handleOpenModal([String(el.id)])}
                 >
                     <Delete/>
                 </IconButton>
@@ -136,14 +135,17 @@ const ContactList = () => {
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
     const [openSearch, setOpenSearch] = React.useState(false);
-    const {getContacts, setPage, setTake, deleteContacts, deleteAll} = useActions()
+    const {getContacts, setPage, setTake, logOut} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
+
     const prevVal = usePrevious(data)
     const history = useHistory()
     sessionStorage.setItem('contactsId', JSON.stringify(selectionModel));
     sessionStorage.setItem('contacts', JSON.stringify(items));
-    const handleOpenModal = () => {
+
+    const handleOpenModal = (id: GridRowId[]) => {
+        setSelectionModel(id)
         setOpen(true);
     };
     const handleCloseModal = () => {
@@ -188,13 +190,13 @@ const ContactList = () => {
     const deleteContact = (event: SyntheticEvent) => {
         const id = event.currentTarget.id
         const checkedContacts: Array<string> = []
-        deleteContacts([...checkedContacts, id])
+        setSelectionModel([...checkedContacts, id])
+        // deleteContacts([...checkedContacts, id])
+        handleCloseModal()
     }
 
-    const deleteCheckedContacts = () => {
-        deleteContacts(selectionModel)
-        handleCloseModal()
-        setSelectionModel([])
+    const exitClickHandler = () => {
+      logOut()
     }
 
     useEffect(() => {
@@ -214,6 +216,7 @@ const ContactList = () => {
         }
     }, [data])
 
+
     if (isLoading || !data) {
         return <CircularProgress
             className={classes.preloader}
@@ -224,6 +227,7 @@ const ContactList = () => {
 
     return (
         <div className={classes.root}>
+            <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <Grid
                 className={classes.headerWrapper}
                 container
@@ -240,7 +244,7 @@ const ContactList = () => {
             </NavLink>
                 <div>
                     <Button
-                        onClick={handleOpenModal}
+                        onClick={() => handleOpenModal(selectionModel)}
                         disabled={selectionModel.length === 0}
                         className={classes.deleteButton}
                         variant="outlined"
@@ -297,28 +301,28 @@ const ContactList = () => {
             <DataGrid
                 className={classes.grid}
                 rows={items}
-                      columns={columns}
-                      pageSize={take}
-                      page={page - 1 || 0}
-                      rowCount={maxUsers}
-                      autoHeight
-                      loading={isDeleteLoading}
-                      paginationMode={'server'}
-                      rowsPerPageOptions={[5, 10, 25]}
-                      onPageChange={handlePaginationChange}
-                      onPageSizeChange={handlePaginationChange}
-                      sortingMode={'server'}
-                      disableSelectionOnClick
-                      checkboxSelection
-                      onSelectionModelChange={checkedCurrenContacts}
-                      selectionModel={selectionModel}
+                columns={columns}
+                pageSize={take}
+                page={page - 1 || 0}
+                rowCount={maxUsers}
+                autoHeight
+                loading={isDeleteLoading}
+                paginationMode={'server'}
+                rowsPerPageOptions={[5, 10, 25]}
+                onPageChange={handlePaginationChange}
+                onPageSizeChange={handlePaginationChange}
+                sortingMode={'server'}
+                disableSelectionOnClick
+                checkboxSelection
+                onSelectionModelChange={checkedCurrenContacts}
+                selectionModel={selectionModel}
             />
 
             <DeleteModal open={open}
                          onClose={handleCloseModal}
                          selectionModel={selectionModel}
-                         deleteCheckedContacts={deleteCheckedContacts}
-                         deleteAll={deleteAll}/>
+                         deleteContact={deleteContact}
+            />
         </div>
     );
 }

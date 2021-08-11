@@ -1,8 +1,40 @@
 const User = require('../models/user').User
 const Address = require('../models/address').Address
+const Phone = require('../models/phone').Phone
+const Attachment = require('../models/attachment').Attachment
 const nodemailer = require('nodemailer')
+const fs = require('fs')
+
 
 module.exports = {
+
+    login: async (req, res, next) => {
+        const email = req.body.email
+        const password = req.body.password
+
+        await User.find({email: email})
+            .then( user => {
+                console.log(user)
+                if (!user[0]._id) {
+                    res.status(404).json({
+                        message: `Пользователь с email: ${email} не найден!`,
+                        isSuccess: false,
+                    })
+                }
+                res.status(200).json({
+                    message: 'Авторизация прошла успешно!',
+                    isSuccess: true,
+                    user
+                })
+            })
+            .catch(error => {
+                res.status(500).json({
+                    message: 'Fetching contacts failed!',
+                    isSuccess: false,
+                    error
+                })
+            })
+    },
 
     getContacts: async (req, res, next) => {
         const pageSize = req.body.take
@@ -76,7 +108,6 @@ module.exports = {
         }
 
 
-
         if (city) {
             searchParams['addresses.city'] = city
         }
@@ -97,7 +128,7 @@ module.exports = {
         }
 
         await User.find(searchParams)
-            .populate(['addresses', 'phones'])
+            .populate(['addresses', 'phones', 'attachments'])
             .skip(isPaging ? pageSize * (currentPage - 1) : 0)
             .limit(isPaging ? pageSize : 0)
             .then(async documents => {
@@ -125,6 +156,15 @@ module.exports = {
                         }
                     })
 
+                    const attachments = user.attachments.map(attachment => {
+                        return {
+                            id: attachment._id,
+                            comment: attachment.comment,
+                            filePath: attachment.filePath,
+                            uploadDate: attachment.uploadDate
+                        }
+                    })
+
                     return {
                         id: user._id,
                         name: user.name,
@@ -138,6 +178,8 @@ module.exports = {
                         email: user.email,
                         edit: user.edit,
                         address: addr,
+                        imagePath: user.imagePath,
+                        attachments,
                         phones
                     }
                 })
@@ -159,6 +201,9 @@ module.exports = {
 
     createContact: async (req, res, next) => {
         let newContact = req.body.contact
+
+        const url = req.protocol + '://' + req.get('host')
+        newContact.imagePath = url + '/attachments/' + req.file.filename
 
         await User.create(newContact)
             .then(async user => {
@@ -194,11 +239,15 @@ module.exports = {
         const contactId = contactForUpdate.id
         const addressId = contactForUpdate.address.id
         const phones = contactForUpdate.phones
+        const logo = contactForUpdate.logo
+        const attachments = contactForUpdate.attachments
+
+        const filePathUrl = req.protocol + '://' + req.get('host')
 
         await User.findById({_id: contactId})
             .then(user => {
                 if (user._id) {
-                    const index = user.addresses.findIndex(item => item._id.equals(addressId))
+                    const addressIndex = user.addresses.findIndex(item => item._id.equals(addressId))
 
                     user.name = contactForUpdate.name
                     user.surname = contactForUpdate.surname
@@ -210,24 +259,76 @@ module.exports = {
                     user.currentJob = contactForUpdate.currentJob
                     user.email = contactForUpdate.email
 
-                    if (index >= 0) {
-                        user.addresses[index].city = contactForUpdate.address.city
-                        user.addresses[index].country = contactForUpdate.address.country
-                        user.addresses[index].street = contactForUpdate.address.street
-                        user.addresses[index].building = contactForUpdate.address.building
-                        user.addresses[index].flat = contactForUpdate.address.flat
-                        user.addresses[index].zipCode = contactForUpdate.address.zipCode
-                        user.addresses[index].fullAddress = contactForUpdate.address.fullAddress
+                    if (addressIndex >= 0) {
+                        user.addresses[addressIndex].city = contactForUpdate.address.city
+                        user.addresses[addressIndex].country = contactForUpdate.address.country
+                        user.addresses[addressIndex].street = contactForUpdate.address.street
+                        user.addresses[addressIndex].building = contactForUpdate.address.building
+                        user.addresses[addressIndex].flat = contactForUpdate.address.flat
+                        user.addresses[addressIndex].zipCode = contactForUpdate.address.zipCode
+                        user.addresses[addressIndex].fullAddress = contactForUpdate.address.fullAddress
                     }
 
-                    phones.map(phone => {
-                        const phoneIndex = user.phones.findIndex(item => item._id.equals(phone.id))
-                        if (phoneIndex >= 0) {
-                            user.phones[phoneIndex].countryCode = phone.countryCode
-                            user.phones[phoneIndex].operatorID = phone.operatorID
-                            user.phones[phoneIndex].phoneNumber = phone.phoneNumber
-                            user.phones[phoneIndex].phoneType = phone.phoneType
-                            user.phones[phoneIndex].comment = phone.comment
+                    user.phones.forEach(phone => {
+                        if (!phones.includes(phone)) {
+                            user.phones.pull(phone._id)
+                        }
+                    })
+
+                    phones.forEach(phoneForUpdate => {
+                        const phoneIndex = user.phones.findIndex(item => item._id.equals(phoneForUpdate.id))
+                        if (phoneForUpdate.id) {
+                            if (phoneIndex >= 0) {
+                                user.phones[phoneIndex].countryCode = phoneForUpdate.countryCode
+                                user.phones[phoneIndex].operatorID = phoneForUpdate.operatorID
+                                user.phones[phoneIndex].phoneNumber = phoneForUpdate.phoneNumber
+                                user.phones[phoneIndex].phoneType = phoneForUpdate.phoneType
+                                user.phones[phoneIndex].comment = phoneForUpdate.comment
+                            } else {
+                                user.phones.push(phoneForUpdate)
+                            }
+                        }
+
+                    })
+
+                    if (logo.file) {
+                        if (user.imagePath) {
+                            fs.unlink(user.imagePath, () => {
+                                console.log('Logo успешно удален')
+                            })
+                        }
+                        const logoPath = filePathUrl + '/backend/src/attachments/' + logo.name
+                        const logoBase64Image = logo.file.split(';base64,').pop();
+                        fs.writeFile(logoPath, logoBase64Image, {encoding: 'base64'}, () => {
+                            console.log('Logo успешно сохранен')
+                        });
+                        user.imagePath = logoPath
+                    }
+
+                    user.attachments.forEach(attachment => {
+                        if (!attachments.includes(attachment)) {
+                            user.attachments.pull(attachment._id)
+                            fs.unlink(attachment.filePath, () => {
+                                console.log('Attachment успешно удален')
+                            })
+                        }
+                    })
+
+                    attachments.forEach(attachmentForUpdate => {
+                        if (attachmentForUpdate.id) {
+                            const attachmentPath = filePathUrl + '/backend/src/attachments/' + attachmentForUpdate.fileName
+                            const attachmentBase64Image = logo.file.split(';base64,').pop();
+                            fs.writeFile(attachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
+                                console.log('Attachment успешно сохранен')
+                            });
+                            const attachmentIndex = user.attachments.findIndex(item => item._id.equals(attachmentForUpdate.id))
+                            if (attachmentIndex >= 0) {
+                                user.attachments[attachmentIndex].imagePath = attachmentPath
+                                user.attachments[attachmentIndex].uploadDate = attachmentForUpdate.date
+                                user.attachments[attachmentIndex].comment = attachmentForUpdate.comment
+                            }
+                        } else {
+                            user.attachments.push(attachmentForUpdate)
                         }
                     })
 
@@ -425,6 +526,7 @@ module.exports = {
         //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`,
         //         currentJob: `${i % 2 === 0 ? 'Programmer' : 'Tester'}`,
         //         email: `${i % 2 === 0 ? 'kleshchenok90@gmail.com' : 'kleshchenok.private@gmail.com'}`,
+        //         imagePath: ''
         //     })
         //
         //     await user.save()
@@ -458,6 +560,18 @@ module.exports = {
         //                     await user.save()
         //                 })
         //
+        //             const attachment = new Attachment({
+        //                 uploadDate: `${i % 2 === 0 ? '12.03.2021' : '17.04.2021'}`,
+        //                 filePath: `${i % 2 === 0 ? 'test' : 'notFound'}`,
+        //                 comment: `${i % 2 === 0 ? 'Super comment' : 'Super Puper comment'}`
+        //             })
+        //
+        //             await attachment.save()
+        //                 .then(async attachment => {
+        //                     user.attachments.push(attachment)
+        //                     await user.save()
+        //                 })
+        //
         //         }).catch(error => console.log(error))
         //
         //     i++
@@ -465,8 +579,8 @@ module.exports = {
 
         // User.find().populate('addresses').then(documents => res.json({users: documents}))
         //
-        // User.deleteMany({}).then(result =>  res.json({deleted: result}))
-        // Address.deleteMany({}).then(result =>  res.json({deleted: result}))
-        // Phone.deleteMany({}).then(result =>  res.json({deleted: result}))
+        // User.deleteMany({}).then(result => res.json({deleted: result}))
+        // Address.deleteMany({}).then(result => res.json({deleted: result}))
+        // Phone.deleteMany({}).then(result => res.json({deleted: result}))
     }
 }

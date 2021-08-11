@@ -48,18 +48,16 @@ export const RequestSender: HttpClient = {
             .then(response => errorHandler(response))
     },
 
-    async postFormData(url, body, headers): Promise<Request> {
-        const options: RequestInit = {
-            method: 'POSTREQUESTDATA',
-            headers: {...defaultHeaders, ...headers},
-            body
+    async postFormData(url, formData, headers): Promise<Request> {
+        const options: any = {
+            method: 'PUT',
+            headers: {...headers},
+            body: formData
         }
 
         return await fetch(url, options)
             .then(response => errorHandler(response))
-    },
-
-
+    }
 }
 
 const errorHandler = (res: any): Promise<Request> => {
