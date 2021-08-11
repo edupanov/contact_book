@@ -1,11 +1,12 @@
 import React, {SyntheticEvent} from 'react';
 import style from './mainPage.module.scss'
 import LoginForm from "./loginForm/LoginForm";
-import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import {NavLink} from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import AppBar from "@material-ui/core/AppBar";
+import Menu from "../../../shared/components/Menu";
 
 const MainPage = () => {
 
@@ -24,34 +25,17 @@ const MainPage = () => {
     return (
         <div className={style.wrapper}>
             <div className={style.root}>
-                <AppBar position="static">
-                    <Toolbar className={style.nav}>
-                        <NavLink className={style.link} to={'/contacts'}>
-                            <Typography variant="h6">
-                                Contact Book
-                            </Typography>
-                        </NavLink>
-                        <Button
-                            color="inherit"
-                            onClick={loginClickHandler}
-                        >
-
-                            Login
-                        </Button>
-                    </Toolbar>
-                </AppBar>
+                <Menu loginClickHandler={loginClickHandler} auth='Login'/>
             </div>
             <div>
                 <h1 className={style.title}>Книга Контактов</h1>
-
             </div>
-
             <div className={style.footer}>
-                <span>by Egor Dupanov (Bostil Support)</span>
-                <span>P.S. дизайнер с меня так себе</span>
+                <span className={style.footerTitle}>by Egor Dupanov (Bostil Support)</span>
             </div>
 
             {openLogin ? <LoginForm openLoginFormClickHandler={openLoginFormClickHandler}/> : null}
+
         </div>
     );
 };

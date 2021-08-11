@@ -20,7 +20,7 @@ export default function DeleteModal(props: DeleteType) {
     const {open, onClose, selectionModel} = props
 
     const classes = useStylesModal();
-    const deleteContact = (e: any) => {
+    const deleteContact = () => {
         if(selectionModel.length >= 5) {
             deleteAll()
             onClose()

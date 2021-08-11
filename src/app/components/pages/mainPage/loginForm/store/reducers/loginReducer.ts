@@ -17,6 +17,11 @@ export const LoginReducer = (state = initialState, action: LoginActionType): Log
                 ...state,
                 isSuccess: true,
             }
+        case LoginActionTypes.LOGOUT_SUCCESS:
+            return {
+                ...state,
+                isSuccess: false,
+            }
         case LoginActionTypes.GET_LOGIN_FAILURE:
             return {
                 ...state,

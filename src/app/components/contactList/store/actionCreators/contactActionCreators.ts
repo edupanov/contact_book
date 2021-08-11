@@ -6,9 +6,10 @@ import {ContactInterface} from "../../types/contact.interface";
 import * as ContactListRequests from '../../requests/contactListRequests'
 import {LoginActionType} from "../../../pages/mainPage/loginForm/store/ActionTypes/loginActionTypes";
 import * as SendMailRequest from "../../../pages/emailPage/requests/emailRequests";
-import {CallHistoryMethodAction} from "connected-react-router";
+import {CallHistoryMethodAction, push} from "connected-react-router";
 import {MailActionType, MailActionTypes} from "../../../pages/emailPage/store/actionTypes/mailActionTypes";
 import {formatDate} from "../../../../utils/utils";
+import {PATH} from "../../../../routes/Routes";
 
 export const getContacts = () => // передаем то что хотим поменять
     async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => { // передаем наш диспатч

@@ -6,12 +6,13 @@ import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams, GridRowId,} 
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
-import {NavLink, useHistory} from 'react-router-dom';
+import {NavLink, Redirect, useHistory} from 'react-router-dom';
 import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
 import {useStylesContactList} from "./styles/contactListStyles";
+import Menu from "../../shared/components/Menu";
 
 
 const ContactList = () => {
@@ -115,7 +116,7 @@ const ContactList = () => {
                 <IconButton
                     aria-label="del"
                     id={String(el.id)}
-                    onClick={()=>handleOpenModal([String(el.id)])}
+                    onClick={() => handleOpenModal([String(el.id)])}
                 >
                     <Delete/>
                 </IconButton>
@@ -134,7 +135,7 @@ const ContactList = () => {
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [open, setOpen] = React.useState(false);
     const [openSearch, setOpenSearch] = React.useState(false);
-    const {getContacts, setPage, setTake, deleteContacts} = useActions()
+    const {getContacts, setPage, setTake, logOut} = useActions()
     const {isLoading, data, maxUsers, page, take} = useTypeSelector(state => state.contacts)
     const {isDeleteLoading} = useTypeSelector(state => state.delete)
 
@@ -194,6 +195,10 @@ const ContactList = () => {
         handleCloseModal()
     }
 
+    const exitClickHandler = () => {
+      logOut()
+    }
+
     useEffect(() => {
         getContacts()
         if (data && data.length > 0) {
@@ -219,8 +224,10 @@ const ContactList = () => {
             color="secondary"
         />
     }
+
     return (
         <div className={classes.root}>
+            <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <Grid
                 className={classes.headerWrapper}
                 container
@@ -237,7 +244,7 @@ const ContactList = () => {
             </NavLink>
                 <div>
                     <Button
-                        onClick={()=>handleOpenModal(selectionModel)}
+                        onClick={() => handleOpenModal(selectionModel)}
                         disabled={selectionModel.length === 0}
                         className={classes.deleteButton}
                         variant="outlined"

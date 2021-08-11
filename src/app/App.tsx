@@ -1,7 +1,7 @@
 import './App.css';
 import {History} from 'history'
 import {ConnectedRouter} from "connected-react-router";
-import React, {useEffect} from "react";
+import React, {SyntheticEvent, useEffect} from "react";
 import Routes from "./routes/Routes";
 import {useTypeSelector} from "./store/hooks/useTypeSelector";
 import {useActions} from "./store/hooks/useActions";
