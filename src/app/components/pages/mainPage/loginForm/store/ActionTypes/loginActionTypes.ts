@@ -1,6 +1,7 @@
 export interface LoginStateInterface {
     isSuccess: boolean
     errors: {}
+    data: string
 }
 
 export enum LoginActionTypes  {
@@ -16,6 +17,7 @@ interface GetLogin {
 
 interface GetLoginSuccess {
     type: LoginActionTypes.GET_LOGIN_SUCCESS,
+    payload: ''
 }
 
 interface GetLoginFailure {

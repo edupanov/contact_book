@@ -36,6 +36,8 @@ export const useStyles = makeStyles({
         justifyContent: "center"
     },
     title: {
+        padding: 20,
+        fontSize:28,
         textAlign: "center",
         color: "#3451b9"
     },

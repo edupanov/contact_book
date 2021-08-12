@@ -50,20 +50,21 @@ export const getContactsBirthday = (mailTo: string) =>
                     const contacts = response?.data as Array<ContactInterface>
                     let date: any = new Date();
                     const today = formatDate(date, 'DD.MM.yyyy')
-                    const testContact = '01.01.2054'
+                    const testContact = '01.01.2007'
                     const contactsBirthDay = contacts.filter((el: any) => el.birthDate === testContact)
                     const contactNameBirthday = contactsBirthDay.map((el: any) => `${el.name} ${el.surname}`).join(', ')
 
-
-                    await SendMailRequest.sendMail([`${mailTo}`], 'Напоминание', `Сегодня День рождения у ${contactNameBirthday}`)
-                        .then(async response => {
-                            if (response.isSuccess) {
-                                dispatch({type: MailActionTypes.SEND_MAIL_SUCCESS})
-                            }
-                        })
-                        .catch(error => {
-                            dispatch({type: MailActionTypes.SEND_MAIL_FAILURE, errors: error})
-                        })
+                    if(contactsBirthDay.length !== 0) {
+                        await SendMailRequest.sendMail([`${mailTo}`], 'Напоминание', `Сегодня День рождения у ${contactNameBirthday}`)
+                            .then(async response => {
+                                if (response.isSuccess) {
+                                    dispatch({type: MailActionTypes.SEND_MAIL_SUCCESS})
+                                }
+                            })
+                            .catch(error => {
+                                dispatch({type: MailActionTypes.SEND_MAIL_FAILURE, errors: error})
+                            })
+                    }
                 }
             })
             .catch(error => {

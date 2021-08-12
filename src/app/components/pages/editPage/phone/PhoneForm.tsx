@@ -109,7 +109,7 @@ const PhoneForm = (props: PhoneFormProps) => {
 
     return (
         <div style={{height: 'auto', width: '100%'}}>
-            <h2>Контактные телефоны</h2>
+            <h2 className={classes.formTitle}>Контактные телефоны</h2>
             <Button
                 className={classes.button}
                 variant="outlined"

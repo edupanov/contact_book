@@ -259,6 +259,7 @@ module.exports = {
                     user.currentJob = contactForUpdate.currentJob
                     user.email = contactForUpdate.email
 
+
                     if (addressIndex >= 0) {
                         user.addresses[addressIndex].city = contactForUpdate.address.city
                         user.addresses[addressIndex].country = contactForUpdate.address.country
@@ -268,7 +269,6 @@ module.exports = {
                         user.addresses[addressIndex].zipCode = contactForUpdate.address.zipCode
                         user.addresses[addressIndex].fullAddress = contactForUpdate.address.fullAddress
                     }
-
                     user.phones.forEach(phone => {
                         if (!phones.includes(phone)) {
                             user.phones.pull(phone._id)
@@ -276,7 +276,10 @@ module.exports = {
                     })
 
                     phones.forEach(phoneForUpdate => {
+                        //console.log(phoneForUpdate)
+
                         const phoneIndex = user.phones.findIndex(item => item._id.equals(phoneForUpdate.id))
+
                         if (phoneForUpdate.id) {
                             if (phoneIndex >= 0) {
                                 user.phones[phoneIndex].countryCode = phoneForUpdate.countryCode
@@ -285,6 +288,8 @@ module.exports = {
                                 user.phones[phoneIndex].phoneType = phoneForUpdate.phoneType
                                 user.phones[phoneIndex].comment = phoneForUpdate.comment
                             } else {
+                               console.log(phoneForUpdate)
+
                                 user.phones.push(phoneForUpdate)
                             }
                         }
@@ -525,7 +530,7 @@ module.exports = {
         //         maritalStatus: `${i % 2 === 0 ? 'женат' : 'замужем'}`,
         //         nationality: `${i % 2 === 0 ? 'Беларус' : 'Россиянин'}`,
         //         currentJob: `${i % 2 === 0 ? 'Programmer' : 'Tester'}`,
-        //         email: `${i % 2 === 0 ? 'kleshchenok90@gmail.com' : 'kleshchenok.private@gmail.com'}`,
+        //         email: `${i % 2 === 0 ? 'edupanov@gmail.com' : 'kleshchenok.private@gmail.com'}`,
         //         imagePath: ''
         //     })
         //

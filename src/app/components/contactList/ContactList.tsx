@@ -6,7 +6,7 @@ import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams, GridRowId,} 
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
-import {NavLink, Redirect, useHistory} from 'react-router-dom';
+import {NavLink, useHistory} from 'react-router-dom';
 import {Delete} from "@material-ui/icons";
 import DeleteModal from "../pages/deleteModal/DeleteModal";
 import SearchPage from "../pages/searchPage/SearchPage";

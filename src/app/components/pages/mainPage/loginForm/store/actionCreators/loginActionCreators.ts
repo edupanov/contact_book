@@ -11,9 +11,8 @@ export const getLogin = (email: string, password: string) =>
 
         await LoginRequests.login(email, password)
             .then(response => {
-                console.log(response)
                 if (response.user.length > 0) {
-                    dispatch({type: LoginActionTypes.GET_LOGIN_SUCCESS})
+                    dispatch({type: LoginActionTypes.GET_LOGIN_SUCCESS, payload: response.user})
                 }
             })
             .catch(error => {
