@@ -71,7 +71,7 @@ const Logo = ({contact}: AvatarPropsType) => {
             <Box display="flex" flexWrap='wrap'>
                 <Box width="500%">
                     <Avatar
-                        src={picture.croppedImg}
+                        src={contact.imagePath}
                         style={{width: "100%", height: "auto", padding: "10", marginBottom: 10}}
                     />
 

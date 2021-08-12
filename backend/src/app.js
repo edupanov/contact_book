@@ -9,10 +9,10 @@ const app = express()
 
 const url = "mongodb+srv://Egor:" + process.env.MONGO_ATLAS_PW + "@myclaster.yoacx.mongodb.net/contacts?retryWrites=true&w=majority"
 
-mongoose.connect( url, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
-    })
+mongoose.connect(url, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+})
     .then(() => {
         console.log('Connected to database!')
     })
@@ -22,7 +22,7 @@ mongoose.connect( url, {
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
-app.use('/attachments', express.static(path.join('/backend/attachments')))
+app.use('/assets', express.static(path.join('backend/assets')));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')

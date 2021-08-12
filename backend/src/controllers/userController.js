@@ -4,6 +4,7 @@ const Phone = require('../models/phone').Phone
 const Attachment = require('../models/attachment').Attachment
 const nodemailer = require('nodemailer')
 const fs = require('fs')
+const path = require('path')
 
 
 module.exports = {
@@ -13,7 +14,7 @@ module.exports = {
         const password = req.body.password
 
         await User.find({email: email})
-            .then( user => {
+            .then(user => {
                 console.log(user)
                 if (!user[0]._id) {
                     res.status(404).json({
@@ -246,94 +247,118 @@ module.exports = {
 
         await User.findById({_id: contactId})
             .then(user => {
-                if (user._id) {
-                    const addressIndex = user.addresses.findIndex(item => item._id.equals(addressId))
+                    if (user._id) {
+                        const addressIndex = user.addresses.findIndex(item => item._id.equals(addressId))
 
-                    user.name = contactForUpdate.name
-                    user.surname = contactForUpdate.surname
-                    user.patronymic = contactForUpdate.patronymic
-                    user.birthDate = contactForUpdate.birthDate
-                    user.gender = contactForUpdate.gender
-                    user.maritalStatus = contactForUpdate.maritalStatus
-                    user.nationality = contactForUpdate.nationality
-                    user.currentJob = contactForUpdate.currentJob
-                    user.email = contactForUpdate.email
+                        user.name = contactForUpdate.name
+                        user.surname = contactForUpdate.surname
+                        user.patronymic = contactForUpdate.patronymic
+                        user.birthDate = contactForUpdate.birthDate
+                        user.gender = contactForUpdate.gender
+                        user.maritalStatus = contactForUpdate.maritalStatus
+                        user.nationality = contactForUpdate.nationality
+                        user.currentJob = contactForUpdate.currentJob
+                        user.email = contactForUpdate.email
 
 
-                    if (addressIndex >= 0) {
-                        user.addresses[addressIndex].city = contactForUpdate.address.city
-                        user.addresses[addressIndex].country = contactForUpdate.address.country
-                        user.addresses[addressIndex].street = contactForUpdate.address.street
-                        user.addresses[addressIndex].building = contactForUpdate.address.building
-                        user.addresses[addressIndex].flat = contactForUpdate.address.flat
-                        user.addresses[addressIndex].zipCode = contactForUpdate.address.zipCode
-                        user.addresses[addressIndex].fullAddress = contactForUpdate.address.fullAddress
-                    }
-                    user.phones.forEach(phone => {
-                        if (!phones.includes(phone)) {
-                            user.phones.pull(phone._id)
-                        }
-                    })
-
-                    phones.forEach(phoneForUpdate => {
-
-                        const phoneIndex = user.phones.findIndex(item => item._id.equals(phoneForUpdate.id))
-
-                        if (phoneForUpdate.id) {
-                            if (phoneIndex >= 0) {
-                                user.phones[phoneIndex].countryCode = phoneForUpdate.countryCode
-                                user.phones[phoneIndex].operatorID = phoneForUpdate.operatorID
-                                user.phones[phoneIndex].phoneNumber = phoneForUpdate.phoneNumber
-                                user.phones[phoneIndex].phoneType = phoneForUpdate.phoneType
-                                user.phones[phoneIndex].comment = phoneForUpdate.comment
-                            } else {
-
-                                user.phones.push(phoneForUpdate)
-                            }
+                        if (addressIndex >= 0) {
+                            user.addresses[addressIndex].city = contactForUpdate.address.city
+                            user.addresses[addressIndex].country = contactForUpdate.address.country
+                            user.addresses[addressIndex].street = contactForUpdate.address.street
+                            user.addresses[addressIndex].building = contactForUpdate.address.building
+                            user.addresses[addressIndex].flat = contactForUpdate.address.flat
+                            user.addresses[addressIndex].zipCode = contactForUpdate.address.zipCode
+                            user.addresses[addressIndex].fullAddress = contactForUpdate.address.fullAddress
                         }
 
-                    })
+                        // user.phones.forEach(phone => {
+                        //     if (!phones.includes(phone)) {
+                        //         user.phones.pull(phone._id)
+                        //     }
+                        // })
+                        //
+                        // phones.forEach(phoneForUpdate => {
+                        //
+                        //     const phoneIndex = user.phones.findIndex(item => item._id.equals(phoneForUpdate.id))
+                        //
+                        //     if (phoneForUpdate.id) {
+                        //         if (phoneIndex >= 0) {
+                        //             user.phones[phoneIndex].countryCode = phoneForUpdate.countryCode
+                        //             user.phones[phoneIndex].operatorID = phoneForUpdate.operatorID
+                        //             user.phones[phoneIndex].phoneNumber = phoneForUpdate.phoneNumber
+                        //             user.phones[phoneIndex].phoneType = phoneForUpdate.phoneType
+                        //             user.phones[phoneIndex].comment = phoneForUpdate.comment
+                        //         } else {
+                        //
+                        //             user.phones.push(phoneForUpdate)
+                        //         }
+                        //     }
+                        //
+                        // })
 
-                    if (logo.file) {
-                        if (user.imagePath) {
-                            fs.unlink(user.imagePath, () => {
-                                console.log('Logo успешно удален')
+                        // if (logo.file) {
+                        //     const logoName = user.imagePath.split('/').reverse()[0]
+                        //     const deleteLogoPath = `backend/assets/logo/${logoName}`
+                        //
+                        //     if (user.imagePath) {
+                        //         fs.unlink(deleteLogoPath, () => {
+                        //             console.log('Logo успешно удален')
+                        //         })
+                        //     }
+                        //
+                        //     const createLogoPath = `backend/assets/logo/${user.id}-${logo.name}`
+                        //     const logoBase64Image = logo.file.split(';base64,').pop();
+                        //     fs.writeFile(createLogoPath, logoBase64Image, {encoding: 'base64'}, () => {
+                        //         console.log('Logo успешно сохранен')
+                        //     });
+                        //     user.imagePath = filePathUrl + `/assets/logo/${user.id}-${logo.name}`
+                        // }
+
+                        if (attachments.length > 0) {
+                            const presentedAttachmentIds = attachments.reduce((acc, item) => {
+                                if (item.id) {
+                                    acc.push(item.id.toString().trim())
+                                }
+
+                                return acc
+                            }, [])
+
+                            user.attachments.length > 0 && user.attachments.forEach(attachment => {
+                                if (!presentedAttachmentIds.includes(attachment._id.toString().trim())) {
+                                    user.attachments.pull(attachment._id)
+                                    const attachmentName = attachment.filePath.split('/').reverse()[0]
+                                    const deleteAttachmentPath = `backend/assets/attachments/${attachmentName}`
+                                    fs.unlink(deleteAttachmentPath, () => {
+                                        console.log('Attachment успешно удален')
+                                    })
+                                }
+                            })
+
+                            attachments.length > 0 && attachments.forEach(attachmentForUpdate => {
+                                if (attachmentForUpdate.id) {
+                                    const attachmentIndex = user.attachments.findIndex(item => item._id.equals(attachmentForUpdate.id))
+                                    if (attachmentIndex >= 0) {
+                                        if (attachmentForUpdate.date) {
+                                            user.attachments[attachmentIndex].uploadDate = attachmentForUpdate.date
+                                        }
+                                        if (attachmentForUpdate.comment) {
+                                            user.attachments[attachmentIndex].comment = attachmentForUpdate.comment
+                                        }
+                                    }
+                                } else {
+                                    const createAttachmentPath = `backend/assets/attachments/${user.id}-${attachmentForUpdate.fileName}`
+                                    const attachmentBase64Image = attachmentForUpdate.base64File.split(';base64,').pop();
+                                    fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
+                                        console.log('Attachment успешно сохранен')
+                                    });
+                                    user.attachments.push(attachmentForUpdate)
+                                }
                             })
                         }
-                        const logoPath = filePathUrl + '/backend/src/attachments/' + logo.name
-                        const logoBase64Image = logo.file.split(';base64,').pop();
-                        fs.writeFile(logoPath, logoBase64Image, {encoding: 'base64'}, () => {
-                            console.log('Logo успешно сохранен')
-                        });
-                        user.imagePath = logoPath
+                    } else {
+                        user.attachments = []
                     }
 
-                    user.attachments.forEach(attachment => {
-                        if (!attachments.includes(attachment)) {
-                            user.attachments.pull(attachment._id)
-                            fs.unlink(attachment.filePath, () => {
-                                console.log('Attachment успешно удален')
-                            })
-                        }
-                    })
-
-                    attachments.forEach(attachmentForUpdate => {
-                        if (attachmentForUpdate.id) {
-                            const attachmentPath = filePathUrl + '/backend/src/attachments/' + attachmentForUpdate.fileName
-                            const attachmentBase64Image = logo.file.split(';base64,').pop();
-                            fs.writeFile(attachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
-                                console.log('Attachment успешно сохранен')
-                            });
-                            const attachmentIndex = user.attachments.findIndex(item => item._id.equals(attachmentForUpdate.id))
-                            if (attachmentIndex >= 0) {
-                                user.attachments[attachmentIndex].imagePath = attachmentPath
-                                user.attachments[attachmentIndex].uploadDate = attachmentForUpdate.date
-                                user.attachments[attachmentIndex].comment = attachmentForUpdate.comment
-                            }
-                        } else {
-                            user.attachments.push(attachmentForUpdate)
-                        }
-                    })
 
                     user.save()
                         .then(() => {
@@ -350,7 +375,7 @@ module.exports = {
                             })
                         })
                 }
-            })
+            )
             .catch(err => {
                 res.status(500).json({
                     error: err,

@@ -41,6 +41,7 @@ export interface ContactInterface {
     gender: string
     maritalStatus: string
     nationality: string
+    imagePath: string
     email: string
     currentJob: string
     logo: AvatarInterface
