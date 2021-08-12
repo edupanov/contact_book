@@ -54,7 +54,7 @@ const Logo = ({contact}: AvatarPropsType) => {
         });
 
         // @ts-ignore
-        saveAvatar(croppedImg, picture.img.name, contact.id)
+        saveAvatar(picture.img.name, croppedImg, contact.id)
 
     };
     const handleFileChange = (e: any) => {

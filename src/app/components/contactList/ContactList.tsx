@@ -253,16 +253,6 @@ const ContactList = () => {
                         Удалить выбранные
                         <Delete/>
                     </Button>
-                    <Button
-
-                        onClick={searchClickHandler}
-                        className={classes.searchButton}
-                        variant="outlined"
-                        color="primary"
-                    >
-                        Поиск
-                        <SearchIcon/>
-                    </Button>
                     {selectionModel.length === 0
                         ? <Button
                             disabled
@@ -292,6 +282,16 @@ const ContactList = () => {
                             </Button>
                         </NavLink>
                     }
+                    <Button
+
+                        onClick={searchClickHandler}
+                        className={classes.searchButton}
+                        variant="outlined"
+                        color="primary"
+                    >
+                        Поиск
+                        <SearchIcon/>
+                    </Button>
 
                 </div>
             </Grid>

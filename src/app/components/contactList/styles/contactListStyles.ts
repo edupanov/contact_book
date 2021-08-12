@@ -1,16 +1,23 @@
 import {makeStyles} from "@material-ui/styles";
+import {Theme} from "@material-ui/core/styles";
+
+function customCheckbox(theme: Theme) {
+    return {
+        '& .MuiDataGrid-columnHeaderCheckbox': {backgroundColor: '#00000008',},
+    };
+}
 
 export const useStylesContactList = makeStyles({
+    '& .MuiDataGrid-columnHeaderCheckbox': {backgroundColor: '#00000008',},
         root: {
             height: '100%',
-            headerClassName: 'column',
             width: '100%',
-            backgroundImage: 'url(https://png.pngtree.com/thumb_back/fh260/background/20200808/pngtree-white-gray-gradient-abstract-background-image_388903.jpg)',
+            backgroundImage: 'url(https://wallpapercave.com/wp/wp3589868.jpg)',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
+            backgroundRepeat: 'repeat-y',
             '& .column': {
-                backgroundColor: '#929292',
+                backgroundColor: '#00000008',
             },
         },
         headerWrapper: {
