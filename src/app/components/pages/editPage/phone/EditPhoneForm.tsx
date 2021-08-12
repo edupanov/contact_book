@@ -1,6 +1,6 @@
 import React, {ChangeEvent} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {useStylesModal} from "../../deleteModal/style/styleModal";
+import {useStylesAddPhone} from "../phone/styles/styles";
 import {ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
 
 interface EditPhoneFormInterface {
@@ -11,7 +11,7 @@ interface EditPhoneFormInterface {
 
 export const EditPhoneForm = (props: EditPhoneFormInterface) => {
 
-    const classes = useStylesModal();
+    const classes = useStylesAddPhone();
     let {phone, setOpen} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {

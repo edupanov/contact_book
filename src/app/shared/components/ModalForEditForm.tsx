@@ -20,7 +20,6 @@ export const ModalForEditForm = (props: PhoneEditModalType) => {
     const classes = useStylesModal();
 
     return (
-        <div>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -47,6 +46,5 @@ export const ModalForEditForm = (props: PhoneEditModalType) => {
                     </div>
                 </Fade>
             </Modal>
-        </div>
     );
 }

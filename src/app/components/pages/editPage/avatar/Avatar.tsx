@@ -5,11 +5,14 @@ import AvatarEditor from "react-avatar-editor";
 import {Box, Slider} from "@material-ui/core";
 import {ContactInterface} from "../../../contactList/types/contact.interface";
 import {useActions} from "../../../../store/hooks/useActions";
+import {useStylesAvatar} from "./styles/avatar.styles";
 
 type AvatarPropsType = {
     contact: ContactInterface
 }
 const Logo = ({contact}: AvatarPropsType) => {
+    const styles = useStylesAvatar();
+
 
     const {saveAvatar} = useActions()
 
@@ -17,7 +20,7 @@ const Logo = ({contact}: AvatarPropsType) => {
     const [picture, setPicture] = useState({
         cropperOpen: false,
         img: null,
-        zoom: 2,
+        zoom: 1,
         croppedImg:
             "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
     });
@@ -68,30 +71,32 @@ const Logo = ({contact}: AvatarPropsType) => {
 
     return (
         <div>
-            <Box display="flex" flexWrap='wrap'>
-                <Box width="500%">
+            <Box className={styles.wrapper}>
+                <Box className={styles.box} >
                     <Avatar
+                        className={styles.avatar}
                         src={picture.croppedImg}
-                        style={{width: "100%", height: "auto", padding: "10", marginBottom: 10}}
                     />
 
                     <Button
+                        className={styles.button}
                         variant="contained"
-                        style={{backgroundColor: "#3451b9", color: "white"}}
                     >
                         <input type="file" accept="image/*" onChange={handleFileChange}/>
                     </Button>
                 </Box>
 
                 {picture.cropperOpen && (
-                    <Box display="block">
+                    <Box
+                        className={styles.editorWrapper}
+                        >
                         <AvatarEditor
                             ref={setEditorRef}
                             image={picture.img!}
                             width={200}
                             height={200}
                             border={5}
-                            color={[255, 255, 255, 0.6]} // RGBA
+                            color={[255, 255, 255, 0.6]}
                             rotate={0}
                             scale={picture.zoom}
                         />

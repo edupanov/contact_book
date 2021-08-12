@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
-import {useStyles} from "../editPage/styles/editContactStyles";
+import {useStylesSearchPage} from "./styles/styles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
 import {formatDate} from "../../../utils/utils";
 
@@ -16,7 +16,7 @@ type SearchPanelType = {
 
 const SearchPanel = (props: SearchPanelType) => {
 
-    const classes = useStyles()
+    const classes = useStylesSearchPage()
 
     const {getContacts, setSearchParams, setPage} = useActions()
 

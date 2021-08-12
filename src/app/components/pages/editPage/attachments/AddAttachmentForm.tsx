@@ -1,7 +1,6 @@
 import React, {ChangeEvent, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
-import {useStyles} from "../styles/editContactStyles";
 import {useActions} from "../../../../store/hooks/useActions";
 import {toBase64} from "../../../../utils/utils";
 import {useStylesAttachment} from "./styles/attachment.style";

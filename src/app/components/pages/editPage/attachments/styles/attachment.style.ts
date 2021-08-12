@@ -1,6 +1,7 @@
 import {makeStyles} from "@material-ui/core";
 
 export const useStylesAttachment = makeStyles({
+
     wrapperInput: {
         padding: '10px 0',
         display: "flex",

@@ -1,35 +1,16 @@
 import {makeStyles} from "@material-ui/core";
-import editFormBG from '../../../../../assets/img/editFormBG.jpg'
+import addFormBG from "../../../../../assets/img/addFormBG.jpg";
 
-export const useStylesEditPAge = makeStyles({
-    avatar: {
-        width: 300
-    },
-    close: {
-        textDecoration: "none",
-        position: "fixed",
-        top: 160,
-        right: 50,
-        border: '1px solid black'
-    },
+export const useStylesAddPage = makeStyles({
 
-    errorTitle: {
-        fontSize: '1.5em',
-        textAlign: "center",
-        color: "red",
-        margin: '0 auto',
-        padding: '20px 0'
-    },
-    searchPanel: {
-        marginBottom: 30
-    },
-
-    editForm: {
-        display: "flex",
-        backgroundImage: `url(${editFormBG})`,
+    addPageWrapper: {
+        height: '100%',
+        width: '100%',
+        marginBottom: 30,
+        backgroundImage: `url(${addFormBG})`,
         backgroundPosition: 'center',
         backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
+        backgroundRepeat: 'repeat-y',
     },
     form: {
         width: '100%'
@@ -45,21 +26,11 @@ export const useStylesEditPAge = makeStyles({
         textAlign: "center",
         color: "#3451b9"
     },
-    wrapperInput: {
-        padding: '10px 0',
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center"
-    },
+
     input: {
         margin: '0 10px 10px',
     },
-    contactInfo: {
-        display: "flex",
-        flexWrap: 'wrap',
-        justifyContent: 'space-around'
 
-    },
     dateWrapper: {
         display: "flex",
         justifyContent: "space-between",
@@ -79,9 +50,7 @@ export const useStylesEditPAge = makeStyles({
         justifyContent: "space-around",
         marginTop: 20
     },
-    button: {
-        padding: 0
-    },
+
     prevButton: {textDecoration: 'none'},
     editButton: {padding: 10, margin: 20},
 
@@ -90,12 +59,5 @@ export const useStylesEditPAge = makeStyles({
         display: 'flex',
         justifyContent: 'center',
         margin: 80
-    },
-    wrapperButtonEditPage: {
-        display: "flex",
-        justifyContent: "center"
-    },
-    buttonEditForm: {
-        margin: 20
     },
 })
