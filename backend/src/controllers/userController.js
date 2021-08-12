@@ -276,7 +276,6 @@ module.exports = {
                     })
 
                     phones.forEach(phoneForUpdate => {
-                        //console.log(phoneForUpdate)
 
                         const phoneIndex = user.phones.findIndex(item => item._id.equals(phoneForUpdate.id))
 
@@ -288,7 +287,6 @@ module.exports = {
                                 user.phones[phoneIndex].phoneType = phoneForUpdate.phoneType
                                 user.phones[phoneIndex].comment = phoneForUpdate.comment
                             } else {
-                               console.log(phoneForUpdate)
 
                                 user.phones.push(phoneForUpdate)
                             }
