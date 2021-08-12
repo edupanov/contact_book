@@ -22,7 +22,7 @@ mongoose.connect( url, {
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
-app.use('/attachments', express.static(path.join('backend/src/attachments')))
+app.use('/attachments', express.static(path.join('/backend/attachments')))
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
