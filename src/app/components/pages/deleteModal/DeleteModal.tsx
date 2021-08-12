@@ -46,7 +46,7 @@ export default function DeleteModal(props: DeleteType) {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
-                        <h2 id="transition-modal-title">Вы действительно хотите удалить выбранные контакты?</h2>
+                        <h2 className={classes.modalTitle} id="transition-modal-title">Вы действительно хотите удалить выбранные контакты?</h2>
                         <Button
                             // className={classes.}
                             onClick={ deleteContact}

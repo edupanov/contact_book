@@ -18,7 +18,9 @@ export const useStylesModal = makeStyles((theme: Theme) =>
         },
 
         modalTitle:{
-            paddingTop: 20
+            padding: 20,
+            fontSize: 22,
+            textAlign: 'center'
         },
         wrapperInput: {
             padding: '10px 0',
