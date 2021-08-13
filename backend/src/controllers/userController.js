@@ -155,15 +155,17 @@ module.exports = {
                             comment: phone.comment
                         }
                     })
-
+                    console.log(user.attachments)
                     const attachments = user.attachments.map(attachment => {
                         return {
                             id: attachment._id,
                             comment: attachment.comment,
                             filePath: attachment.filePath,
+                            fileName: attachment.fileName,
                             uploadDate: attachment.uploadDate
                         }
                     })
+
 
                     return {
                         id: user._id,
@@ -316,7 +318,6 @@ module.exports = {
                             })
                         }
                     })
-
                     attachments.forEach(attachmentForUpdate => {
                         if (attachmentForUpdate.id) {
                             const attachmentPath = filePathUrl + '/backend/src/attachments/' + attachmentForUpdate.fileName
@@ -324,6 +325,7 @@ module.exports = {
                             fs.writeFile(attachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
                                 console.log('Attachment успешно сохранен')
                             });
+
                             const attachmentIndex = user.attachments.findIndex(item => item._id.equals(attachmentForUpdate.id))
                             if (attachmentIndex >= 0) {
                                 user.attachments[attachmentIndex].imagePath = attachmentPath
@@ -566,7 +568,8 @@ module.exports = {
         //             const attachment = new Attachment({
         //                 uploadDate: `${i % 2 === 0 ? '12.03.2021' : '17.04.2021'}`,
         //                 filePath: `${i % 2 === 0 ? 'test' : 'notFound'}`,
-        //                 comment: `${i % 2 === 0 ? 'Super comment' : 'Super Puper comment'}`
+        //                 comment: `${i % 2 === 0 ? 'Super comment' : 'Super Puper comment'}`,
+        //                 fileName: `${i % 2 === 0 ? 'New file' : 'Super Puper file'}`
         //             })
         //
         //             await attachment.save()

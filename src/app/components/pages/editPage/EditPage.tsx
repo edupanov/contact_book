@@ -66,11 +66,11 @@ const EditPage = () => {
     // }
     let copyContact = JSON.parse(JSON.stringify(currentContact))
     const attachmentSubmit = copyContact.attachments.map((el: AttachmentInterface) => {
-        if (el.base64File) {
+        if (el.filePath) {
 
             return {
                 comment: el.comment,
-                base64File: el.base64File,
+                filePath: el.filePath,
                 date: el.date,
                 fileName: el.fileName
             }

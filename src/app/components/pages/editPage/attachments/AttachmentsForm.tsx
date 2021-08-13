@@ -20,7 +20,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
 
     const columns: GridColDef[] = [
         {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
-        {field: 'date', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false},
+        {field: 'uploadDate', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false},
         {
             field: 'edit', headerName: '', width: 100, filterable: false, sortable: false, editable: true,
@@ -84,7 +84,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     };
 
     return (
-        <div style={{height: 162, width: '100%', marginBottom: 40, marginTop: 30}}>
+        <div style={{width: '100%', marginBottom: 40, marginTop: 30}}>
             <h2 className={classes.formTitle}>Вложения</h2>
             <Button
                 className={classes.button}

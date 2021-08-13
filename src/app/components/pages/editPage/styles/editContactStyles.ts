@@ -89,7 +89,7 @@ export const useStylesEditPAge = makeStyles({
         position: "relative",
         display: 'flex',
         justifyContent: 'center',
-        margin: 80
+        marginTop: 0
     },
     wrapperButtonEditPage: {
         display: "flex",

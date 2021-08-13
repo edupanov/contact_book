@@ -2,6 +2,7 @@ import React, {ChangeEvent} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
 import {useStylesAttachment} from "./styles/attachment.style";
+import {useActions} from "../../../../store/hooks/useActions";
 
 interface EditAttachmentFormInterface {
     setOpen: Function
@@ -11,9 +12,10 @@ interface EditAttachmentFormInterface {
 
 export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
     const styles = useStylesAttachment();
-    let {setOpen, attachment} = props
+    const {editAttachment} = useActions()
+    let {setOpen, attachment, contact} = props
 
-
+    console.log(attachment)
     const changeAttachmentHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
         if (name === 'fileName') {
@@ -23,8 +25,10 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
             attachment.comment = value
         }
     }
+    console.log(attachment)
 
     const onSubmit = () => {
+        editAttachment(attachment, contact.id)
         setOpen(false)
     }
 
@@ -38,7 +42,7 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
                                 <div className={styles.wrapperInput}>
                                     <TextField className={styles.input}
                                                label="Имя файла"
-                                               name={"file"}
+                                               name={"fileName"}
                                                type="search"
                                                onChange={changeAttachmentHandler}
                                                defaultValue={attachment.fileName ? attachment.fileName : ''}
