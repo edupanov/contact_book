@@ -17,7 +17,6 @@ type AttachmentsPropsType = {
 const AttachmentsForm = (props: AttachmentsPropsType) => {
     const classes = useStyles()
     const {contact} = props
-
     const columns: GridColDef[] = [
         {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,
             renderCell: (el) => {
