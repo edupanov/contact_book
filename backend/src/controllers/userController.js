@@ -163,6 +163,7 @@ module.exports = {
                             id: attachment._id,
                             comment: attachment.comment,
                             filePath: attachment.filePath,
+                            fileName: attachment.fileName,
                             uploadDate: attachment.uploadDate
                         }
                     })
@@ -318,12 +319,13 @@ module.exports = {
                             const current_date = (new Date()).valueOf().toString();
                             const random = Math.random().toString();
                             const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
-                            const createLogoPath = `backend/assets/logo/${user.id}-${hash}-${logo.name}`
+                            const ext = logo.file.split(';base64,')[0].split('/')[1]
+                            const createLogoPath = `backend/assets/logo/${user.id}-${hash}-${logo.name}.${ext}`
                             const logoBase64Image = logo.file.split(';base64,').pop();
                             fs.writeFile(createLogoPath, logoBase64Image, {encoding: 'base64'}, () => {
                                 console.log('Logo успешно сохранен')
                             });
-                            user.imagePath = filePathUrl + `/assets/logo/${user.id}-${hash}-${logo.name}`
+                            user.imagePath = filePathUrl + `/assets/logo/${user.id}-${hash}-${logo.name}.${ext}`
                         }
 
                         if (attachments && attachments.length > 0) {
@@ -365,26 +367,23 @@ module.exports = {
                                         }
                                         if (attachmentForUpdate.filePath) {
                                             const attachmentName = attachmentForUpdate.filePath.split('/').reverse()[0]
+                                            const ext = attachmentForUpdate.filePath.split('.').pop()
                                             const deleteAttachmentPath = `backend/assets/attachments/${attachmentName}`
-                                            console.log(deleteAttachmentPath)
-                                            fs.readFile(deleteAttachmentPath, 'utf8', (err, data) => {
+                                            fs.readFile(deleteAttachmentPath, {encoding: 'base64'}, (err, data) => {
                                                 if (err) {
-                                                    console.error(err)
                                                     return
                                                 }
                                                 const current_date = (new Date()).valueOf().toString();
                                                 const random = Math.random().toString();
                                                 const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
-                                                const ext = data.split('.').pop()
-                                                console.log(ext)
+                                                const attachmentBase64Image = data.split(';base64,').pop();
                                                 const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}.${ext}`
-                                                console.log(createAttachmentPath)
                                                 fs.unlink(deleteAttachmentPath, () => {
                                                     console.log('Attachment успешно удален')
+                                                    fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
+                                                        console.log('Attachment успешно сохранен')
+                                                    });
                                                 })
-                                                fs.writeFile(createAttachmentPath, data, {encoding: 'base64'}, () => {
-                                                    console.log('Attachment успешно сохранен')
-                                                });
                                             })
 
                                         }

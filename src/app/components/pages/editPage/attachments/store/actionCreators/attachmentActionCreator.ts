@@ -22,7 +22,7 @@ export const addAttachment = (newAttachment: AttachmentInterface, contactId: str
                 if (copyContact.attachments && copyContact.attachments.length > 0) {
                     copyContact.attachments.push({...newAttachment, uploadDate: today})
                 } else {
-                    copyContact.attachments = [newAttachment]
+                    copyContact.attachments = [{...newAttachment, uploadDate: today}]
                 }
                 return copyContact
             }
