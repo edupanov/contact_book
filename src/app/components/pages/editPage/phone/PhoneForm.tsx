@@ -124,7 +124,6 @@ const PhoneForm = (props: PhoneFormProps) => {
                 autoHeight
                 disableSelectionOnClick
                 hideFooter
-                checkboxSelection
                 onSelectionModelChange={checkedCurrenPhone}
                 selectionModel={selectionModel}
             />

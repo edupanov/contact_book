@@ -19,7 +19,12 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     const {contact} = props
 
     const columns: GridColDef[] = [
-        {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,},
+        {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,
+            renderCell: (el) => {
+                return <a href={el.row.filePath}
+                          download
+                          target="_blank" rel="noopener noreferrer">{el.value}</a>
+            }},
         {field: 'uploadDate', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false},
         {
@@ -101,7 +106,6 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
                 autoHeight
                 disableSelectionOnClick
                 hideFooter
-                checkboxSelection
                 onSelectionModelChange={checkedCurrenAttachment}
                 selectionModel={selectionModel}
             />

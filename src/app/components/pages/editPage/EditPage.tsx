@@ -71,7 +71,7 @@ const EditPage = () => {
             return {
                 comment: el.comment,
                 filePath: el.base64File,
-                date: el.uploadDate,
+                uploadDate: el.uploadDate,
                 fileName: el.fileName
             }
         }

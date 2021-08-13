@@ -12,9 +12,8 @@ type AvatarPropsType = {
 }
 const Logo = ({contact}: AvatarPropsType) => {
     const styles = useStylesAvatar();
-
-
     const {saveAvatar} = useActions()
+    const [avatar, setAvatar] = useState<string>(contact.imagePath)
 
     let editor = "";
     const [picture, setPicture] = useState({
@@ -55,6 +54,7 @@ const Logo = ({contact}: AvatarPropsType) => {
             cropperOpen: false,
             croppedImg: croppedImg
         });
+        setAvatar(croppedImg)
 
         // @ts-ignore
         saveAvatar(picture.img.name, croppedImg, contact.id)
@@ -67,15 +67,14 @@ const Logo = ({contact}: AvatarPropsType) => {
             cropperOpen: true
         });
     };
-
-
+    // const imgFromServer: any = await toBase64()
     return (
         <div>
             <Box className={styles.wrapper}>
                 <Box className={styles.box} >
                     <Avatar
                         className={styles.avatar}
-                        src={picture.croppedImg}
+                        src={avatar}
                     />
 
                     <Button
