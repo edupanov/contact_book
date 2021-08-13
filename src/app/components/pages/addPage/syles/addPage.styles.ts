@@ -2,15 +2,22 @@ import {makeStyles} from "@material-ui/core";
 import addFormBG from "../../../../../assets/img/addFormBG.jpg";
 
 export const useStylesAddPage = makeStyles({
+    addPageBG:{
+        height:'100%',
+        backgroundImage: `url(${addFormBG})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'repeat-y',
+    },
+    container: {
+        maxWidth: 1400,
+        margin: '0 auto',
+    },
 
     addPageWrapper: {
         height: '100%',
         width: '100%',
         marginBottom: 30,
-        backgroundImage: `url(${addFormBG})`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'repeat-y',
     },
     form: {
         width: '100%'
@@ -41,6 +48,11 @@ export const useStylesAddPage = makeStyles({
         width: 195
     },
     period: {
+        display: "flex",
+        justifyContent: "center",
+        flexWrap: "wrap"
+    },
+    addressWrapper:{
         display: "flex",
         justifyContent: "center",
         flexWrap: "wrap"

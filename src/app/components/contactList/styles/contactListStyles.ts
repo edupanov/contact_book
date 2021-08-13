@@ -13,6 +13,10 @@ export const useStylesContactList = makeStyles({
                 backgroundColor: '#00000000',
             },
         },
+        container: {
+            maxWidth: 1200,
+            margin: '0 auto'
+        },
         headerWrapper: {
             // border: '1px solid #3f51b5',
             padding: '5px 25px',

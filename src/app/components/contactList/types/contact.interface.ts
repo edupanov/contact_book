@@ -20,9 +20,9 @@ export interface PhoneInterface {
 
 export interface AttachmentInterface {
     id: string
-    date: string
+    uploadDate: string
     fileName: string
-    filePath:  string
+    base64File:  string
     comment: string
 }
 

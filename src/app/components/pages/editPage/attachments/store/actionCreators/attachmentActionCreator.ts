@@ -5,6 +5,7 @@ import {
     ContactActionTypes,
     ContactsActionType
 } from "../../../../../contactList/store/actionTypes/contactListActiontypes";
+import {formatDate} from "../../../../../../utils/utils";
 
 export const addAttachment = (newAttachment: AttachmentInterface, contactId: string) =>
     async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
@@ -14,10 +15,12 @@ export const addAttachment = (newAttachment: AttachmentInterface, contactId: str
 
         const updatedContacts = data.map((contact: ContactInterface) => {
             const copyContact = JSON.parse(JSON.stringify(contact))
+            let date: any = new Date();
+            const today = formatDate(date, 'DD.MM.yyyy')
 
             if (copyContact.id === contactId) {
                 if (copyContact.attachments && copyContact.attachments.length > 0) {
-                    copyContact.attachments.push(newAttachment)
+                    copyContact.attachments.push({...newAttachment, uploadDate: today})
                 } else {
                     copyContact.attachments = [newAttachment]
                 }

@@ -2,34 +2,30 @@ import {makeStyles} from "@material-ui/core";
 import editFormBG from '../../../../../assets/img/editFormBG.jpg'
 
 export const useStylesEditPAge = makeStyles({
-    avatar: {
-        width: 300
-    },
-    close: {
-        textDecoration: "none",
-        position: "fixed",
-        top: 160,
-        right: 50,
-        border: '1px solid black'
-    },
-
-    errorTitle: {
-        fontSize: '1.5em',
-        textAlign: "center",
-        color: "red",
-        margin: '0 auto',
-        padding: '20px 0'
-    },
-    searchPanel: {
-        marginBottom: 30
-    },
-
-    editForm: {
-        display: "flex",
+    editBG: {
         backgroundImage: `url(${editFormBG})`,
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
+    },
+    container: {
+        maxWidth: 1400,
+        margin: '0 auto',
+    },
+    avatar: {
+        width: 300
+    },
+    // close: {
+    //     textDecoration: "none",
+    //     position: "fixed",
+    //     top: 160,
+    //     right: 50,
+    //     border: '1px solid black'
+    // },
+
+    editForm: {
+        display: "flex",
+
     },
     form: {
         width: '100%'
