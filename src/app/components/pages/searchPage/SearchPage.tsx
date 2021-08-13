@@ -22,6 +22,7 @@ const SearchPanel = (props: SearchPanelType) => {
 
     const savedSearch: SearchParamsInterface = JSON.parse(sessionStorage.getItem('search') || '{}');
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
+
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
         const isDate = target.name === 'dateFrom' || target.name === 'dateTo'
@@ -51,7 +52,7 @@ const SearchPanel = (props: SearchPanelType) => {
         setSearchParams(search)
         getContacts()
     }
-
+    console.log(savedSearch)
     const discharge = () => {
         sessionStorage.clear()
         setSearch({})
@@ -177,7 +178,7 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    name={"building"}
                                                    type="number"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.building}
+                                                   defaultValue={search.address?.building}
 
                                         />
                                         <TextField className={classes.input}
@@ -185,7 +186,7 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    name={"flat"}
                                                    type="number"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.flat}
+                                                   defaultValue={search.address?.flat}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"

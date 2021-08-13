@@ -196,7 +196,7 @@ const ContactList = () => {
     }
 
     const exitClickHandler = () => {
-      logOut()
+        logOut()
     }
 
     useEffect(() => {
@@ -226,49 +226,39 @@ const ContactList = () => {
     }
 
     return (
+
         <div className={classes.root}>
-            <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
-            <Grid
-                className={classes.headerWrapper}
-                container
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-            > <NavLink className={classes.link} to={'/contacts/create'}>
-                <Button
-                    variant="outlined"
-                    color="primary"
-                >
-                    Создать новый контакт
-                </Button>
-            </NavLink>
-                <div>
+
+                <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
+            <div className={classes.container}>
+                <Grid
+                    className={classes.headerWrapper}
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                > <NavLink className={classes.link} to={'/contacts/create'}>
                     <Button
-                        onClick={() => handleOpenModal(selectionModel)}
-                        disabled={selectionModel.length === 0}
-                        className={classes.deleteButton}
                         variant="outlined"
-                        color="secondary"
+                        color="primary"
                     >
-                        Удалить выбранные
-                        <Delete/>
+                        Создать новый контакт
                     </Button>
-                    {selectionModel.length === 0
-                        ? <Button
-                            disabled
-                            variant="contained"
-                            size="large"
-                            color="primary"
-                            target="_top"
-                            rel="noopener noreferrer"
-                            href={``}
+                </NavLink>
+                    <div>
+                        <Button
+                            onClick={() => handleOpenModal(selectionModel)}
+                            disabled={selectionModel.length === 0}
+                            className={classes.deleteButton}
+                            variant="outlined"
+                            color="secondary"
                         >
-                            <Typography variant="button" className={classes.emailButtonText}>
-                                Отправить E-mail
-                            </Typography>
+                            Удалить выбранные
+                            <Delete/>
                         </Button>
-                        : <NavLink className={classes.link} to={'/contacts/email'}>
-                            <Button
+                        {selectionModel.length === 0
+                            ? <Button
+                                disabled
                                 variant="contained"
                                 size="large"
                                 color="primary"
@@ -280,49 +270,63 @@ const ContactList = () => {
                                     Отправить E-mail
                                 </Typography>
                             </Button>
-                        </NavLink>
-                    }
-                    <Button
+                            : <NavLink className={classes.link} to={'/contacts/email'}>
+                                <Button
+                                    variant="contained"
+                                    size="large"
+                                    color="primary"
+                                    target="_top"
+                                    rel="noopener noreferrer"
+                                    href={``}
+                                >
+                                    <Typography variant="button" className={classes.emailButtonText}>
+                                        Отправить E-mail
+                                    </Typography>
+                                </Button>
+                            </NavLink>
+                        }
+                        <Button
 
-                        onClick={searchClickHandler}
-                        className={classes.searchButton}
-                        variant="outlined"
-                        color="primary"
-                    >
-                        Поиск
-                        <SearchIcon/>
-                    </Button>
+                            onClick={searchClickHandler}
+                            className={classes.searchButton}
+                            variant="outlined"
+                            color="primary"
+                        >
+                            Поиск
+                            <SearchIcon/>
+                        </Button>
 
-                </div>
-            </Grid>
+                    </div>
+                </Grid>
 
-            {openSearch ? <SearchPage searchClickHandlerClose={searchClickHandlerClose}/> : null}
+                {openSearch ? <SearchPage searchClickHandlerClose={searchClickHandlerClose}/> : null}
 
-            <DataGrid
-                className={classes.grid}
-                rows={items}
-                columns={columns}
-                pageSize={take}
-                page={page - 1 || 0}
-                rowCount={maxUsers}
-                autoHeight
-                loading={isDeleteLoading}
-                paginationMode={'server'}
-                rowsPerPageOptions={[5, 10, 25]}
-                onPageChange={handlePaginationChange}
-                onPageSizeChange={handlePaginationChange}
-                sortingMode={'server'}
-                disableSelectionOnClick
-                checkboxSelection
-                onSelectionModelChange={checkedCurrenContacts}
-                selectionModel={selectionModel}
-            />
+                <DataGrid
+                    className={classes.grid}
+                    rows={items}
+                    columns={columns}
+                    pageSize={take}
+                    page={page - 1 || 0}
+                    rowCount={maxUsers}
+                    autoHeight
+                    loading={isDeleteLoading}
+                    paginationMode={'server'}
+                    rowsPerPageOptions={[5, 10, 25]}
+                    onPageChange={handlePaginationChange}
+                    onPageSizeChange={handlePaginationChange}
+                    sortingMode={'server'}
+                    disableSelectionOnClick
+                    checkboxSelection
+                    onSelectionModelChange={checkedCurrenContacts}
+                    selectionModel={selectionModel}
+                />
 
-            <DeleteModal open={open}
-                         onClose={handleCloseModal}
-                         selectionModel={selectionModel}
-                         deleteContact={deleteContact}
-            />
+                <DeleteModal open={open}
+                             onClose={handleCloseModal}
+                             selectionModel={selectionModel}
+                             deleteContact={deleteContact}
+                />
+            </div>
         </div>
     );
 }

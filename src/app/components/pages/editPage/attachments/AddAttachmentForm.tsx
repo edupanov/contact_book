@@ -5,12 +5,12 @@ import {useActions} from "../../../../store/hooks/useActions";
 import {toBase64} from "../../../../utils/utils";
 import {useStylesAttachment} from "./styles/attachment.style";
 
-interface AddPhoneFormInterface {
+interface AddAttachmentFormInterface {
     setOpen: Function
     contact: ContactInterface
 }
 
-export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
+export const AddAttachmentForm = (props: AddAttachmentFormInterface) => {
     const styles = useStylesAttachment();
     let {setOpen, contact} = props
 
@@ -22,8 +22,8 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
         const file = event.target.files![0]
         const fileName = event.target.files![0].name
 
-        const filePath: any = await toBase64(file)
-        const newAttachment = {...attachment, filePath: filePath, fileName: fileName}
+        const base64File: any = await toBase64(file)
+        const newAttachment = {...attachment, base64File: base64File, fileName: fileName}
         setAttachment(newAttachment)
     }
 
@@ -49,7 +49,7 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
                             <FormGroup>
                                 <div className={styles.wrapperInput }>
                                     <TextField
-                                        name={'file'}
+                                        name={'fileName'}
                                         className={styles.input}
                                         id="contained-button-file"
                                         type="file"
@@ -59,12 +59,6 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
                                                label="Коментарий"
                                                name={"comment"}
                                                type="search"
-                                               onChange={changeAttachmentInfoHandler}
-                                    />
-                                    <TextField className={styles.input}
-                                               helperText="Сегодняшняя дата"
-                                               name={"uploadDate"}
-                                               type="datetime-local"
                                                onChange={changeAttachmentInfoHandler}
                                     />
                                 </div>

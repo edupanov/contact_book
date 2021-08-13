@@ -163,6 +163,7 @@ module.exports = {
                             id: attachment._id,
                             comment: attachment.comment,
                             filePath: attachment.filePath,
+                            fileName: attachment.fileName,
                             uploadDate: attachment.uploadDate
                         }
                     })
@@ -370,6 +371,8 @@ module.exports = {
                                     fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
                                         console.log('Attachment успешно сохранен')
                                     });
+                                    console.log(attachmentForUpdate)
+
                                     attachmentForUpdate.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}`
                                     user.attachments.push(attachmentForUpdate)
                                 }
