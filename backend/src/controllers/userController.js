@@ -360,17 +360,46 @@ module.exports = {
                                         if (attachmentForUpdate.comment) {
                                             user.attachments[attachmentIndex].comment = attachmentForUpdate.comment
                                         }
+                                        if (attachmentForUpdate.fileName) {
+                                            user.attachments[attachmentIndex].fileName = attachmentForUpdate.fileName
+                                        }
+                                        if (attachmentForUpdate.filePath) {
+                                            const attachmentName = attachmentForUpdate.filePath.split('/').reverse()[0]
+                                            const deleteAttachmentPath = `backend/assets/attachments/${attachmentName}`
+                                            console.log(deleteAttachmentPath)
+                                            fs.readFile(deleteAttachmentPath, 'utf8', (err, data) => {
+                                                if (err) {
+                                                    console.error(err)
+                                                    return
+                                                }
+                                                const current_date = (new Date()).valueOf().toString();
+                                                const random = Math.random().toString();
+                                                const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
+                                                const ext = data.split('.').pop()
+                                                console.log(ext)
+                                                const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}.${ext}`
+                                                console.log(createAttachmentPath)
+                                                fs.unlink(deleteAttachmentPath, () => {
+                                                    console.log('Attachment успешно удален')
+                                                })
+                                                fs.writeFile(createAttachmentPath, data, {encoding: 'base64'}, () => {
+                                                    console.log('Attachment успешно сохранен')
+                                                });
+                                            })
+
+                                        }
                                     }
                                 } else {
                                     const current_date = (new Date()).valueOf().toString();
                                     const random = Math.random().toString();
                                     const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
-                                    const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}`
+                                    const ext = attachmentForUpdate.filePath.split(';base64,')[0].split('/')[1]
+                                    const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}.${ext}`
                                     const attachmentBase64Image = attachmentForUpdate.filePath.split(';base64,').pop();
                                     fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
                                         console.log('Attachment успешно сохранен')
                                     });
-                                    attachmentForUpdate.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}`
+                                    attachmentForUpdate.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}.${ext}`
                                     user.attachments.push(attachmentForUpdate)
                                 }
                             })
