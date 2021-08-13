@@ -9,7 +9,7 @@ export const useStylesModal = makeStyles((theme: Theme) =>
         },
         paper: {
             position: 'relative',
-            width: '50%',
+            width: 'auto',
             backgroundColor: theme.palette.background.paper,
             display: 'flex',
             flexDirection: 'column',
@@ -37,9 +37,10 @@ export const useStylesModal = makeStyles((theme: Theme) =>
             margin: '80px 0 20px 0',
         },
         modalButtonClose: {
-            position: "absolute",
-            top: 10,
-            right: 20
+            position: "relative",
+            backgroundColor: 'rgba(255,255,255,0)',
+            top: 0,
+            left: 140,
         },
 
     }),

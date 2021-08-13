@@ -1,14 +1,13 @@
 import React, {ChangeEvent, FC, useState} from 'react';
-import {Button, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
+import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
-import {useStyles} from "../editPage/styles/editContactStyles";
+import {useStylesAddPage} from "./syles/styles";
 import {NavLink, useHistory} from 'react-router-dom';
-import {GridCloseIcon} from "@material-ui/data-grid";
 import {PATH} from "../../../routes/Routes";
 
 const AddPage: FC = () => {
-    const classes = useStyles()
+    const classes = useStylesAddPage()
     const history = useHistory()
 
     const {addContact} = useActions()
@@ -51,7 +50,7 @@ const AddPage: FC = () => {
     }
 
     return (
-        <div className={classes.searchPanel}>
+        <div className={classes.addPageWrapper}>
             <h2 className={classes.title}>Добавление нового контакта</h2>
             <Grid container justifyContent="center">
                 <Grid item xs={10}>

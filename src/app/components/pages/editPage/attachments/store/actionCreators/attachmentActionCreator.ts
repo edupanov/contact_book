@@ -35,6 +35,42 @@ export const addAttachment = (newAttachment: AttachmentInterface, contactId: str
         })
     }
 
+export const editAttachment = (updateAttachment: AttachmentInterface, contactId: string) =>
+    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
+        dispatch({type: ContactActionTypes.GET_CONTACTS})
+
+        const {data, maxUsers} = getState().contacts
+
+        const updatedContacts = data.map((contact: ContactInterface) => {
+            const copyContact = JSON.parse(JSON.stringify(contact))
+
+            if (copyContact.id === contactId) {
+                const updateAttachments = copyContact.attachments.map((attachment: AttachmentInterface) => {
+                    if (attachment.id === updateAttachment.id) {
+                        return updateAttachment;
+                    }
+                    return attachment;
+                });
+                return {...copyContact, attachments: updateAttachments}
+            }
+            return contact
+        })
+
+        dispatch({
+            type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+            payload: {
+                users: updatedContacts as Array<ContactInterface>,
+                maxUsers: maxUsers
+            }
+        })
+    }
+
+
+
+
+
+
+
 export const deleteAttachment = (contactId: string, attachmentId: string) =>
     async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
         dispatch({type: ContactActionTypes.GET_CONTACTS})

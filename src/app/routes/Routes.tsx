@@ -17,7 +17,6 @@ export const PATH = {
 const Routes = () => {
 
     return (
-        <div>
             <Switch>
                 <Route exact path={PATH.LOGIN} component={MainPage}/>
                 <Route exact path={PATH.HOME} component={ContactList}/>
@@ -25,7 +24,6 @@ const Routes = () => {
                 <Route exact path={PATH.EMAIL} component={EmailPage}/>
                 <Route exact path={`${PATH.EDIT}/:id`} component={EditPage}/>
             </Switch>
-        </div>
     );
 };
 

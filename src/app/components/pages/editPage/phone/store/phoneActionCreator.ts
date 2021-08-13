@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {ContactActionTypes, ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
 import {RootState} from "../../../../../store/rootReducer";
-import {ContactInterface, PhoneInterface} from "../../../../contactList/types/contact.interface";
+import {AttachmentInterface, ContactInterface, PhoneInterface} from "../../../../contactList/types/contact.interface";
 
 
 export const addPhone = (phone: PhoneInterface, contactId: string) =>
@@ -20,6 +20,36 @@ export const addPhone = (phone: PhoneInterface, contactId: string) =>
                     copyContact.phones = [phone]
                 }
                 return copyContact
+            }
+            return contact
+        })
+
+        dispatch({
+            type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+            payload: {
+                users: updatedContacts as Array<ContactInterface>,
+                maxUsers: maxUsers
+            }
+        })
+    }
+
+export const editPhone = (updatePhone: PhoneInterface, contactId: string) =>
+    async (dispatch: Dispatch<ContactsActionType>, getState: () => RootState) => {
+        dispatch({type: ContactActionTypes.GET_CONTACTS})
+
+        const {data, maxUsers} = getState().contacts
+
+        const updatedContacts = data.map((contact: ContactInterface) => {
+            const copyContact = JSON.parse(JSON.stringify(contact))
+
+            if (copyContact.id === contactId) {
+                const phones = copyContact.phones.map((phone: PhoneInterface) => {
+                    if (phone.id === updatePhone.id) {
+                        return updatePhone;
+                    }
+                    return phone;
+                });
+                return {...copyContact, phones: phones}
             }
             return contact
         })

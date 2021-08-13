@@ -1,7 +1,6 @@
 import React, {ChangeEvent, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
-import {useStyles} from "../styles/editContactStyles";
 import {useActions} from "../../../../store/hooks/useActions";
 import {toBase64} from "../../../../utils/utils";
 import {useStylesAttachment} from "./styles/attachment.style";
@@ -23,8 +22,8 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
         const file = event.target.files![0]
         const fileName = event.target.files![0].name
 
-        const base64File: any = await toBase64(file)
-        const newAttachment = {...attachment, base64File: base64File, fileName: fileName}
+        const filePath: any = await toBase64(file)
+        const newAttachment = {...attachment, filePath: filePath, fileName: fileName}
         setAttachment(newAttachment)
     }
 
@@ -64,7 +63,7 @@ export const AddAttachmentForm = (props: AddPhoneFormInterface) => {
                                     />
                                     <TextField className={styles.input}
                                                helperText="Сегодняшняя дата"
-                                               name={"date"}
+                                               name={"uploadDate"}
                                                type="datetime-local"
                                                onChange={changeAttachmentInfoHandler}
                                     />

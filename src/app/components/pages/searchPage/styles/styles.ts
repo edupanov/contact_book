@@ -1,7 +1,6 @@
 import {makeStyles} from "@material-ui/core";
-import editFormBG from '../../../../../assets/img/editFormBG.jpg'
 
-export const useStylesEditPAge = makeStyles({
+export const useStylesSearchPage = makeStyles({
     avatar: {
         width: 300
     },
@@ -26,10 +25,7 @@ export const useStylesEditPAge = makeStyles({
 
     editForm: {
         display: "flex",
-        backgroundImage: `url(${editFormBG})`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
+
     },
     form: {
         width: '100%'
@@ -89,7 +85,7 @@ export const useStylesEditPAge = makeStyles({
         position: "relative",
         display: 'flex',
         justifyContent: 'center',
-        marginTop: 0
+        margin: 80
     },
     wrapperButtonEditPage: {
         display: "flex",

@@ -22,7 +22,7 @@ export interface AttachmentInterface {
     id: string
     date: string
     fileName: string
-    base64File:  string
+    filePath:  string
     comment: string
 }
 

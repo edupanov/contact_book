@@ -1,7 +1,8 @@
 import React, {ChangeEvent} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
-import {useStylesModal} from "../../deleteModal/style/styleModal";
+import {useStylesAddPhone} from "../phone/styles/styles";
 import {ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
+import {useActions} from "../../../../store/hooks/useActions";
 
 interface EditPhoneFormInterface {
     setOpen: Function
@@ -11,8 +12,9 @@ interface EditPhoneFormInterface {
 
 export const EditPhoneForm = (props: EditPhoneFormInterface) => {
 
-    const classes = useStylesModal();
-    let {phone, setOpen} = props
+    const classes = useStylesAddPhone();
+    const {editPhone} = useActions()
+    let {phone, setOpen, contact} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
@@ -33,8 +35,10 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
             phone.comment = value
         }
     }
+    console.log(phone)
 
     const onSubmit = () => {
+        editPhone(phone, contact.id)
         setOpen(false)
     }
 

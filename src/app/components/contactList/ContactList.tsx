@@ -84,9 +84,9 @@ const ContactList = () => {
             headerAlign: 'center',
         },
         {
-            field: 'edit',
+            field: 'редактировать',
             headerName: '',
-            width: 100,
+            width: 150,
             filterable: false,
             sortable: false,
             editable: true,
