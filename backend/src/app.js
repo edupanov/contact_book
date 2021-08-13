@@ -20,7 +20,7 @@ mongoose.connect(url, {
         console.log('Connection failed!' + error)
     })
 
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use('/assets', express.static(path.join('backend/assets')));
 

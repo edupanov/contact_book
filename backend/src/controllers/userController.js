@@ -272,7 +272,7 @@ module.exports = {
                             user.addresses[addressIndex].fullAddress = contactForUpdate.address.fullAddress
                         }
 
-                        if (phones.length > 0) {
+                        if (phones && phones.length > 0) {
                             const presentedPhoneIds = phones.reduce((acc, item) => {
                                 if (item.id) {
                                     acc.push(item.id.toString().trim())
@@ -288,9 +288,7 @@ module.exports = {
                             })
 
                             phones.length > 0 && phones.forEach(phoneForUpdate => {
-
                                 const phoneIndex = user.phones.findIndex(item => item._id.equals(phoneForUpdate.id))
-
                                 if (phoneForUpdate.id) {
                                     if (phoneIndex >= 0) {
                                         user.phones[phoneIndex].countryCode = phoneForUpdate.countryCode
@@ -298,84 +296,87 @@ module.exports = {
                                         user.phones[phoneIndex].phoneNumber = phoneForUpdate.phoneNumber
                                         user.phones[phoneIndex].phoneType = phoneForUpdate.phoneType
                                         user.phones[phoneIndex].comment = phoneForUpdate.comment
-                                    } else {
-                                        user.phones.push(phoneForUpdate)
                                     }
+                                } else {
+                                    user.phones.push(phoneForUpdate)
                                 }
                             })
+
                         } else {
                             user.phones = []
                         }
 
-                        // if (logo.file) {
-                        //     const logoName = user.imagePath.split('/').reverse()[0]
-                        //     const deleteLogoPath = `backend/assets/logo/${logoName}`
-                        //
-                        //     if (user.imagePath) {
-                        //         fs.unlink(deleteLogoPath, () => {
-                        //             console.log('Logo успешно удален')
-                        //         })
-                        //     }
-                        //     const current_date = (new Date()).valueOf().toString();
-                        //     const random = Math.random().toString();
-                        //     const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
-                        //     const createLogoPath = `backend/assets/logo/${user.id}-${hash}-${logo.name}`
-                        //     const logoBase64Image = logo.file.split(';base64,').pop();
-                        //     fs.writeFile(createLogoPath, logoBase64Image, {encoding: 'base64'}, () => {
-                        //         console.log('Logo успешно сохранен')
-                        //     });
-                        //     user.imagePath = filePathUrl + `/assets/logo/${user.id}-${hash}-${logo.name}`
-                        // }
+                        if (logo && logo.file) {
+                            const logoName = user.imagePath.split('/').reverse()[0]
+                            const deleteLogoPath = `backend/assets/logo/${logoName}`
 
-                        // if (attachments.length > 0) {
-                        //     const presentedAttachmentIds = attachments.reduce((acc, item) => {
-                        //         if (item.id) {
-                        //             acc.push(item.id.toString().trim())
-                        //         }
-                        //
-                        //         return acc
-                        //     }, [])
-                        //
-                        //     user.attachments.length > 0 && user.attachments.forEach(attachment => {
-                        //         if (!presentedAttachmentIds.includes(attachment._id.toString().trim())) {
-                        //             if (attachment.filePath) {
-                        //                 const attachmentName = attachment.filePath.split('/').reverse()[0]
-                        //                 const deleteAttachmentPath = `backend/assets/attachments/${attachmentName}`
-                        //                 fs.unlink(deleteAttachmentPath, () => {
-                        //                     console.log('Attachment успешно удален')
-                        //                 })
-                        //             }
-                        //             user.attachments.pull(attachment._id)
-                        //         }
-                        //     })
-                        //
-                        //     attachments.length > 0 && attachments.forEach(attachmentForUpdate => {
-                        //         if (attachmentForUpdate.id) {
-                        //             const attachmentIndex = user.attachments.findIndex(item => item._id.equals(attachmentForUpdate.id))
-                        //             if (attachmentIndex >= 0) {
-                        //                 if (attachmentForUpdate.date) {
-                        //                     user.attachments[attachmentIndex].uploadDate = attachmentForUpdate.date
-                        //                 }
-                        //                 if (attachmentForUpdate.comment) {
-                        //                     user.attachments[attachmentIndex].comment = attachmentForUpdate.comment
-                        //                 }
-                        //             }
-                        //         } else {
-                        //             const current_date = (new Date()).valueOf().toString();
-                        //             const random = Math.random().toString();
-                        //             const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
-                        //             const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}`
-                        //             const attachmentBase64Image = attachmentForUpdate.base64File.split(';base64,').pop();
-                        //             fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
-                        //                 console.log('Attachment успешно сохранен')
-                        //             });
-                        //             attachmentForUpdate.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}`
-                        //             user.attachments.push(attachmentForUpdate)
-                        //         }
-                        //     })
-                        // } else {
-                        //     user.attachments = []
-                        // }
+                            if (user.imagePath) {
+                                fs.unlink(deleteLogoPath, () => {
+                                    console.log('Logo успешно удален')
+                                })
+                            }
+                            const current_date = (new Date()).valueOf().toString();
+                            const random = Math.random().toString();
+                            const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
+                            const createLogoPath = `backend/assets/logo/${user.id}-${hash}-${logo.name}`
+                            const logoBase64Image = logo.file.split(';base64,').pop();
+                            fs.writeFile(createLogoPath, logoBase64Image, {encoding: 'base64'}, () => {
+                                console.log('Logo успешно сохранен')
+                            });
+                            user.imagePath = filePathUrl + `/assets/logo/${user.id}-${hash}-${logo.name}`
+                        }
+
+                        if (attachments && attachments.length > 0) {
+                            const presentedAttachmentIds = attachments.reduce((acc, item) => {
+                                if (item.id) {
+                                    acc.push(item.id.toString().trim())
+                                }
+
+                                return acc
+                            }, [])
+
+                            if (presentedAttachmentIds && presentedAttachmentIds.length > 0) {
+                                user.attachments.length > 0 && user.attachments.forEach(attachment => {
+                                    if (!presentedAttachmentIds.includes(attachment._id.toString().trim())) {
+                                        if (attachment.filePath) {
+                                            const attachmentName = attachment.filePath.split('/').reverse()[0]
+                                            const deleteAttachmentPath = `backend/assets/attachments/${attachmentName}`
+                                            fs.unlink(deleteAttachmentPath, () => {
+                                                console.log('Attachment успешно удален')
+                                            })
+                                        }
+                                        user.attachments.pull(attachment._id)
+                                    }
+                                })
+                            }
+
+                            attachments.length > 0 && attachments.forEach(attachmentForUpdate => {
+                                if (attachmentForUpdate.id) {
+                                    const attachmentIndex = user.attachments.findIndex(item => item._id.equals(attachmentForUpdate.id))
+                                    if (attachmentIndex >= 0) {
+                                        if (attachmentForUpdate.date) {
+                                            user.attachments[attachmentIndex].uploadDate = attachmentForUpdate.date
+                                        }
+                                        if (attachmentForUpdate.comment) {
+                                            user.attachments[attachmentIndex].comment = attachmentForUpdate.comment
+                                        }
+                                    }
+                                } else {
+                                    const current_date = (new Date()).valueOf().toString();
+                                    const random = Math.random().toString();
+                                    const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
+                                    const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}`
+                                    const attachmentBase64Image = attachmentForUpdate.filePath.split(';base64,').pop();
+                                    fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
+                                        console.log('Attachment успешно сохранен')
+                                    });
+                                    attachmentForUpdate.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}`
+                                    user.attachments.push(attachmentForUpdate)
+                                }
+                            })
+                        } else {
+                            user.attachments = []
+                        }
 
                         user.save()
                             .then(() => {
