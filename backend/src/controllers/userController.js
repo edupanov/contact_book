@@ -367,38 +367,39 @@ module.exports = {
                                         }
                                         if (attachmentForUpdate.filePath) {
                                             const attachmentName = attachmentForUpdate.filePath.split('/').reverse()[0]
-                                            const ext = attachmentForUpdate.filePath.split('.').pop()
+                                            const index = attachmentName.lastIndexOf('.')
+                                            const ext = attachmentName.substring(index, attachmentName.length)
                                             const deleteAttachmentPath = `backend/assets/attachments/${attachmentName}`
+
+                                            const current_date = (new Date()).valueOf().toString();
+                                            const random = Math.random().toString();
+                                            const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
+
                                             fs.readFile(deleteAttachmentPath, {encoding: 'base64'}, (err, data) => {
                                                 if (err) {
                                                     return
                                                 }
-                                                const current_date = (new Date()).valueOf().toString();
-                                                const random = Math.random().toString();
-                                                const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
-                                                const attachmentBase64Image = data.split(';base64,').pop();
-                                                const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}.${ext}`
+                                                const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}${ext}`
                                                 fs.unlink(deleteAttachmentPath, () => {
                                                     console.log('Attachment успешно удален')
-                                                    fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
-                                                        console.log('Attachment успешно сохранен')
+                                                    fs.writeFile(createAttachmentPath, data, {encoding: 'base64'}, () => {
+                                                        console.log('Attachment успешно обновлен')
                                                     });
                                                 })
                                             })
-
+                                            user.attachments[attachmentIndex].filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}${ext}`
                                         }
                                     }
                                 } else {
                                     const current_date = (new Date()).valueOf().toString();
                                     const random = Math.random().toString();
                                     const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
-                                    const ext = attachmentForUpdate.filePath.split(';base64,')[0].split('/')[1]
-                                    const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}.${ext}`
+                                    const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}${attachmentForUpdate.ext}`
                                     const attachmentBase64Image = attachmentForUpdate.filePath.split(';base64,').pop();
                                     fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
                                         console.log('Attachment успешно сохранен')
                                     });
-                                    attachmentForUpdate.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}.${ext}`
+                                    attachmentForUpdate.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}${attachmentForUpdate.ext}`
                                     user.attachments.push(attachmentForUpdate)
                                 }
                             })
@@ -565,7 +566,6 @@ module.exports = {
                 })
             })
     },
-
 
     deleteAllContacts: async (req, res, next) => {
 
