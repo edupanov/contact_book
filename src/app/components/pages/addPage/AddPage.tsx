@@ -5,12 +5,13 @@ import {TargetType} from "../searchPage/SearchPage";
 import {useStylesAddPage} from "./syles/addPage.styles";
 import {NavLink, useHistory} from 'react-router-dom';
 import {PATH} from "../../../routes/Routes";
+import Menu from "../../../shared/components/Menu";
 
 const AddPage: FC = () => {
     const classes = useStylesAddPage()
     const history = useHistory()
 
-    const {addContact} = useActions()
+    const {addContact, logOut} = useActions()
 
     const [contactInfo, setContactInfo] = useState({})
     const [contactAddress, setContactAddress] = useState({})
@@ -38,6 +39,10 @@ const AddPage: FC = () => {
         })
     }
 
+    const exitClickHandler = () => {
+        logOut()
+    }
+
     const onSubmit = () => {
         const contact = {
             contact: {
@@ -51,6 +56,7 @@ const AddPage: FC = () => {
 
     return (
         <div className={classes.addPageBG}>
+            <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <div className={classes.container}>
                 <div className={classes.addPageWrapper}>
                     <h2 className={classes.title}>Добавление нового контакта</h2>

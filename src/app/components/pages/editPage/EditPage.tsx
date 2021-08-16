@@ -12,11 +12,12 @@ import {AttachmentInterface, ContactInterface} from "../../contactList/types/con
 import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 import {RootState} from "../../../store/rootReducer";
 import styles from "./styles/HeaderContactList.module.scss";
+import Menu from "../../../shared/components/Menu";
 
 const EditPage = () => {
 
     const classes = useStylesEditPAge()
-    const {updateContact, getContacts} = useActions()
+    const {updateContact, getContacts, logOut} = useActions()
     const contacts: ContactInterface[] = useTypeSelector((state: RootState) => state.contacts.data)
     const location = useLocation<LocationType>()
     const contactId = location.pathname.split('/').reverse()[0]
@@ -56,6 +57,10 @@ const EditPage = () => {
             address: {...currentContact.address, id: currentContact.address.id, [target.name]: target.value}
         }
         setCurrentContact(address)
+    }
+
+    const exitClickHandler = () => {
+        logOut()
     }
 
     // const setAvatar = (avatar: any) => {
@@ -106,6 +111,7 @@ const EditPage = () => {
     }
     return (
         <div className={classes.editBG}>
+            <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <div className={classes.container}>
                 <div className={classes.editForm}>
                     <div className={classes.avatar}><Avatar contact={currentContact}/></div>

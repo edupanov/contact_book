@@ -23,6 +23,7 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
         const {name, value} = event.target
 
         const updatePhone = {...phone, [name]: value, id: `phone${String(phoneId)}`}
+        console.log(updatePhone)
         setPhone(updatePhone)
     }
 
@@ -44,6 +45,7 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                name={"countryCode"}
                                                type="search"
                                                onChange={changePhoneInfoHandler}
+
                                     />
                                     <TextField className={classes.input}
                                                label="Код оператора"

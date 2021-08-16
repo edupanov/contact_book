@@ -8,6 +8,20 @@ export const useStylesAttachment = makeStyles({
         flexDirection: "column",
         justifyContent: "center"
     },
+    customUpload:{
+        display: "flex",
+        alignItems: 'center'
+    },
+    attachmentFileName:{
+        paddingLeft: 10,
+    },
+
+    attachmentButton:{
+        marginLeft: 10,
+        marginRight: 10,
+        backgroundColor: "#3f51b5",
+        display: "none"
+    },
 
     input: {
         marginLeft: 10,

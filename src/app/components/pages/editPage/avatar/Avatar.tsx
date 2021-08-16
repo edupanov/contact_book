@@ -71,24 +71,27 @@ const Logo = ({contact}: AvatarPropsType) => {
     return (
         <div>
             <Box className={styles.wrapper}>
-                <Box className={styles.box} >
-                    <Avatar
-                        className={styles.avatar}
-                        src={avatar}
-                    />
+                <Box className={styles.box}>
+                    <label htmlFor="logoCheck" className={styles.logoLabel}>
+                        <Avatar
+                            className={styles.avatar}
+                            src={avatar}
+                        />
+                    </label>
 
-                    <Button
-                        className={styles.button}
-                        variant="contained"
-                    >
-                        <input type="file" accept="image/*" onChange={handleFileChange}/>
-                    </Button>
+                    {/*<Button*/}
+                    {/*    className={styles.button}*/}
+                    {/*    variant="contained"*/}
+                    {/*>*/}
+                        <input className={styles.logoInput} type="file" accept="image/*" id={'logoCheck'} onChange={handleFileChange}/>
+
+                    {/*</Button>*/}
                 </Box>
 
                 {picture.cropperOpen && (
                     <Box
                         className={styles.editorWrapper}
-                        >
+                    >
                         <AvatarEditor
                             ref={setEditorRef}
                             image={picture.img!}

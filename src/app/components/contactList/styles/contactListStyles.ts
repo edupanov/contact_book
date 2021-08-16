@@ -13,6 +13,9 @@ export const useStylesContactList = makeStyles({
                 backgroundColor: '#00000000',
             },
         },
+        caption: {
+            color: 'red'
+        },
         container: {
             maxWidth: 1200,
             margin: '0 auto'
@@ -21,9 +24,7 @@ export const useStylesContactList = makeStyles({
             // border: '1px solid #3f51b5',
             padding: '5px 25px',
         },
-        grid: {
-            // color: 'white',
-        },
+
         preloader: {
             position: 'absolute',
             top: '50%',

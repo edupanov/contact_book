@@ -10,8 +10,14 @@ export const useStylesAvatar = makeStyles({
     box: {
         width:"500%"
     },
+    logoLabel:{
+        cursor: 'pointer',
+    },
+    logoInput: {
+      display: 'none',
+    },
      avatar: {
-         width: "100%",
+         width: 200,
          height: "auto",
          padding: "10",
          marginBottom: 10

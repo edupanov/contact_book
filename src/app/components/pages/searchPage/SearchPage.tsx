@@ -52,15 +52,14 @@ const SearchPanel = (props: SearchPanelType) => {
         setSearchParams(search)
         getContacts()
     }
-    console.log(savedSearch)
+
     const discharge = () => {
         sessionStorage.clear()
         setSearch({})
     }
 
     return (
-        <div
-            className={classes.searchPanel}>
+        <div className={classes.searchPanel}>
             <h2 className={classes.title}>Поиск контакта</h2>
             <Grid container justifyContent="center">
                 <Grid item xs={10}>

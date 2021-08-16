@@ -37,10 +37,10 @@ export const useStylesModal = makeStyles((theme: Theme) =>
             margin: '80px 0 20px 0',
         },
         modalButtonClose: {
-            position: "relative",
+            position: "absolute",
             backgroundColor: 'rgba(255,255,255,0)',
             top: 0,
-            left: 140,
+            right: 0,
         },
 
     }),

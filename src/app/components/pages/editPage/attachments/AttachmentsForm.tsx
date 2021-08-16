@@ -27,9 +27,9 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
                           target="_blank" rel="noopener noreferrer">{el.value}</a>
             }},
         {field: 'uploadDate', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false},
-        {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false},
+        {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false, flex: 1},
         {
-            field: 'edit', headerName: '', width: 100, filterable: false, sortable: false, editable: true,
+            field: 'Редактировать', headerName: '', width: 155, filterable: false, sortable: false, editable: true,headerAlign: 'center',
             renderCell: (el) => {
                 return <IconButton
                     id={String(el.id)}
@@ -41,7 +41,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
             }
         },
         {
-            field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
+            field: 'Удалить', headerName: '', width: 110, filterable: false, sortable: false,headerAlign: 'center',
             renderCell: (el) =>
                 <IconButton
                     id={String(el.id)}
@@ -102,6 +102,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
             </Button>
 
             <DataGrid
+                className={classes.phoneTable}
                 rows={contact.attachments! || []}
                 columns={columns}
                 autoHeight

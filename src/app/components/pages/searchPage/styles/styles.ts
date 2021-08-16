@@ -28,7 +28,8 @@ export const useStylesSearchPage = makeStyles({
 
     },
     form: {
-        width: '100%'
+        width: '100%',
+        // boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
     },
     row: {
         display: "flex",

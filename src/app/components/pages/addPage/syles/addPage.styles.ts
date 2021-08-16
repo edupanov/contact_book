@@ -10,7 +10,7 @@ export const useStylesAddPage = makeStyles({
         backgroundRepeat: 'repeat-y',
     },
     container: {
-        maxWidth: 1400,
+        maxWidth: 1030,
         margin: '0 auto',
     },
 
@@ -20,7 +20,8 @@ export const useStylesAddPage = makeStyles({
         marginBottom: 30,
     },
     form: {
-        width: '100%'
+        width: '100%',
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
     },
     row: {
         display: "flex",

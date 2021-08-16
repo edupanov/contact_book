@@ -4,6 +4,7 @@ import {AttachmentInterface, ContactInterface} from "../../../contactList/types/
 import {useActions} from "../../../../store/hooks/useActions";
 import {toBase64} from "../../../../utils/utils";
 import {useStylesAttachment} from "./styles/attachment.style";
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 interface AddAttachmentFormInterface {
     setOpen: Function
@@ -17,6 +18,7 @@ export const AddAttachmentForm = (props: AddAttachmentFormInterface) => {
     const {addAttachment} = useActions()
     const [attachment, setAttachment] = useState<AttachmentInterface>({} as AttachmentInterface)
     const attachId = contact.attachments ? contact.attachments.length + 1 : 1
+    console.log(attachment)
 
     const changeAttachmentBase64File = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files![0]
@@ -26,7 +28,6 @@ export const AddAttachmentForm = (props: AddAttachmentFormInterface) => {
 
         const base64File: any = await toBase64(file)
         const newAttachment = {...attachment, base64File, fileName, ext}
-        console.log(newAttachment)
         setAttachment(newAttachment)
     }
 
@@ -35,7 +36,6 @@ export const AddAttachmentForm = (props: AddAttachmentFormInterface) => {
 
         const newAttachment = {...attachment, [name]: value, id: String(attachId)}
         setAttachment(newAttachment)
-
     }
 
     const onSubmit = () => {
@@ -51,10 +51,18 @@ export const AddAttachmentForm = (props: AddAttachmentFormInterface) => {
                         <FormControl>
                             <FormGroup>
                                 <div className={styles.wrapperInput }>
-                                    <TextField
+                                    <label htmlFor="file-upload" className={styles.customUpload}>
+                                        <div>
+                                            <CloudUploadIcon/>
+                                        </div>
+                                        <div className={styles.attachmentFileName}>
+                                            <span>{attachment.fileName! ? `Имя файла: ${attachment.fileName}` : 'Загрузить файл'}</span>
+                                        </div>
+                                    </label>
+                                    <input
+                                        className={styles.attachmentButton}
                                         name={'fileName'}
-                                        className={styles.input}
-                                        id="contained-button-file"
+                                        id="file-upload"
                                         type="file"
                                         onChange={changeAttachmentBase64File}
                                     />

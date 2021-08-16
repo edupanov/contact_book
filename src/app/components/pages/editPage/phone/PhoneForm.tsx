@@ -39,7 +39,7 @@ const PhoneForm = (props: PhoneFormProps) => {
         {field: 'phoneType', headerName: 'Описание', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false, flex: 1},
         {
-            field: 'edit', headerName: '', width: 100, filterable: false, sortable: false, editable: true,
+            field: 'Редактировать', headerName: '', width: 155, filterable: false, sortable: false, editable: true,headerAlign: 'center',
             renderCell: (el) => {
                 return <IconButton
                     id={String(el.id)}
@@ -51,7 +51,7 @@ const PhoneForm = (props: PhoneFormProps) => {
             }
         },
         {
-            field: 'del', headerName: '', width: 100, filterable: false, sortable: false,
+            field: 'Удалить', headerName: '', width: 110, filterable: false, sortable: false,headerAlign: 'center',
             renderCell: (el) =>
                 <IconButton
                     aria-label="del"
@@ -108,7 +108,7 @@ const PhoneForm = (props: PhoneFormProps) => {
 
 
     return (
-        <div style={{height: 'auto', width: '100%'}}>
+        <div className={classes.phoneFormWrapper}>
             <h2 className={classes.formTitle}>Контактные телефоны</h2>
             <Button
                 className={classes.button}
@@ -119,6 +119,7 @@ const PhoneForm = (props: PhoneFormProps) => {
                 Добавить новый номер
             </Button>
             <DataGrid
+                className={classes.phoneTable}
                 rows={phones! || []}
                 columns={columns}
                 autoHeight

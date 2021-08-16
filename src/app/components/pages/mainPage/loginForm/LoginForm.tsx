@@ -6,7 +6,6 @@ import {useStyles} from "./loginStyles";
 import {LoginErrorType} from "../../../../validation/types/LoginErrorType";
 import {useTypeSelector} from "../../../../store/hooks/useTypeSelector";
 import {Redirect} from "react-router";
-import {locale} from "moment";
 
 
 type LoginFormType = {
@@ -44,8 +43,6 @@ const LoginForm = (props: LoginFormType) => {
             formik.resetForm()
         }
     })
-       localStorage.setItem('email', JSON.stringify(formik.values.email))
-
 
     if (isSuccess) {
         return <Redirect to={'/contacts'}/>
@@ -57,11 +54,6 @@ const LoginForm = (props: LoginFormType) => {
                 <Grid item xs={12}>
                     <form onSubmit={formik.handleSubmit}>
                         <FormControl>
-                            <FormLabel>
-                                <p>or use common test account credentials:</p>
-                                <p>Email: test@test.test</p>
-                                <p>Password: 11112</p>
-                            </FormLabel>
                             <FormGroup>
                                 <div className={styles.inputWrapper}>
                                     <TextField

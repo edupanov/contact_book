@@ -2,7 +2,13 @@ import React, {SyntheticEvent, useEffect, useRef, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
-import {DataGrid, GridCellParams, GridColDef, GridPageChangeParams, GridRowId,} from "@material-ui/data-grid";
+import {
+    DataGrid,
+    GridCellParams,
+    GridColDef,
+    GridPageChangeParams,
+    GridRowId, ruRU
+} from "@material-ui/data-grid";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
@@ -13,7 +19,6 @@ import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
 import {useStylesContactList} from "./styles/contactListStyles";
 import Menu from "../../shared/components/Menu";
-
 
 const ContactList = () => {
 
@@ -84,9 +89,9 @@ const ContactList = () => {
             headerAlign: 'center',
         },
         {
-            field: 'редактировать',
+            field: 'Редактировать',
             headerName: '',
-            width: 150,
+            width: 155,
             filterable: false,
             sortable: false,
             editable: true,
@@ -105,9 +110,9 @@ const ContactList = () => {
             }
         },
         {
-            field: 'del',
+            field: 'Удалить',
             headerName: '',
-            width: 100,
+            width: 110,
             filterable: false,
             sortable: false,
             headerAlign: 'center',
@@ -228,8 +233,7 @@ const ContactList = () => {
     return (
 
         <div className={classes.root}>
-
-                <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
+            <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <div className={classes.container}>
                 <Grid
                     className={classes.headerWrapper}
@@ -292,7 +296,6 @@ const ContactList = () => {
                             variant="outlined"
                             color="primary"
                         >
-                            Поиск
                             <SearchIcon/>
                         </Button>
 
@@ -302,7 +305,6 @@ const ContactList = () => {
                 {openSearch ? <SearchPage searchClickHandlerClose={searchClickHandlerClose}/> : null}
 
                 <DataGrid
-                    className={classes.grid}
                     rows={items}
                     columns={columns}
                     pageSize={take}
@@ -311,12 +313,13 @@ const ContactList = () => {
                     autoHeight
                     loading={isDeleteLoading}
                     paginationMode={'server'}
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[5, 10, 25, ] }
                     onPageChange={handlePaginationChange}
                     onPageSizeChange={handlePaginationChange}
                     sortingMode={'server'}
                     disableSelectionOnClick
                     checkboxSelection
+                    localeText={"props" in ruRU ? ruRU.props.MuiDataGrid.localeText : undefined}
                     onSelectionModelChange={checkedCurrenContacts}
                     selectionModel={selectionModel}
                 />

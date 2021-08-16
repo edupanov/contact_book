@@ -1,11 +1,6 @@
 import React, {SyntheticEvent} from 'react';
 import style from './mainPage.module.scss'
 import LoginForm from "./loginForm/LoginForm";
-import Toolbar from "@material-ui/core/Toolbar";
-import {NavLink} from "react-router-dom";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import AppBar from "@material-ui/core/AppBar";
 import Menu from "../../../shared/components/Menu";
 
 const MainPage = () => {
