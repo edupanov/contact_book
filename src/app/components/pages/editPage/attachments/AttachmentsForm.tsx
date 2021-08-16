@@ -20,6 +20,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     const columns: GridColDef[] = [
         {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,
             renderCell: (el) => {
+
                 return <a href={el.row.filePath}
                           download
                           target="_blank" rel="noopener noreferrer">{el.value}</a>
