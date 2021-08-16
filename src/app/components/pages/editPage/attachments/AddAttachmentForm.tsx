@@ -20,12 +20,14 @@ export const AddAttachmentForm = (props: AddAttachmentFormInterface) => {
 
     const changeAttachmentBase64File = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files![0]
-        const fileName = file.name.split('.')[0]
+        const index = file.name.lastIndexOf('.')
+        const fileName = file.name.substring(0, index)
+        const ext = file.name.substring(index, file.name.length)
         console.log(fileName)
-
+        console.log(ext)
 
         const base64File: any = await toBase64(file)
-        const newAttachment = {...attachment, base64File: base64File, fileName: fileName}
+        const newAttachment = {...attachment, base64File, fileName, ext}
         setAttachment(newAttachment)
     }
 
