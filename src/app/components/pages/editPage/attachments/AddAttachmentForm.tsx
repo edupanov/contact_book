@@ -23,11 +23,10 @@ export const AddAttachmentForm = (props: AddAttachmentFormInterface) => {
         const index = file.name.lastIndexOf('.')
         const fileName = file.name.substring(0, index)
         const ext = file.name.substring(index, file.name.length)
-        console.log(fileName)
-        console.log(ext)
 
         const base64File: any = await toBase64(file)
         const newAttachment = {...attachment, base64File, fileName, ext}
+        console.log(newAttachment)
         setAttachment(newAttachment)
     }
 

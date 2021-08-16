@@ -25,6 +25,7 @@ export interface AttachmentInterface {
     base64File:  string
     comment: string
     filePath?: string
+    ext: string
 }
 
 export interface AvatarInterface {
