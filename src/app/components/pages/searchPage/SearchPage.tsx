@@ -60,12 +60,12 @@ const SearchPanel = (props: SearchPanelType) => {
 
     return (
         <div className={classes.searchPanel}>
-            <h2 className={classes.title}>Поиск контакта</h2>
-            <Grid container justifyContent="center">
-                <Grid item xs={10}>
-                    <form onSubmit={onSubmit}>
+            <Grid container justifyContent="center" >
+                <Grid item xs={10}className={classes.searchWrapper}>
+                    <form onSubmit={onSubmit} >
                         <FormControl className={classes.form}>
                             <FormGroup className={classes.row}>
+                                <h2 className={classes.title}>Поиск контакта</h2>
                                 <div>
                                     <div className={classes.period}>
                                         <TextField className={classes.input}
@@ -148,15 +148,15 @@ const SearchPanel = (props: SearchPanelType) => {
                                             />
                                         </div>
                                     </div>
-                                    <div>
-                                        <h3 className={classes.title}>Адрес</h3>
-                                        <br/><TextField className={classes.input}
-                                                        label="Страна"
-                                                        name={"country"}
-                                                        type="search"
-                                                        onChange={changeContactAddressHandler}
-                                                        defaultValue={savedSearch.address?.country}
-                                    />
+                                    <h3 className={classes.title}>Адрес</h3>
+                                    <div className={classes.addressWrapper}>
+                                        <TextField className={classes.input}
+                                                   label="Страна"
+                                                   name={"country"}
+                                                   type="search"
+                                                   onChange={changeContactAddressHandler}
+                                                   defaultValue={savedSearch.address?.country}
+                                        />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}

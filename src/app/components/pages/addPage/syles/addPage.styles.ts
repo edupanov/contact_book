@@ -2,6 +2,15 @@ import {makeStyles} from "@material-ui/core";
 import addFormBG from "../../../../../assets/img/addFormBG.jpg";
 
 export const useStylesAddPage = makeStyles({
+    error: {
+        fontSize: 14,
+        height: 16,
+        color: 'red',
+        position: 'relative',
+        top: -8,
+        left: 10
+    },
+
     addPageBG:{
         height:'100%',
         backgroundImage: `url(${addFormBG})`,
@@ -32,12 +41,15 @@ export const useStylesAddPage = makeStyles({
         padding: 20,
         fontSize: 28,
         textAlign: "center",
-        color: "#3451b9"
+        color: "#3451b9",
+        fontFamily: 'Sans-Serif',
     },
 
     input: {
         margin: '0 10px 10px',
+        width: 200
     },
+    gender: {width: 200, margin: '0 10px 10px'},
 
     dateWrapper: {
         display: "flex",
@@ -60,7 +72,7 @@ export const useStylesAddPage = makeStyles({
     },
     buttonWrapper: {
         display: "flex",
-        justifyContent: "space-around",
+        justifyContent: "flex-end",
         marginTop: 20
     },
 

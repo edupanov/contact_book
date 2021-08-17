@@ -34,7 +34,8 @@ export const useStylesEditPAge = makeStyles({
         padding: 20,
         fontSize: 28,
         textAlign: "center",
-        color: "#3451b9"
+        color: "#3451b9",
+        fontFamily: 'Sans-Serif',
     },
     contactWrapper:{
 

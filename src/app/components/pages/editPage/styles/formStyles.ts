@@ -16,6 +16,7 @@ export const useStyles = makeStyles({
         fontSize: 28,
         padding: 20,
         textAlign: "center",
-        color: "#3451b9"
+        color: "#3451b9",
+        fontFamily: 'Sans-Serif',
     }
 })

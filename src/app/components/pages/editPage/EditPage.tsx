@@ -242,12 +242,6 @@ const EditPage = () => {
                                             <AttachmentsForm contact={currentContact}/>
 
                                             <div className={classes.submitButton}>
-                                                <Button
-                                                    className={classes.editButton}
-                                                    type={'submit'}
-                                                    variant={'contained'}
-                                                    color={'primary'}
-                                                >Сохранить изменения</Button>
                                                 <NavLink to={'/contacts'} className={classes.prevButton}>
                                                     <Button
                                                         className={classes.editButton}
@@ -256,6 +250,12 @@ const EditPage = () => {
                                                         color={'primary'}
                                                     >Назад</Button>
                                                 </NavLink>
+                                                <Button
+                                                    className={classes.editButton}
+                                                    type={'submit'}
+                                                    variant={'contained'}
+                                                    color={'primary'}
+                                                >Сохранить изменения</Button>
                                             </div>
                                         </FormGroup>
                                     </FormControl>

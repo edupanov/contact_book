@@ -20,8 +20,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         container: {
             maxWidth: 1200,
-            margin: '0 auto',
-            background: '#ffffff'
+            margin: '10% auto',
+            background: '#ffffff',
+
         },
         emailFormWrapper: {
             display: 'flex',
@@ -64,9 +65,9 @@ export const useStyles = makeStyles((theme: Theme) =>
             }
 
         },
-        emailButton:{
+        emailButton: {
             marginTop: 10,
-            marginBottom:20
+            marginBottom: 20
         },
 
     }),

@@ -26,7 +26,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
                           download
                           target="_blank" rel="noopener noreferrer">{el.value}</a>
             }},
-        {field: 'uploadDate', headerName: 'Дата Загрузки', width: 160, filterable: false, sortable: false},
+        {field: 'uploadDate', headerName: 'Дата загрузки', width: 160, filterable: false, sortable: false},
         {field: 'comment', headerName: 'Коментарий', width: 160, filterable: false, sortable: false, flex: 1},
         {
             field: 'Редактировать', headerName: '', width: 155, filterable: false, sortable: false, editable: true,headerAlign: 'center',

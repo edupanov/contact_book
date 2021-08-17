@@ -27,9 +27,15 @@ export const useStylesSearchPage = makeStyles({
         display: "flex",
 
     },
+    searchWrapper:{
+        maxWidth: '100%',
+        flexBasis: '100%'
+    },
     form: {
+        maxWidth: 1200,
+
         width: '100%',
-        // boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
     },
     row: {
         display: "flex",
@@ -40,7 +46,8 @@ export const useStylesSearchPage = makeStyles({
         padding: 20,
         fontSize: 28,
         textAlign: "center",
-        color: "#3451b9"
+        color: "#3451b9",
+        fontFamily: 'Sans-Serif',
     },
     wrapperInput: {
         padding: '10px 0',
@@ -71,10 +78,16 @@ export const useStylesSearchPage = makeStyles({
         justifyContent: "center",
         flexWrap: "wrap"
     },
+    addressWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+    },
     buttonWrapper: {
         display: "flex",
         justifyContent: "space-around",
-        marginTop: 20
+        marginTop: 20,
+        marginBottom: 20
     },
     button: {
         padding: 0

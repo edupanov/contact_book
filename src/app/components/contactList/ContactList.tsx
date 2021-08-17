@@ -260,22 +260,9 @@ const ContactList = () => {
                             Удалить выбранные
                             <Delete/>
                         </Button>
-                        {selectionModel.length === 0
-                            ? <Button
-                                disabled
-                                variant="contained"
-                                size="large"
-                                color="primary"
-                                target="_top"
-                                rel="noopener noreferrer"
-                                href={``}
-                            >
-                                <Typography variant="button" className={classes.emailButtonText}>
-                                    Отправить E-mail
-                                </Typography>
-                            </Button>
-                            : <NavLink className={classes.link} to={'/contacts/email'}>
+                            <NavLink className={classes.link} to={'/contacts/email'}>
                                 <Button
+                                    disabled={selectionModel.length === 0}
                                     variant="contained"
                                     size="large"
                                     color="primary"
@@ -288,9 +275,7 @@ const ContactList = () => {
                                     </Typography>
                                 </Button>
                             </NavLink>
-                        }
                         <Button
-
                             onClick={searchClickHandler}
                             className={classes.searchButton}
                             variant="outlined"
@@ -305,6 +290,7 @@ const ContactList = () => {
                 {openSearch ? <SearchPage searchClickHandlerClose={searchClickHandlerClose}/> : null}
 
                 <DataGrid
+                    className={classes.contactsForm}
                     rows={items}
                     columns={columns}
                     pageSize={take}

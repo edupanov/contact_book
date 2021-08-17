@@ -28,13 +28,13 @@ const LoginForm = (props: LoginFormType) => {
 
             const errors: LoginErrorType = {};
             if (!values.email) {
-                errors.email = 'Email is required';
+                errors.email = 'Email обязателен';
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = 'Invalid email address';
+                errors.email = 'Неверный email адрес';
             }
 
             if (!values.password) {
-                errors.password = 'Password is required';
+                errors.password = 'Пароль обязателен';
             }
             return errors;
         },
@@ -57,6 +57,7 @@ const LoginForm = (props: LoginFormType) => {
                             <FormGroup>
                                 <div className={styles.inputWrapper}>
                                     <TextField
+                                        type="search"
                                         label="Email"
                                         margin="normal"
                                         {...formik.getFieldProps("email")}
@@ -70,7 +71,6 @@ const LoginForm = (props: LoginFormType) => {
                                         {...formik.getFieldProps("password")}
                                     />
                                 </div>
-
                                 {formik.errors.password ?
                                     <div className={styles.errorForm}>{formik.errors.password}</div> : null}
                                 <div className={styles.buttonWrapper}>

@@ -17,11 +17,14 @@ export const useStylesContactList = makeStyles({
         container: {
             maxWidth: 1200,
             margin: '0 auto',
-            padding: 5
+            padding: 15
         },
         headerWrapper: {
-            padding: '0 25px',
+            padding: '5px 0',
         },
+    contactsForm :{
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
+    },
 
         preloader: {
             position: 'absolute',
@@ -34,7 +37,7 @@ export const useStylesContactList = makeStyles({
         },
         searchButton: {
             display: 'inline-flex',
-            margin: '10px 20px 10px 10px !important',
+            margin: '10px 0 10px 10px !important',
             a: {
                 textDecoration: 'none',
                 svg: {

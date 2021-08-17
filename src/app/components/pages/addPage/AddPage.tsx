@@ -1,5 +1,5 @@
-import React, {ChangeEvent, FC, useState} from 'react';
-import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import React, {ChangeEvent, FC, useEffect, useState} from 'react';
+import {Button, FormControl, FormGroup, Grid, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
 import {useStylesAddPage} from "./syles/addPage.styles";
@@ -15,14 +15,13 @@ const AddPage: FC = () => {
 
     const [contactInfo, setContactInfo] = useState({})
     const [contactAddress, setContactAddress] = useState({})
+    const [gender, setGender] = useState('')
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
 
         const target: TargetType = (event.target)
         const isDate = target.name === 'birthDate'
         const replaceStr = event.target.value.replace(/-/g, ' ').split(' ').reverse().join('.')
-
-
         setContactInfo({
             ...contactInfo,
             [target.name]: isDate ? replaceStr : target.value,
@@ -39,6 +38,10 @@ const AddPage: FC = () => {
         })
     }
 
+    const ChangeGender = (event: any) => {
+        setGender(event.target.value as string);
+    };
+
     const exitClickHandler = () => {
         logOut()
     }
@@ -47,12 +50,37 @@ const AddPage: FC = () => {
         const contact = {
             contact: {
                 ...contactInfo,
-                address: contactAddress
+                address: contactAddress,
+                gender: gender
             }
         }
+        console.log(contact)
         addContact(contact)
         history.push(PATH.HOME)
     }
+
+    const errors = {
+        name: '',
+        surname: '',
+        patronymic: '',
+    }
+    const validation = (obj: any) => {
+
+        if (!obj.name) {
+            errors.name = 'Поле не запонено'
+        }
+        if (!obj.surname) {
+            errors.surname = 'Поле не запонено'
+        }
+        if (!obj.patronymic) {
+            errors.patronymic = 'Поле не запонено'
+        }
+        return errors
+    }
+
+    useEffect(() => {
+        validation(contactInfo)
+    }, [contactInfo])
 
     return (
         <div className={classes.addPageBG}>
@@ -67,30 +95,59 @@ const AddPage: FC = () => {
                                     <FormGroup className={classes.row}>
                                         <div>
                                             <div className={classes.period}>
-                                                <TextField className={classes.input}
-                                                           label="Имя"
-                                                           name={"name"}
-                                                           type="search"
-                                                           onChange={changeContactInfoHandler}
-                                                />
-                                                <TextField className={classes.input}
-                                                           label="Фамилия"
-                                                           name={"surname"}
-                                                           type="search"
-                                                           onChange={changeContactInfoHandler}
-                                                />
-                                                <TextField className={classes.input}
-                                                           label="Отчество"
-                                                           name={"patronymic"}
-                                                           type="search"
-                                                           onChange={changeContactInfoHandler}
-                                                />
-                                                <TextField className={classes.input}
-                                                           label="Пол"
-                                                           name={"gender"}
-                                                           type="search"
-                                                           onChange={changeContactInfoHandler}
-                                                />
+                                                <div>
+                                                    <TextField className={classes.input}
+                                                               label="Имя"
+                                                               name={"name"}
+                                                               type="search"
+                                                               onChange={changeContactInfoHandler}
+                                                    />
+                                                    {errors.name ?
+                                                        <div className={classes.error}>{errors.name}</div> : null}
+                                                </div>
+                                                <div>
+                                                    <TextField className={classes.input}
+                                                               label="Фамилия"
+                                                               name={"surname"}
+                                                               type="search"
+                                                               onChange={changeContactInfoHandler}
+                                                    />
+                                                    {errors.surname ?
+                                                        <div className={classes.error}>{errors.surname}</div> : null}
+                                                </div>
+                                                <div>
+                                                    <TextField className={classes.input}
+                                                               label="Отчество"
+                                                               name={"patronymic"}
+                                                               type="search"
+                                                               onChange={changeContactInfoHandler}
+                                                    />
+                                                    {errors.patronymic ?
+                                                        <div className={classes.error}>{errors.patronymic}</div> : null}
+                                                </div>
+
+                                                {/*<TextField className={classes.input}*/}
+                                                {/*           label="Пол"*/}
+                                                {/*           name={"gender"}*/}
+                                                {/*           type="search"*/}
+                                                {/*           onChange={changeContactInfoHandler}*/}
+                                                {/*/>*/}
+
+                                                <FormControl className={classes.gender}>
+                                                    <InputLabel id="demo-simple-select-label">Пол</InputLabel>
+                                                    <Select
+                                                        labelId="demo-simple-select-label"
+                                                        id="demo-simple-select"
+                                                        value={gender}
+                                                        onChange={ChangeGender}
+                                                    >
+                                                        <MenuItem value={''}/>
+                                                        <MenuItem value={'мужской'}>Мужской</MenuItem>
+                                                        <MenuItem value={'женский'}>Женский</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+
+
                                                 <TextField className={classes.input}
                                                            label="Семейное положение"
                                                            name={"maritalStatus"}
@@ -162,12 +219,7 @@ const AddPage: FC = () => {
 
                                         </div>
                                         <div className={classes.buttonWrapper}>
-                                            <Button
-                                                className={classes.editButton}
-                                                type={'submit'}
-                                                variant={'contained'}
-                                                color={'primary'}
-                                            >Сохранить изменения</Button>
+
                                             <NavLink to={'/contacts'} className={classes.prevButton}>
                                                 <Button
                                                     className={classes.editButton}
@@ -175,6 +227,12 @@ const AddPage: FC = () => {
                                                     color={'primary'}
                                                 >Назад</Button>
                                             </NavLink>
+                                            <Button
+                                                className={classes.editButton}
+                                                type={'submit'}
+                                                variant={'contained'}
+                                                color={'primary'}
+                                            >Сохранить изменения</Button>
 
                                         </div>
                                     </FormGroup>

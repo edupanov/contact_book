@@ -21,7 +21,6 @@ const EmailPage = () => {
     const contactsId = JSON.parse(sessionStorage.getItem('contactsId') || '[]');
     const contacts = JSON.parse(sessionStorage.getItem('contacts') || '[]');
     const [template, setTemplate] = React.useState<{ name: string }>({name: ''});
-    console.log(email)
 
     const findEqualObjects = (someArray: any, otherArray: any) => {
         let equalObjects: ContactInterface[] = [];
