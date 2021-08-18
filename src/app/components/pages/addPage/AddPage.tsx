@@ -90,7 +90,9 @@ const AddPage: FC = () => {
         }
         return error
     }
-
+    const disable = Object.values(error).includes('Поле запонено неверно')
+    console.log(disable)
+    console.log(error)
     return (
         <div className={classes.addPageBG}>
             <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
@@ -243,6 +245,7 @@ const AddPage: FC = () => {
                                                 >Назад</Button>
                                             </NavLink>
                                             <Button
+                                                disabled={disable}
                                                 className={classes.editButton}
                                                 type={'submit'}
                                                 variant={'contained'}
