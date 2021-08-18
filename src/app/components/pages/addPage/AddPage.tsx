@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useEffect, useState} from 'react';
+import React, {ChangeEvent, FC, FocusEventHandler, SyntheticEvent, useEffect, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
@@ -10,6 +10,12 @@ import Menu from "../../../shared/components/Menu";
 const AddPage: FC = () => {
     const classes = useStylesAddPage()
     const history = useHistory()
+
+    const [error, setError] = useState({
+        name: '',
+        surname: '',
+        patronymic: '',
+    })
 
     const {addContact, logOut} = useActions()
 
@@ -54,33 +60,36 @@ const AddPage: FC = () => {
                 gender: gender
             }
         }
-        console.log(contact)
         addContact(contact)
         history.push(PATH.HOME)
     }
 
-    const errors = {
-        name: '',
-        surname: '',
-        patronymic: '',
+    const validation = (event: React.FocusEvent<HTMLInputElement>) => {
+        const target = event.target
+        const regexRange = /^[а-яА-Яб,0-9]{3,10}$/;
+        if (target.name === 'name') {
+            if(!regexRange.test(target.value)) {
+                setError({...error, name: 'Поле запонено неверно'})
+            }else if (regexRange.test(target.value)) {
+                setError({...error, name: ''})
+            }
+        }
+        if (target.name === 'surname') {
+            if(!regexRange.test(target.value)) {
+                setError({...error, surname: 'Поле запонено неверно'})
+            }else if (regexRange.test(target.value)) {
+                setError({...error, surname: ''})
+            }
+        }
+        if (target.name === 'patronymic') {
+            if(!regexRange.test(target.value)) {
+                setError({...error, patronymic: 'Поле запонено неверно'})
+            }else if (regexRange.test(target.value)) {
+                setError({...error, patronymic: ''})
+            }
+        }
+        return error
     }
-    const validation = (obj: any) => {
-
-        if (!obj.name) {
-            errors.name = 'Поле не запонено'
-        }
-        if (!obj.surname) {
-            errors.surname = 'Поле не запонено'
-        }
-        if (!obj.patronymic) {
-            errors.patronymic = 'Поле не запонено'
-        }
-        return errors
-    }
-
-    useEffect(() => {
-        validation(contactInfo)
-    }, [contactInfo])
 
     return (
         <div className={classes.addPageBG}>
@@ -97,33 +106,39 @@ const AddPage: FC = () => {
                                             <div className={classes.period}>
                                                 <div>
                                                     <TextField className={classes.input}
+                                                               title={'Используйте русский язык и цифры'}
                                                                label="Имя"
                                                                name={"name"}
                                                                type="search"
+                                                               onBlur={validation}
                                                                onChange={changeContactInfoHandler}
                                                     />
-                                                    {errors.name ?
-                                                        <div className={classes.error}>{errors.name}</div> : null}
+                                                    {error.name ?
+                                                        <div className={classes.error}>{error.name}</div> : null}
                                                 </div>
                                                 <div>
                                                     <TextField className={classes.input}
+                                                               title={'Используйте русский язык и цифры'}
                                                                label="Фамилия"
                                                                name={"surname"}
                                                                type="search"
+                                                               onBlur={validation}
                                                                onChange={changeContactInfoHandler}
                                                     />
-                                                    {errors.surname ?
-                                                        <div className={classes.error}>{errors.surname}</div> : null}
+                                                    {error.surname ?
+                                                        <div className={classes.error}>{error.surname}</div> : null}
                                                 </div>
                                                 <div>
                                                     <TextField className={classes.input}
+                                                               title={'Используйте русский язык и цифры'}
                                                                label="Отчество"
                                                                name={"patronymic"}
                                                                type="search"
+                                                               onBlur={validation}
                                                                onChange={changeContactInfoHandler}
                                                     />
-                                                    {errors.patronymic ?
-                                                        <div className={classes.error}>{errors.patronymic}</div> : null}
+                                                    {error.patronymic ?
+                                                        <div className={classes.error}>{error.patronymic}</div> : null}
                                                 </div>
 
                                                 {/*<TextField className={classes.input}*/}
