@@ -63,12 +63,6 @@ const EditPage = () => {
         logOut()
     }
 
-    // const setAvatar = (avatar: any) => {
-    //     setCurrentContact({
-    //         ...currentContact,
-    //         logo: avatar
-    //     })
-    // }
     let copyContact = JSON.parse(JSON.stringify(currentContact))
     const attachmentSubmit = copyContact.attachments.map((el: AttachmentInterface) => {
         if (el.base64File) {
@@ -103,7 +97,6 @@ const EditPage = () => {
         phones: phoneSubmit,
         attachments: attachmentSubmit
     }
-
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         updateContact({contact: contactSubmit})

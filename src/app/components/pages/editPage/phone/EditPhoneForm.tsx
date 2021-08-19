@@ -8,13 +8,15 @@ interface EditPhoneFormInterface {
     setOpen: Function
     phone: PhoneInterface
     contact: ContactInterface
+    newPhones?: Array<PhoneInterface>
+    setNewPhones?: Function
 }
 
 export const EditPhoneForm = (props: EditPhoneFormInterface) => {
 
     const classes = useStylesAddPhone();
     const {editPhone} = useActions()
-    let {phone, setOpen, contact} = props
+    let {phone, setOpen, contact, newPhones, setNewPhones} = props
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
@@ -35,11 +37,22 @@ export const EditPhoneForm = (props: EditPhoneFormInterface) => {
             phone.comment = value
         }
     }
-    console.log(phone)
 
     const onSubmit = () => {
-        editPhone(phone, contact.id)
-        setOpen(false)
+        if(contact.id) {
+            editPhone(phone, contact.id)
+            setOpen(false)
+        } else {
+            const updatePhones = newPhones!.map((item) => {
+                if (item.id === phone.id) {
+                    return phone
+                }
+                return item
+
+            })
+            setOpen(false)
+            return setNewPhones!(updatePhones)
+        }
     }
 
     return (

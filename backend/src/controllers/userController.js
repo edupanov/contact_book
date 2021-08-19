@@ -126,39 +126,50 @@ module.exports = {
             .skip(isPaging ? pageSize * (currentPage - 1) : 0)
             .limit(isPaging ? pageSize : 0)
             .then(async documents => {
+                console.log(documents)
                 const contactsCount = await User.find(searchParams).countDocuments()
                 const users = documents.map(user => {
-                    const addr = {
-                        id: user.addresses[0]._id,
-                        city: user.addresses[0].city,
-                        country: user.addresses[0].country,
-                        street: user.addresses[0].street,
-                        building: user.addresses[0].building,
-                        flat: user.addresses[0].flat,
-                        zipCode: user.addresses[0].zipCode,
-                        fullAddress: user.addresses[0].fullAddress
+                    let addr = {}
+                    if (user.addresses[0]) {
+                        addr = {
+                            id: user.addresses[0]._id,
+                            city: user.addresses[0].city,
+                            country: user.addresses[0].country,
+                            street: user.addresses[0].street,
+                            building: user.addresses[0].building,
+                            flat: user.addresses[0].flat,
+                            zipCode: user.addresses[0].zipCode,
+                            fullAddress: user.addresses[0].fullAddress
+                        }
                     }
 
-                    const phones = user.phones.map(phone => {
-                        return {
-                            id: phone._id,
-                            countryCode: phone.countryCode,
-                            operatorID: phone.operatorID,
-                            phoneNumber: phone.phoneNumber,
-                            phoneType: phone.phoneType,
-                            comment: phone.comment
-                        }
-                    })
+                    let phones = []
+                    if (user.phones && user.phones.length > 0) {
+                        phones = user.phones.map(phone => {
+                            return {
+                                id: phone._id,
+                                countryCode: phone.countryCode,
+                                operatorID: phone.operatorID,
+                                phoneNumber: phone.phoneNumber,
+                                phoneType: phone.phoneType,
+                                comment: phone.comment
+                            }
+                        })
+                    }
 
-                    const attachments = user.attachments.map(attachment => {
-                        return {
-                            id: attachment._id,
-                            comment: attachment.comment,
-                            filePath: attachment.filePath,
-                            fileName: attachment.fileName,
-                            uploadDate: attachment.uploadDate
-                        }
-                    })
+                    let attachments = []
+                    if (user.attachments && user.attachments.length) {
+                        attachments = user.attachments.map(attachment => {
+                            return {
+                                id: attachment._id,
+                                comment: attachment.comment,
+                                filePath: attachment.filePath,
+                                fileName: attachment.fileName,
+                                uploadDate: attachment.uploadDate
+                            }
+                        })
+                    }
+
 
                     return {
                         id: user._id,
@@ -173,7 +184,7 @@ module.exports = {
                         email: user.email,
                         edit: user.edit,
                         address: addr,
-                        imagePath: user.imagePath,
+                        imagePath: user?.imagePath,
                         attachments,
                         phones
                     }
@@ -229,18 +240,12 @@ module.exports = {
 
                     //phones
                     if (phones && phones.length > 0) {
-                        for (const phone of phones) {
-                            await Phone.create(phone).then(phone => {
-                                if (phone._id) {
-                                    user.phones.push(phone)
-                                }
-                            })
-                        }
+                        phones.forEach(phone => user.phones.push(phone))
                     }
 
                     //attachments
                     if (attachments && attachments.length > 0) {
-                        for (const attachment of attachments) {
+                        attachments.forEach(attachment => {
                             let newAttachment = {}
 
                             if (attachment.date) {
@@ -264,12 +269,8 @@ module.exports = {
                                 newAttachment.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachment.fileName}${attachment.ext}`
                             }
 
-                            await Attachment.create(newAttachment).then(newAttachment => {
-                                if (newAttachment._id) {
-                                    user.attachments.push(newAttachment)
-                                }
-                            })
-                        }
+                            user.attachments.push(newAttachment)
+                        })
                     }
 
                     user.save()

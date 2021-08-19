@@ -8,14 +8,15 @@ interface EditAttachmentFormInterface {
     setOpen: Function
     contact: ContactInterface
     attachment: AttachmentInterface
+    setNewAttachments?: Function
+    newAttachments?: Array<AttachmentInterface>
 }
 
 export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
     const styles = useStylesAttachment();
     const {editAttachment} = useActions()
-    let {setOpen, attachment, contact} = props
+    let {setOpen, attachment, contact, setNewAttachments, newAttachments} = props
 
-    console.log(attachment)
     const changeAttachmentHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
         if (name === 'fileName') {
@@ -25,11 +26,22 @@ export const EditAttachmentForm = (props: EditAttachmentFormInterface) => {
             attachment.comment = value
         }
     }
-    console.log(attachment)
 
     const onSubmit = () => {
-        editAttachment(attachment, contact.id)
-        setOpen(false)
+        if (contact.id) {
+            editAttachment(attachment, contact.id)
+            setOpen(false)
+        } else {
+            const updateAttachments = newAttachments!.map((item) => {
+                if (item.id === attachment.id) {
+                    return attachment
+                }
+                return item
+
+            })
+            setOpen(false)
+            return setNewAttachments!(updateAttachments)
+        }
     }
 
     return (

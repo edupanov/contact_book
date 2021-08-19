@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, Dispatch, useState} from 'react';
 import Button from "@material-ui/core/Button";
 import Avatar from '@material-ui/core/Avatar'
 import AvatarEditor from "react-avatar-editor";
@@ -8,9 +8,10 @@ import {useActions} from "../../../../store/hooks/useActions";
 import {useStylesAvatar} from "./styles/avatar.styles";
 
 type AvatarPropsType = {
-    contact: any
+    contact: ContactInterface
+    setLogo?: Dispatch<React.SetStateAction<{}>>
 }
-const Logo = ({contact}: AvatarPropsType) => {
+const Logo = ({contact, setLogo}: AvatarPropsType) => {
     const styles = useStylesAvatar();
     const {saveAvatar} = useActions()
     const [avatar, setAvatar] = useState<string>(contact.imagePath)
@@ -56,8 +57,17 @@ const Logo = ({contact}: AvatarPropsType) => {
         });
         setAvatar(croppedImg)
 
-        // @ts-ignore
-        saveAvatar(picture.img.name, croppedImg, contact.id)
+
+        if (contact.id) {
+            // @ts-ignore
+            saveAvatar(picture.img.name, croppedImg, contact.id)
+        } else {
+            // @ts-ignore
+            const newLogo = {name: picture.img.name, file: croppedImg}
+            if (setLogo) {
+                setLogo(newLogo)
+            }
+        }
 
     };
     const handleFileChange = (e: any) => {
@@ -67,7 +77,7 @@ const Logo = ({contact}: AvatarPropsType) => {
             cropperOpen: true
         });
     };
-    // const imgFromServer: any = await toBase64()
+
     return (
         <div>
             <Box className={styles.wrapper}>
@@ -78,14 +88,9 @@ const Logo = ({contact}: AvatarPropsType) => {
                             src={avatar}
                         />
                     </label>
+                    <input className={styles.logoInput} type="file" accept="image/*" id={'logoCheck'}
+                           onChange={handleFileChange}/>
 
-                    {/*<Button*/}
-                    {/*    className={styles.button}*/}
-                    {/*    variant="contained"*/}
-                    {/*>*/}
-                        <input className={styles.logoInput} type="file" accept="image/*" id={'logoCheck'} onChange={handleFileChange}/>
-
-                    {/*</Button>*/}
                 </Box>
 
                 {picture.cropperOpen && (

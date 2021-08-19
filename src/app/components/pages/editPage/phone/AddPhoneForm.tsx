@@ -7,6 +7,8 @@ import {useActions} from "../../../../store/hooks/useActions";
 interface AddPhoneFormInterface {
     setOpen: Function
     contact: ContactInterface
+    setNewPhones?: Function
+    newPhones?: Array<PhoneInterface>
 }
 
 export const AddPhoneForm = (props: AddPhoneFormInterface) => {
@@ -18,22 +20,23 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
     })
 
     const classes = useStylesAddPhone();
-    let {setOpen, contact} = props
+    let {setOpen, contact, setNewPhones, newPhones} = props
 
     const {addPhone} = useActions()
     const [phone, setPhone] = useState({} as PhoneInterface)
-    const phoneId = contact.phones ? contact.phones.length + 1 : 1
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const phoneId = contact.phones ? contact.phones.length + 1 : newPhones?.length! + 1
         const {name, value} = event.target
-
         const updatePhone = {...phone, [name]: value, id: `phone${String(phoneId)}`}
-        console.log(updatePhone)
+
         setPhone(updatePhone)
     }
 
     const onSubmit = () => {
-        addPhone(phone, contact.id)
+        if (!contact.id) {
+            setNewPhones!([...newPhones!, phone])
+        } else addPhone(phone, contact.id)
         setOpen(false)
     }
 

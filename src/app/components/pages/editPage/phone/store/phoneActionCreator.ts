@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {ContactActionTypes, ContactsActionType} from "../../../../contactList/store/actionTypes/contactListActiontypes";
 import {RootState} from "../../../../../store/rootReducer";
-import {AttachmentInterface, ContactInterface, PhoneInterface} from "../../../../contactList/types/contact.interface";
+import {ContactInterface, PhoneInterface} from "../../../../contactList/types/contact.interface";
 
 
 export const addPhone = (phone: PhoneInterface, contactId: string) =>

@@ -3,7 +3,7 @@ import {DataGrid, GridColDef, GridRowId} from "@material-ui/data-grid";
 import {Button, IconButton} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import {Delete} from "@material-ui/icons";
-import {ContactInterface} from "../../../contactList/types/contact.interface";
+import {AttachmentInterface, ContactInterface} from "../../../contactList/types/contact.interface";
 import {ModalForEditForm} from "../../../../shared/components/ModalForEditForm";
 import {AddAttachmentForm} from "./AddAttachmentForm";
 import {EditAttachmentForm} from "./EditAttachmentForm";
@@ -12,11 +12,14 @@ import {useStyles} from "../styles/formStyles";
 
 type AttachmentsPropsType = {
     contact: ContactInterface
+    setNewAttachments?: Function
+    newAttachments?: Array<AttachmentInterface>
 }
 
 const AttachmentsForm = (props: AttachmentsPropsType) => {
     const classes = useStyles()
-    const {contact} = props
+    let {contact, newAttachments, setNewAttachments} = props
+
     const columns: GridColDef[] = [
         {field: 'fileName', headerName: 'Имя файла', width: 200, filterable: false, sortable: false,
             renderCell: (el) => {
@@ -62,7 +65,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     // ADD ATTACHMENT
     const addAttachmentChangeHandler = () => {
         setTitle('Добавить вложения');
-        setBody(<AddAttachmentForm setOpen={setOpen} contact={contact}/>)
+        setBody(<AddAttachmentForm setOpen={setOpen} contact={contact} newAttachments={newAttachments} setNewAttachments={setNewAttachments}/>)
         setOpen(true);
     }
     //EDIT ATTACHMENT
@@ -70,15 +73,23 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
         setTitle('Редактирование вложений');
         setOpen(true);
         const targetID = event.currentTarget.id
-        const currentAttachment = contact.attachments.find(target => {
-            return target.id === targetID
-        })!;
-        setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
+
+        if(contact.id){
+            const currentAttachment = contact.attachments.find(target =>target.id === targetID )!;
+            setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={currentAttachment}/>)
+        } else {
+            const updateNewAttachment = newAttachments!.find(target => target.id === targetID)!;
+            setBody(<EditAttachmentForm setOpen={setOpen} contact={contact} attachment={updateNewAttachment} setNewAttachments={setNewAttachments} newAttachments={newAttachments}/>)
+
+        }
+
     }
     //DELETE ATTACHMENT
     const deleteCurrentAttachment = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        deleteAttachment(contact.id, targetID)
+        if(!contact.id) {
+            setNewAttachments!(newAttachments?.filter(item=> item.id !== targetID))
+        } else deleteAttachment(contact.id, targetID)
     }
 
     const checkedCurrenAttachment = (params: GridRowId[]) => {
@@ -103,7 +114,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
 
             <DataGrid
                 className={classes.phoneTable}
-                rows={contact.attachments! || []}
+                rows={contact.attachments! || newAttachments}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick

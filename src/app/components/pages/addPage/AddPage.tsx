@@ -26,8 +26,10 @@ const AddPage: FC = () => {
     const [contactInfo, setContactInfo] = useState({} as ContactInterface)
     const [contactAddress, setContactAddress] = useState({})
     const [gender, setGender] = useState('')
-    console.log(contactInfo)
-    console.log(gender)
+    const [logo, setLogo] = useState({})
+    const [newPhones, setNewPhones] = useState([])
+    const [newAttachments, setNewAttachments] = useState([])
+
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
 
         const target: TargetType = (event.target)
@@ -63,7 +65,9 @@ const AddPage: FC = () => {
                 ...contactInfo,
                 address: contactAddress,
                 gender: gender,
-                // logo:
+                logo: logo,
+                phones: newPhones,
+                attachments: newAttachments
             }
         }
         console.log(contact)
@@ -75,23 +79,23 @@ const AddPage: FC = () => {
         const target = event.target
         const regexRange = /^[а-яА-Яб,0-9]{3,10}$/;
         if (target.name === 'name') {
-            if(!regexRange.test(target.value)) {
+            if (!regexRange.test(target.value)) {
                 setError({...errors, name: 'Поле запонено неверно'})
-            }else if (regexRange.test(target.value)) {
+            } else if (regexRange.test(target.value)) {
                 setError({...errors, name: ''})
             }
         }
         if (target.name === 'surname') {
-            if(!regexRange.test(target.value)) {
+            if (!regexRange.test(target.value)) {
                 setError({...errors, surname: 'Поле запонено неверно'})
-            }else if (regexRange.test(target.value)) {
+            } else if (regexRange.test(target.value)) {
                 setError({...errors, surname: ''})
             }
         }
         if (target.name === 'patronymic') {
-            if(!regexRange.test(target.value)) {
+            if (!regexRange.test(target.value)) {
                 setError({...errors, patronymic: 'Поле запонено неверно'})
-            }else if (regexRange.test(target.value)) {
+            } else if (regexRange.test(target.value)) {
                 setError({...errors, patronymic: ''})
             }
         }
@@ -101,7 +105,7 @@ const AddPage: FC = () => {
         <div className={classes.addPageBG}>
             <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <div className={classes.container}>
-                <div className={classes.avatar}><Avatar contact={contactInfo}/></div>
+                <div className={classes.avatar}><Avatar setLogo={setLogo} contact={contactInfo}/></div>
                 <div className={classes.addPageWrapper}>
                     <h2 className={classes.title}>Добавление нового контакта</h2>
                     <Grid container justifyContent="center">
@@ -233,8 +237,8 @@ const AddPage: FC = () => {
 
                                         </div>
 
-                                        <PhoneForm contact={contactInfo}/>
-                                        <AttachmentsForm contact={contactInfo}/>
+                                        <PhoneForm setNewPhones={setNewPhones} newPhones={newPhones} contact={contactInfo}/>
+                                        <AttachmentsForm contact={contactInfo} newAttachments={newAttachments} setNewAttachments={setNewAttachments}/>
 
                                         <div className={classes.buttonWrapper}>
 

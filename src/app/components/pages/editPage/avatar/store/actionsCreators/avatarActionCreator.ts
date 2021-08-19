@@ -17,12 +17,12 @@ export const saveAvatar = (name: string, fileBAse64: string, contactId: string) 
             const copyContact = JSON.parse(JSON.stringify(contact))
 
             if (copyContact.id === contactId) {
-                if  (copyContact.id === contactId){
-                    copyContact.logo = {name: name, file: fileBAse64}
-                }
-                return copyContact
+                copyContact.logo = {name: name, file: fileBAse64}
             }
-            return contact
+            if (!contactId) {
+                contact.logo = {name: name, file: fileBAse64}
+            }
+            return copyContact
         })
 
         dispatch({

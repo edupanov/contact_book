@@ -13,6 +13,8 @@ import {useStyles} from "../styles/formStyles";
 
 interface PhoneFormProps {
     contact: ContactInterface
+    setNewPhones?: Function
+    newPhones?: Array<PhoneInterface>
 }
 
 const PhoneForm = (props: PhoneFormProps) => {
@@ -63,17 +65,16 @@ const PhoneForm = (props: PhoneFormProps) => {
         },
     ]
 
-    const {contact} = props
+    const {contact, setNewPhones,newPhones} = props
     let phones = contact.phones
 
     const {deletePhone} = useActions()
     const [open, setOpen] = useState(false);
-    const [phone, setPhone] = useState({} as PhoneInterface); //edit phone
+    // const [phone, setPhone] = useState({} as PhoneInterface); //edit phone
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<JSX.Element>(<div/>);
     const [buttons] = useState<JSX.Element>(<div/>);
-
     const handleCloseModal = () => {
         setOpen(false);
     };
@@ -82,17 +83,23 @@ const PhoneForm = (props: PhoneFormProps) => {
 // EDIT PHONE HANDLER
     const changePhoneHandler = (event: SyntheticEvent) => {
         const targetID = event.currentTarget.id
-        const currentPhone = contact.phones.find(target => target.id === targetID)!;
-        setPhone(currentPhone)
         setTitle('Редактирование номера телефона');
-        setBody(<EditPhoneForm phone={currentPhone} setOpen={setOpen} contact={contact}/>)
         setOpen(true);
+        // setPhone(currentPhone)
+        if(contact.id) {
+            const currentPhone = contact.phones.find(target => target.id === targetID)!;
+            setBody(<EditPhoneForm phone={currentPhone} setOpen={setOpen} contact={contact}/>)
+        } else {
+            const currentPhone = newPhones!.find(target => target.id === targetID)!;
+            setBody(<EditPhoneForm phone={currentPhone} setOpen={setOpen} contact={contact} newPhones={newPhones} setNewPhones={setNewPhones}/>)
+
+        }
     }
 
   // ADD PHONE HANDLER
     const addPhoneChangeHandler = (event: SyntheticEvent) => {
         setTitle('Добавить номер телефона');
-        setBody(<AddPhoneForm setOpen={setOpen} contact={contact}/>)
+        setBody(<AddPhoneForm setOpen={setOpen} contact={contact} setNewPhones={setNewPhones} newPhones={newPhones}/>)
         setOpen(true);
     }
 
@@ -103,7 +110,9 @@ const PhoneForm = (props: PhoneFormProps) => {
     const deleteCurrentPhone = (event: SyntheticEvent) => {
         const phoneId = event.currentTarget.id
         const contactId = contact.id
-        deletePhone(contactId, phoneId)
+        if(!contact.id) {
+            setNewPhones!(newPhones?.filter(item=> item.id !== phoneId))
+        } else deletePhone(contactId, phoneId)
     }
 
 
@@ -120,7 +129,7 @@ const PhoneForm = (props: PhoneFormProps) => {
             </Button>
             <DataGrid
                 className={classes.phoneTable}
-                rows={phones! || []}
+                rows={phones! || newPhones}
                 columns={columns}
                 autoHeight
                 disableSelectionOnClick
