@@ -12,6 +12,9 @@ export const useStylesContactList = makeStyles({
             '& .column': {
                 backgroundColor: '#00000000',
             },
+            '& .MuiDataGrid-cell':{
+                textAlign: 'center',
+            },
         },
 
         container: {

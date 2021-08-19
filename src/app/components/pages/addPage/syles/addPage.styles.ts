@@ -10,17 +10,22 @@ export const useStylesAddPage = makeStyles({
         top: -8,
         left: 10
     },
+    avatar: {
+        width: 300,
+        paddingLeft:20,
+        paddingTop: 65
+    },
 
     addPageBG:{
-        height:'100%',
-        backgroundImage: `url(${addFormBG})`,
+        backgroundColor: "whitesmoke",
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'repeat-y',
     },
     container: {
-        maxWidth: 1030,
+        maxWidth: 1200,
         margin: '0 auto',
+        display: 'flex',
     },
 
     addPageWrapper: {

@@ -8,7 +8,7 @@ import {useActions} from "../../../../store/hooks/useActions";
 import {useStylesAvatar} from "./styles/avatar.styles";
 
 type AvatarPropsType = {
-    contact: ContactInterface
+    contact: any
 }
 const Logo = ({contact}: AvatarPropsType) => {
     const styles = useStylesAvatar();

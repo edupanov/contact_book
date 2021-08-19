@@ -6,6 +6,10 @@ import {useStylesAddPage} from "./syles/addPage.styles";
 import {NavLink, useHistory} from 'react-router-dom';
 import {PATH} from "../../../routes/Routes";
 import Menu from "../../../shared/components/Menu";
+import Avatar from "../editPage/avatar/Avatar";
+import PhoneForm from "../editPage/phone/PhoneForm";
+import AttachmentsForm from "../editPage/attachments/AttachmentsForm";
+import {ContactInterface} from "../../contactList/types/contact.interface";
 
 const AddPage: FC = () => {
     const classes = useStylesAddPage()
@@ -19,10 +23,11 @@ const AddPage: FC = () => {
 
     const {addContact, logOut} = useActions()
 
-    const [contactInfo, setContactInfo] = useState({})
+    const [contactInfo, setContactInfo] = useState({} as ContactInterface)
     const [contactAddress, setContactAddress] = useState({})
     const [gender, setGender] = useState('')
-
+    console.log(contactInfo)
+    console.log(gender)
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
 
         const target: TargetType = (event.target)
@@ -57,9 +62,11 @@ const AddPage: FC = () => {
             contact: {
                 ...contactInfo,
                 address: contactAddress,
-                gender: gender
+                gender: gender,
+                // logo:
             }
         }
+        console.log(contact)
         addContact(contact)
         history.push(PATH.HOME)
     }
@@ -95,6 +102,7 @@ const AddPage: FC = () => {
         <div className={classes.addPageBG}>
             <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <div className={classes.container}>
+                <div className={classes.avatar}><Avatar contact={contactInfo}/></div>
                 <div className={classes.addPageWrapper}>
                     <h2 className={classes.title}>Добавление нового контакта</h2>
                     <Grid container justifyContent="center">
@@ -225,6 +233,10 @@ const AddPage: FC = () => {
                                             </div>
 
                                         </div>
+
+                                        <PhoneForm contact={contactInfo}/>
+                                        <AttachmentsForm contact={contactInfo}/>
+
                                         <div className={classes.buttonWrapper}>
 
                                             <NavLink to={'/contacts'} className={classes.prevButton}>
