@@ -37,14 +37,6 @@ const SearchPanel = (props: SearchPanelType) => {
         })
     }
 
-    const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const target: TargetType = (event.target)
-        setSearch({
-            ...search,
-            address: {...search.address, [target.name]: target.value}
-        })
-    }
-
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         sessionStorage.setItem('search', JSON.stringify(search));
@@ -154,21 +146,21 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    label="Страна"
                                                    name={"country"}
                                                    type="search"
-                                                   onChange={changeContactAddressHandler}
+                                                   onChange={changeContactInfoHandler}
                                                    defaultValue={savedSearch.address?.country}
                                         />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
-                                                   onChange={changeContactAddressHandler}
+                                                   onChange={changeContactInfoHandler}
                                                    defaultValue={savedSearch.address?.city}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
-                                                   onChange={changeContactAddressHandler}
+                                                   onChange={changeContactInfoHandler}
                                                    defaultValue={savedSearch.address?.street}
 
                                         />
