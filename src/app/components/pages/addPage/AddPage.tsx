@@ -97,7 +97,6 @@ const AddPage: FC = () => {
         }
         return errors
     }
-
     return (
         <div className={classes.addPageBG}>
             <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>

@@ -78,20 +78,12 @@ module.exports = {
         if (dateFrom && dateTo) {
             searchParams.birthDate = {
                 $gte: dateFrom,
-                $lt: dateTo
+                $lte: dateTo
             }
-        }
-        if (dateTo) {
+        } else if (dateTo) {
             searchParams.birthDate = {$gte: dateFrom}
-        }
-        if (dateFrom) {
-            searchParams.birthDate = {$lt: dateTo}
-        }
-        if (dateFrom) {
-            searchParams.birthDate = {$gte: dateFrom}
-        }
-        if (dateTo) {
-            searchParams.birthDate = {$lt: dateTo}
+        } else if (dateFrom) {
+            searchParams.birthDate = {$lte: dateTo}
         }
         if (gender) {
             searchParams.gender = gender
@@ -134,7 +126,7 @@ module.exports = {
             .skip(isPaging ? pageSize * (currentPage - 1) : 0)
             .limit(isPaging ? pageSize : 0)
             .then(async documents => {
-                const contactsCount = await User.countDocuments()
+                const contactsCount = await User.find(searchParams).countDocuments()
                 const users = documents.map(user => {
                     const addr = {
                         id: user.addresses[0]._id,
@@ -204,29 +196,90 @@ module.exports = {
 
     createContact: async (req, res, next) => {
         let newContact = req.body.contact
+        const logo = newContact.logo
+        const address = newContact.address
+        const phones = newContact.phones
+        const attachments = newContact.attachments
 
-        const url = req.protocol + '://' + req.get('host')
-        newContact.imagePath = url + '/attachments/' + req.file.filename
+        const filePathUrl = req.protocol + '://' + req.get('host')
 
         await User.create(newContact)
             .then(async user => {
                 if (user._id) {
-                    await Address.create(newContact.address).then(address => {
+                    //address
+                    await Address.create(address).then(address => {
                         if (address._id) {
                             user.addresses.push(address)
-                            newContact.phones.map(phone => {
-                                user.phones.push(phone)
-                            })
-                            user.save()
-                                .then(user => {
-                                    if (user._id) {
-                                        res.status(200).json({
-                                            message: 'Contact was created successfully!'
-                                        })
-                                    }
-                                })
                         }
                     })
+
+                    //logo
+                    if (logo && logo.file) {
+                        const salt = Math.random().toString()
+                        const current_date_new = (new Date()).valueOf().toString()
+                        const extension = logo.file.split(';base64,')[0].split('/')[1]
+                        const hash = crypto.createHash('sha1').update(current_date_new + salt).digest('hex')
+                        const createLogoPath = `backend/assets/logo/${user.id}-${hash}-${logo.name}.${extension}`
+                        const logoBase64Image = logo.file.split(';base64,').pop();
+                        fs.writeFile(createLogoPath, logoBase64Image, {encoding: 'base64'}, () => {
+                            console.log('Logo успешно сохранен')
+                        });
+                        user.imagePath = filePathUrl + `/assets/logo/${user.id}-${hash}-${logo.name}.${extension}`
+                    }
+
+                    //phones
+                    if (phones && phones.length > 0) {
+                        for (const phone of phones) {
+                            await Phone.create(phone).then(phone => {
+                                if (phone._id) {
+                                    user.phones.push(phone)
+                                }
+                            })
+                        }
+                    }
+
+                    //attachments
+                    if (attachments && attachments.length > 0) {
+                        for (const attachment of attachments) {
+                            let newAttachment = {}
+
+                            if (attachment.date) {
+                                newAttachment.uploadDate = attachment.date
+                            }
+                            if (attachment.comment) {
+                                newAttachment.comment = attachment.comment
+                            }
+                            if (attachment.fileName) {
+                                newAttachment.fileName = attachment.fileName
+                            }
+                            if (attachment.filePath) {
+                                const current_date = (new Date()).valueOf().toString();
+                                const random = Math.random().toString();
+                                const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
+                                const createAttachmentPath = `backend/assets/attachments/${user.id}-${hash}-${attachment.fileName}${attachment.ext}`
+                                const attachmentBase64Image = attachment.filePath.split(';base64,').pop();
+                                fs.writeFile(createAttachmentPath, attachmentBase64Image, {encoding: 'base64'}, () => {
+                                    console.log('Attachment успешно сохранен')
+                                });
+                                newAttachment.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachment.fileName}${attachment.ext}`
+                            }
+
+                            await Attachment.create(newAttachment).then(newAttachment => {
+                                if (newAttachment._id) {
+                                    user.attachments.push(newAttachment)
+                                }
+                            })
+                        }
+                    }
+
+                    user.save()
+                        .then(user => {
+                            if (user._id) {
+                                res.status(200).json({
+                                    message: 'Contact was created successfully!'
+                                })
+                            }
+                        })
                 }
             })
             .catch(error => {
@@ -316,9 +369,9 @@ module.exports = {
                                     console.log('Logo успешно удален')
                                 })
                             }
-                            const current_date = (new Date()).valueOf().toString();
-                            const random = Math.random().toString();
-                            const hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
+                            const current_date = (new Date()).valueOf().toString()
+                            const random = Math.random().toString()
+                            const hash = crypto.createHash('sha1').update(current_date + random).digest('hex')
                             const ext = logo.file.split(';base64,')[0].split('/')[1]
                             const createLogoPath = `backend/assets/logo/${user.id}-${hash}-${logo.name}.${ext}`
                             const logoBase64Image = logo.file.split(';base64,').pop();
@@ -352,7 +405,7 @@ module.exports = {
                                 })
                             }
 
-                            attachments.length > 0 && attachments.forEach(attachmentForUpdate => {
+                            attachments.length > 0 && attachments.forEach(async attachmentForUpdate => {
                                 if (attachmentForUpdate.id) {
                                     const attachmentIndex = user.attachments.findIndex(item => item._id.equals(attachmentForUpdate.id))
                                     if (attachmentIndex >= 0) {
@@ -400,7 +453,11 @@ module.exports = {
                                         console.log('Attachment успешно сохранен')
                                     });
                                     attachmentForUpdate.filePath = filePathUrl + `/assets/attachments/${user.id}-${hash}-${attachmentForUpdate.fileName}${attachmentForUpdate.ext}`
-                                    user.attachments.push(attachmentForUpdate)
+                                    await Attachment.create(attachmentForUpdate).then(updatedAttachment => {
+                                        if (updatedAttachment._id) {
+                                            user.attachments.push(updatedAttachment)
+                                        }
+                                    })
                                 }
                             })
                         } else {
