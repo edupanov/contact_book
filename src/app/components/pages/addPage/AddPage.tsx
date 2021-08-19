@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, FocusEventHandler, SyntheticEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, FC, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
@@ -11,7 +11,7 @@ const AddPage: FC = () => {
     const classes = useStylesAddPage()
     const history = useHistory()
 
-    const [error, setError] = useState({
+    const [errors, setError] = useState({
         name: '',
         surname: '',
         patronymic: '',
@@ -69,26 +69,26 @@ const AddPage: FC = () => {
         const regexRange = /^[а-яА-Яб,0-9]{3,10}$/;
         if (target.name === 'name') {
             if(!regexRange.test(target.value)) {
-                setError({...error, name: 'Поле запонено неверно'})
+                setError({...errors, name: 'Поле запонено неверно'})
             }else if (regexRange.test(target.value)) {
-                setError({...error, name: ''})
+                setError({...errors, name: ''})
             }
         }
         if (target.name === 'surname') {
             if(!regexRange.test(target.value)) {
-                setError({...error, surname: 'Поле запонено неверно'})
+                setError({...errors, surname: 'Поле запонено неверно'})
             }else if (regexRange.test(target.value)) {
-                setError({...error, surname: ''})
+                setError({...errors, surname: ''})
             }
         }
         if (target.name === 'patronymic') {
             if(!regexRange.test(target.value)) {
-                setError({...error, patronymic: 'Поле запонено неверно'})
+                setError({...errors, patronymic: 'Поле запонено неверно'})
             }else if (regexRange.test(target.value)) {
-                setError({...error, patronymic: ''})
+                setError({...errors, patronymic: ''})
             }
         }
-        return error
+        return errors
     }
     const disable = Object.values(error).includes('Поле запонено неверно')
     console.log(disable)
@@ -115,8 +115,8 @@ const AddPage: FC = () => {
                                                                onBlur={validation}
                                                                onChange={changeContactInfoHandler}
                                                     />
-                                                    {error.name ?
-                                                        <div className={classes.error}>{error.name}</div> : null}
+                                                    {errors.name ?
+                                                        <div className={classes.error}>{errors.name}</div> : null}
                                                 </div>
                                                 <div>
                                                     <TextField className={classes.input}
@@ -127,8 +127,8 @@ const AddPage: FC = () => {
                                                                onBlur={validation}
                                                                onChange={changeContactInfoHandler}
                                                     />
-                                                    {error.surname ?
-                                                        <div className={classes.error}>{error.surname}</div> : null}
+                                                    {errors.surname ?
+                                                        <div className={classes.error}>{errors.surname}</div> : null}
                                                 </div>
                                                 <div>
                                                     <TextField className={classes.input}
@@ -139,17 +139,9 @@ const AddPage: FC = () => {
                                                                onBlur={validation}
                                                                onChange={changeContactInfoHandler}
                                                     />
-                                                    {error.patronymic ?
-                                                        <div className={classes.error}>{error.patronymic}</div> : null}
+                                                    {errors.patronymic ?
+                                                        <div className={classes.error}>{errors.patronymic}</div> : null}
                                                 </div>
-
-                                                {/*<TextField className={classes.input}*/}
-                                                {/*           label="Пол"*/}
-                                                {/*           name={"gender"}*/}
-                                                {/*           type="search"*/}
-                                                {/*           onChange={changeContactInfoHandler}*/}
-                                                {/*/>*/}
-
                                                 <FormControl className={classes.gender}>
                                                     <InputLabel id="demo-simple-select-label">Пол</InputLabel>
                                                     <Select

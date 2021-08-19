@@ -3,6 +3,13 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 export const useStylesAddPhone = makeStyles((theme: Theme) =>
     createStyles({
 
+        error: {
+            fontSize: 14,
+            height: 16,
+            color: 'red',
+            position: 'relative',
+            left: 10
+        },
         wrapperInput: {
             padding: '10px 0',
             display: 'flex',
