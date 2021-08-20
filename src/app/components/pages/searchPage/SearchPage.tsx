@@ -36,7 +36,6 @@ const SearchPanel = (props: SearchPanelType) => {
             [target.name]: isDate ? replaceStr : target.value,
         })
     }
-
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         sessionStorage.setItem('search', JSON.stringify(search));
