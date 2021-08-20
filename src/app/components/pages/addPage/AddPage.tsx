@@ -1,5 +1,15 @@
 import React, {ChangeEvent, FC, useState} from 'react';
-import {Button, FormControl, FormGroup, Grid, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import {
+    Button,
+    FormControl,
+    FormGroup,
+    Grid,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField
+} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
 import {useStylesAddPage} from "./syles/addPage.styles";
@@ -10,6 +20,7 @@ import Avatar from "../editPage/avatar/Avatar";
 import PhoneForm from "../editPage/phone/PhoneForm";
 import AttachmentsForm from "../editPage/attachments/AttachmentsForm";
 import {ContactInterface} from "../../contactList/types/contact.interface";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const AddPage: FC = () => {
     const classes = useStylesAddPage()
@@ -105,6 +116,11 @@ const AddPage: FC = () => {
         <div className={classes.addPageBG}>
             <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <div className={classes.container}>
+                <IconButton className={classes.prevButton}
+                            onClick={() => history.push(PATH.HOME)}
+                            aria-label="close">
+                    <ArrowBackIcon/>
+                </IconButton>
                 <div className={classes.avatar}><Avatar setLogo={setLogo} contact={contactInfo}/></div>
                 <div className={classes.addPageWrapper}>
                     <h2 className={classes.title}>Добавление нового контакта</h2>
@@ -241,14 +257,6 @@ const AddPage: FC = () => {
                                         <AttachmentsForm contact={contactInfo} newAttachments={newAttachments} setNewAttachments={setNewAttachments}/>
 
                                         <div className={classes.buttonWrapper}>
-
-                                            <NavLink to={'/contacts'} className={classes.prevButton}>
-                                                <Button
-                                                    className={classes.editButton}
-                                                    variant={'contained'}
-                                                    color={'primary'}
-                                                >Назад</Button>
-                                            </NavLink>
                                             <Button
                                                 className={classes.editButton}
                                                 type={'submit'}

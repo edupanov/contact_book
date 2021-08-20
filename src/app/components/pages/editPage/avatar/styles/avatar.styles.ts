@@ -18,7 +18,7 @@ export const useStylesAvatar = makeStyles({
     },
      avatar: {
          width: 200,
-         height: "auto",
+         height: 200,
          padding: "10",
          marginBottom: 10
      },

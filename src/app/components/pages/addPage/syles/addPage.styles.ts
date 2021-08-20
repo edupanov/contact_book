@@ -35,6 +35,7 @@ export const useStylesAddPage = makeStyles({
     },
     form: {
         width: '100%',
+        padding: 15,
         boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
     },
     row: {
@@ -81,7 +82,14 @@ export const useStylesAddPage = makeStyles({
         marginTop: 20
     },
 
-    prevButton: {textDecoration: 'none'},
+    prevButton: {
+        width: 50,
+        height: 50,
+        position: "relative",
+        top: 20,
+        left: 10,
+        border: '1px solid black',
+    },
     editButton: {padding: 10, margin: 20},
 
     submitButton: {

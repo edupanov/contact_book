@@ -3,6 +3,13 @@ import {LoginActionType, LoginActionTypes} from "../ActionTypes/loginActionTypes
 import {RootState} from "../../../../../../store/rootReducer";
 import * as LoginRequests from '../requests/loginRequests'
 import {CallHistoryMethodAction} from "connected-react-router";
+import {
+    ContactActionTypes,
+    ContactsActionType
+} from "../../../../../contactList/store/actionTypes/contactListActiontypes";
+import * as ContactListRequests from "../../../../../contactList/requests/contactListRequests";
+import {DefaultPagedResponse} from "../../../../../../shared/types/defaultPagedResponse";
+import {ContactInterface} from "../../../../../contactList/types/contact.interface";
 
 
 export const getLogin = (email: string, password: string) =>
@@ -21,8 +28,26 @@ export const getLogin = (email: string, password: string) =>
     }
 
 export const logOut = () =>
-    async (dispatch: Dispatch<LoginActionType | CallHistoryMethodAction>, getState: () => RootState) => {
-       dispatch({type: LoginActionTypes.LOGOUT_SUCCESS})
+    async (dispatch: Dispatch<LoginActionType | ContactsActionType>, getState: () => RootState) => {
+        let data = getState().contacts.data
+        data = null
+        dispatch({type: LoginActionTypes.LOGOUT_SUCCESS})
+        const search = {}
+        await ContactListRequests.getContact(search)
+            .then(async (response: DefaultPagedResponse<Array<ContactInterface>>) => {
+                if (response.isSuccess) {
+                    dispatch({
+                        type: ContactActionTypes.GET_CONTACTS_SUCCESS,
+                        payload: {
+                            users: data,
+                            maxUsers: response?.maxUsers
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                dispatch({type: ContactActionTypes.GET_CONTACTS_FAILURE, errors: error})
+            })
 
     }
 

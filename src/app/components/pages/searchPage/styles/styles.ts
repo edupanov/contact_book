@@ -37,6 +37,10 @@ export const useStylesSearchPage = makeStyles({
         width: '100%',
         boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
     },
+    searchTable: {
+        maxWidth: 1000,
+        margin: '0 auto'
+    },
     row: {
         display: "flex",
         flexDirection: "column",

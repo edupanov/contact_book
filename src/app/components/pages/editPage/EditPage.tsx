@@ -1,9 +1,9 @@
 import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
-import {Button, CircularProgress, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
+import {Button, CircularProgress, FormControl, FormGroup, Grid, IconButton, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStylesEditPAge} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
-import {NavLink, useLocation} from "react-router-dom";
+import {NavLink, useHistory, useLocation} from "react-router-dom";
 import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
@@ -13,9 +13,11 @@ import {useTypeSelector} from "../../../store/hooks/useTypeSelector";
 import {RootState} from "../../../store/rootReducer";
 import styles from "./styles/HeaderContactList.module.scss";
 import Menu from "../../../shared/components/Menu";
+import {PATH} from "../../../routes/Routes";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const EditPage = () => {
-
+    const history = useHistory()
     const classes = useStylesEditPAge()
     const {updateContact, getContacts, logOut} = useActions()
     const contacts: ContactInterface[] = useTypeSelector((state: RootState) => state.contacts.data)
@@ -107,6 +109,11 @@ const EditPage = () => {
             <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
             <div className={classes.container}>
                 <div className={classes.editForm}>
+                    <IconButton className={classes.prevButton}
+                        onClick={() => history.push(PATH.HOME)}
+                        aria-label="close">
+                        <ArrowBackIcon/>
+                    </IconButton>
                     <div className={classes.avatar}><Avatar contact={currentContact}/></div>
                     <div>
                         <h2 className={classes.title}>Редактирование контакта </h2>
@@ -235,14 +242,6 @@ const EditPage = () => {
                                             <AttachmentsForm contact={currentContact}/>
 
                                             <div className={classes.submitButton}>
-                                                <NavLink to={'/contacts'} className={classes.prevButton}>
-                                                    <Button
-                                                        className={classes.editButton}
-
-                                                        variant={'contained'}
-                                                        color={'primary'}
-                                                    >Назад</Button>
-                                                </NavLink>
                                                 <Button
                                                     className={classes.editButton}
                                                     type={'submit'}

@@ -20,7 +20,7 @@ const SearchPanel = (props: SearchPanelType) => {
 
     const {getContacts, setSearchParams, setPage} = useActions()
 
-    const savedSearch: SearchParamsInterface = JSON.parse(sessionStorage.getItem('search') || '{}');
+    const savedSearch = JSON.parse(sessionStorage.getItem('search') || '{}');
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +49,6 @@ const SearchPanel = (props: SearchPanelType) => {
         sessionStorage.clear()
         setSearch({})
     }
-
     return (
         <div className={classes.searchPanel}>
             <Grid container justifyContent="center" >
@@ -58,7 +57,7 @@ const SearchPanel = (props: SearchPanelType) => {
                         <FormControl className={classes.form}>
                             <FormGroup className={classes.row}>
                                 <h2 className={classes.title}>Поиск контакта</h2>
-                                <div>
+                                <div className={classes.searchTable}>
                                     <div className={classes.period}>
                                         <TextField className={classes.input}
                                                    label="Имя"
@@ -147,21 +146,21 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    name={"country"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.country}
+                                                   defaultValue={savedSearch.country}
                                         />
                                         <TextField className={classes.input}
                                                    label="Город"
                                                    name={"city"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.city}
+                                                   defaultValue={savedSearch.city}
                                         />
                                         <TextField className={classes.input}
                                                    label="Улица"
                                                    name={"street"}
                                                    type="search"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.street}
+                                                   defaultValue={savedSearch.street}
 
                                         />
                                         <TextField className={classes.input}
@@ -169,7 +168,7 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    name={"building"}
                                                    type="number"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={search.address?.building}
+                                                   defaultValue={savedSearch.building}
 
                                         />
                                         <TextField className={classes.input}
@@ -177,7 +176,7 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    name={"flat"}
                                                    type="number"
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={search.address?.flat}
+                                                   defaultValue={savedSearch.flat}
                                         />
                                         <TextField className={classes.input}
                                                    label="Индекс"
@@ -186,7 +185,7 @@ const SearchPanel = (props: SearchPanelType) => {
                                                    placeholder={'6-ти значный номер'}
                                                    inputProps={{pattern: "[0-9]{6}"}}
                                                    onChange={changeContactInfoHandler}
-                                                   defaultValue={savedSearch.address?.zipCode}
+                                                   defaultValue={savedSearch.zipCode}
                                         />
                                     </div>
 

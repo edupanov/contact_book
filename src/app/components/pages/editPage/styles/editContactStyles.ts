@@ -7,14 +7,16 @@ export const useStylesEditPAge = makeStyles({
         backgroundRepeat: 'no-repeat',
         backgroundColor: "whitesmoke"
     },
+
     container: {
         maxWidth: 1200,
         margin: '0 auto',
     },
     avatar: {
-        width: 300,
+        position: 'relative',
+        width: 220,
         paddingLeft:20,
-        paddingTop: 65
+        paddingTop: 60
 
     },
 
@@ -79,7 +81,16 @@ export const useStylesEditPAge = makeStyles({
     button: {
         padding: 0
     },
-    prevButton: {textDecoration: 'none'},
+    prevButton: {
+        width: 50,
+        height: 50,
+        position: "relative",
+        top: 20,
+        left: 10,
+        border: '1px solid black',
+
+
+    },
     editButton: {padding: 10, margin: 20},
 
     submitButton: {

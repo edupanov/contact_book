@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
-import {Redirect} from "react-router";
 
 type MenuPropsType = {
     loginClickHandler?: (event: SyntheticEvent) => void
@@ -16,24 +15,18 @@ type MenuPropsType = {
 
 const Menu = (props: MenuPropsType) => {
 
-    const isSuccess = useTypeSelector(state => state.login.isSuccess)
+    const data = useTypeSelector(state => state.contacts.data)
     const {auth, loginClickHandler, exitClickHandler} = props
     const history = useHistory()
-
-    const redirect = () => {
-        if (isSuccess) {
-          history.push('/contacts')
-        }
-    }
 
     return (
         <AppBar position="relative">
             <Toolbar className={style.nav}>
 
                 <Typography className={style.navTitle} variant="h6" onClick={event => {
-                    if (loginClickHandler) {
-                        loginClickHandler(event)
-                    } else redirect()
+                    if (!data) {
+                        loginClickHandler!(event)
+                    } else history.push('/contacts')
                 }
                 }>
                     Contact Book

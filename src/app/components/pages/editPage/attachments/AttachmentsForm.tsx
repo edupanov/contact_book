@@ -101,7 +101,7 @@ const AttachmentsForm = (props: AttachmentsPropsType) => {
     };
 
     return (
-        <div style={{width: '100%', marginBottom: 40, marginTop: 30}}>
+        <div style={{width: '100%', marginBottom: 10, marginTop: 15}}>
             <h2 className={classes.formTitle}>Вложения</h2>
             <Button
                 className={classes.button}
