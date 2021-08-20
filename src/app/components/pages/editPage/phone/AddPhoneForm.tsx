@@ -3,6 +3,12 @@ import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core
 import {ContactInterface, PhoneInterface} from "../../../contactList/types/contact.interface";
 import {useStylesAddPhone} from "./styles/styles";
 import {useActions} from "../../../../store/hooks/useActions";
+import {
+    PhoneValidationState,
+    TextCountryCode,
+    TextOperatorId,
+    TextPhoneNumber
+} from "../../../../shared/components/customMaskInput";
 
 interface AddPhoneFormInterface {
     setOpen: Function
@@ -13,23 +19,29 @@ interface AddPhoneFormInterface {
 
 export const AddPhoneForm = (props: AddPhoneFormInterface) => {
 
+    const classes = useStylesAddPhone();
+    let {setOpen, contact, setNewPhones, newPhones} = props
     const [errors, setError] = useState({
         countryCode: '',
         operatorID: '',
         phoneNumber: '',
     })
-
-    const classes = useStylesAddPhone();
-    let {setOpen, contact, setNewPhones, newPhones} = props
-
     const {addPhone} = useActions()
     const [phone, setPhone] = useState({} as PhoneInterface)
+    const [values, setValues] = React.useState<PhoneValidationState>({
+        countryCode: '+',
+        operatorID: '',
+        phoneNumber: '',
+    });
 
     const changePhoneInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const phoneId = contact.phones ? contact.phones.length + 1 : newPhones?.length! + 1
         const {name, value} = event.target
         const updatePhone = {...phone, [name]: value, id: `phone${String(phoneId)}`}
-
+        setValues({
+            ...values,
+            [event.target.name]: event.target.value,
+        });
         setPhone(updatePhone)
     }
 
@@ -82,8 +94,12 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                label="Код станы"
                                                name={"countryCode"}
                                                type="search"
+                                               value={values.countryCode}
                                                onBlur={validation}
                                                onChange={changePhoneInfoHandler}
+                                               InputProps={{
+                                                   inputComponent: TextCountryCode as any,
+                                               }}
                                     />
                                     {errors.countryCode ?
                                         <div className={classes.error}>{errors.countryCode}</div> : null}
@@ -93,8 +109,12 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                label="Код оператора"
                                                name={"operatorID"}
                                                type="search"
+                                               value={values.operatorID}
                                                onBlur={validation}
                                                onChange={changePhoneInfoHandler}
+                                               InputProps={{
+                                                   inputComponent: TextOperatorId as any,
+                                               }}
                                     />
                                     {errors.operatorID ?
                                         <div className={classes.error}>{errors.operatorID}</div> : null}
@@ -104,8 +124,12 @@ export const AddPhoneForm = (props: AddPhoneFormInterface) => {
                                                label="Телефонный номер"
                                                name={"phoneNumber"}
                                                type="search"
+                                               value={values.phoneNumber}
                                                onBlur={validation}
                                                onChange={changePhoneInfoHandler}
+                                               InputProps={{
+                                                   inputComponent: TextPhoneNumber as any,
+                                               }}
                                     />
                                     {errors.phoneNumber ?
                                         <div className={classes.error}>{errors.phoneNumber}</div> : null}

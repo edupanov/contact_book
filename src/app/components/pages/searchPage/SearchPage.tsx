@@ -51,9 +51,9 @@ const SearchPanel = (props: SearchPanelType) => {
     }
     return (
         <div className={classes.searchPanel}>
-            <Grid container justifyContent="center" >
-                <Grid item xs={10}className={classes.searchWrapper}>
-                    <form onSubmit={onSubmit} >
+            <Grid container justifyContent="center">
+                <Grid item xs={10} className={classes.searchWrapper}>
+                    <form onSubmit={onSubmit}>
                         <FormControl className={classes.form}>
                             <FormGroup className={classes.row}>
                                 <h2 className={classes.title}>Поиск контакта</h2>
@@ -82,7 +82,6 @@ const SearchPanel = (props: SearchPanelType) => {
                                         />
 
                                         <TextField className={classes.input}
-
                                                    label="Пол"
                                                    name={"gender"}
                                                    type="search"
@@ -123,13 +122,15 @@ const SearchPanel = (props: SearchPanelType) => {
                                             <h3 className={classes.title}>Возраст</h3>
                                         </div>
                                         <div className={classes.period}>
+                                            {/*<span className={classes.delInfoInput} onClick={onClickCleanInput}>x</span>*/}
                                             <TextField className={classes.date}
                                                        helperText="С"
                                                        name={"dateFrom"}
                                                        type="date"
                                                        onChange={changeContactInfoHandler}
-                                                       defaultValue={formatDate(savedSearch.dateFrom!, 'yyyy-MM-DD')}
+                                                       defaultValue={search.dateFrom === '' ? '' : formatDate(savedSearch.dateFrom!, 'yyyy-MM-DD')}
                                             />
+                                            {/*<span className={classes.delInfoInput} onClick={onClickCleanInput}>x</span>*/}
                                             <TextField className={classes.date}
                                                        helperText="По"
                                                        name={"dateTo"}

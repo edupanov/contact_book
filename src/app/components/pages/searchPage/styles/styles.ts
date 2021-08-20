@@ -53,6 +53,15 @@ export const useStylesSearchPage = makeStyles({
         color: "#3451b9",
         fontFamily: 'Sans-Serif',
     },
+    delInfoInput: {
+        position: "relative",
+        left: 0,
+        fontFamily: 'Sans-Serif',
+        fontSize:12,
+        fontWeight: 'bold',
+        cursor: 'pointer'
+
+    },
     wrapperInput: {
         padding: '10px 0',
         display: "flex",
