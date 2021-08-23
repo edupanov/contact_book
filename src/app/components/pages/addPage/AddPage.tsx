@@ -1,4 +1,5 @@
 import React, {ChangeEvent, FC, useState} from 'react';
+import 'date-fns';
 import {
     Button,
     FormControl,
@@ -13,7 +14,7 @@ import {
 import {useActions} from "../../../store/hooks/useActions";
 import {TargetType} from "../searchPage/SearchPage";
 import {useStylesAddPage} from "./syles/addPage.styles";
-import {NavLink, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {PATH} from "../../../routes/Routes";
 import Menu from "../../../shared/components/Menu";
 import Avatar from "../editPage/avatar/Avatar";
@@ -21,6 +22,8 @@ import PhoneForm from "../editPage/phone/PhoneForm";
 import AttachmentsForm from "../editPage/attachments/AttachmentsForm";
 import {ContactInterface} from "../../contactList/types/contact.interface";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import {KeyboardDatePicker} from "@material-ui/pickers";
+import {formatDate} from "../../../utils/utils";
 
 const AddPage: FC = () => {
     const classes = useStylesAddPage()
@@ -40,6 +43,14 @@ const AddPage: FC = () => {
     const [logo, setLogo] = useState({})
     const [newPhones, setNewPhones] = useState([])
     const [newAttachments, setNewAttachments] = useState([])
+
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+        new Date(''),
+    );
+
+    const handleDateChange = (date: Date | null) => {
+        setSelectedDate(date);
+    };
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -69,12 +80,14 @@ const AddPage: FC = () => {
     const exitClickHandler = () => {
         logOut()
     }
+    const birthDate = formatDate(selectedDate, 'DD.MM.yyyy')
 
     const onSubmit = () => {
         const contact = {
             contact: {
                 ...contactInfo,
                 address: contactAddress,
+                birthDate: birthDate,
                 gender: gender,
                 logo: logo,
                 phones: newPhones,
@@ -112,6 +125,7 @@ const AddPage: FC = () => {
         }
         return errors
     }
+    console.log(contactInfo)
     return (
         <div className={classes.addPageBG}>
             <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>
@@ -200,13 +214,18 @@ const AddPage: FC = () => {
                                                     <h3 className={classes.title}>Возраст</h3>
                                                 </div>
                                                 <div className={classes.period}>
-                                                    <TextField className={classes.date}
-                                                               helperText="Дата рождения"
-                                                               name={"birthDate"}
-                                                               type="date"
-                                                               onChange={changeContactInfoHandler}
-                                                    />
-
+                                                            <KeyboardDatePicker
+                                                                margin="normal"
+                                                                id="date-picker-dialog"
+                                                                format="dd.MM.yyyy"
+                                                                helperText="Дата рождения"
+                                                                value={selectedDate}
+                                                                onChange={handleDateChange}
+                                                                KeyboardButtonProps={{
+                                                                    'aria-label': 'change date',
+                                                                }}
+                                                                error={false}
+                                                            />
                                                 </div>
                                             </div>
                                             <div>

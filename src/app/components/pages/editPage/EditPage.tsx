@@ -3,7 +3,7 @@ import {Button, CircularProgress, FormControl, FormGroup, Grid, IconButton, Text
 import {useActions} from "../../../store/hooks/useActions";
 import {useStylesEditPAge} from "./styles/editContactStyles";
 import {TargetType} from "../searchPage/SearchPage";
-import {NavLink, useHistory, useLocation} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import Avatar from "./avatar/Avatar";
 import PhoneForm from "./phone/PhoneForm";
 import AttachmentsForm from "./attachments/AttachmentsForm";
@@ -15,6 +15,8 @@ import styles from "./styles/HeaderContactList.module.scss";
 import Menu from "../../../shared/components/Menu";
 import {PATH} from "../../../routes/Routes";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import {KeyboardDatePicker} from "@material-ui/pickers";
+import {formatDate} from "../../../utils/utils";
 
 const EditPage = () => {
     const history = useHistory()
@@ -25,6 +27,9 @@ const EditPage = () => {
     const contactId = location.pathname.split('/').reverse()[0]
     const defaultContact = contacts?.find(el => el.id === contactId)!
     let [currentContact, setCurrentContact] = useState<ContactInterface>(defaultContact)
+    const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+        new Date(currentContact.birthDate),
+    );
 
     useEffect(() => {
         const newContact: ContactInterface = contacts?.find(el => el.id === contactId)!
@@ -51,6 +56,11 @@ const EditPage = () => {
             setCurrentContact(contact)
         }
     }
+
+
+    const handleDateChange = (date: Date | null) => {
+        setSelectedDate(date);
+    };
     const changeContactAddressHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
 
@@ -93,11 +103,13 @@ const EditPage = () => {
         }
         return el
     })
-
+    const birthDate = formatDate(selectedDate, 'DD.MM.yyyy')
     const contactSubmit = {
         ...copyContact,
         phones: phoneSubmit,
-        attachments: attachmentSubmit
+        attachments: attachmentSubmit,
+        birthDate: birthDate
+
     }
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
@@ -110,8 +122,8 @@ const EditPage = () => {
             <div className={classes.container}>
                 <div className={classes.editForm}>
                     <IconButton className={classes.prevButton}
-                        onClick={() => history.push(PATH.HOME)}
-                        aria-label="close">
+                                onClick={() => history.push(PATH.HOME)}
+                                aria-label="close">
                         <ArrowBackIcon/>
                     </IconButton>
                     <div className={classes.avatar}><Avatar contact={currentContact}/></div>
@@ -145,12 +157,18 @@ const EditPage = () => {
                                                                onChange={changeContactInfoHandler}
                                                                defaultValue={currentContact.patronymic ? currentContact.patronymic : ''}
                                                     />
-                                                    <TextField className={classes.date}
-                                                               label="Дата рождения"
-                                                               name={"birthDate"}
-                                                               type="date"
-                                                               onChange={changeContactInfoHandler}
-                                                               defaultValue={currentContact.birthDate ? currentContact.birthDate.split('.').reverse().join('-') : ''}
+                                                    <KeyboardDatePicker
+                                                        className={classes.date}
+                                                        margin="normal"
+                                                        id="date-picker-dialog"
+                                                        format="dd.MM.yyyy"
+                                                        label="Дата рождения"
+                                                        value={selectedDate}
+                                                        onChange={handleDateChange}
+                                                        KeyboardButtonProps={{
+                                                            'aria-label': 'change date',
+                                                        }}
+                                                        error={false}
                                                     />
                                                     <TextField className={classes.input}
                                                                label="Пол"

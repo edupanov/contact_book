@@ -5,6 +5,9 @@ import React, {useEffect} from "react";
 import Routes from "./routes/Routes";
 import {useTypeSelector} from "./store/hooks/useTypeSelector";
 import {useActions} from "./store/hooks/useActions";
+import DateFnsUtils from "@date-io/date-fns";
+import {MuiPickersUtilsProvider} from "@material-ui/pickers";
+import {ru} from "date-fns/locale";
 
 interface AppHistory {
     history: History
@@ -24,9 +27,12 @@ function App({history}: AppHistory) {
 
     return (
         <ConnectedRouter history={history}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ru}>
             <div className="App">
                 <Routes/>
             </div>
+            </MuiPickersUtilsProvider>
+
         </ConnectedRouter>
     );
 }

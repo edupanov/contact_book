@@ -2,13 +2,7 @@ import React, {SyntheticEvent, useEffect, useRef, useState} from 'react';
 import {useActions} from "../../store/hooks/useActions";
 import {useTypeSelector} from "../../store/hooks/useTypeSelector";
 import {Button, CircularProgress, Grid, IconButton, Typography} from "@material-ui/core";
-import {
-    DataGrid,
-    GridCellParams,
-    GridColDef,
-    GridPageChangeParams,
-    GridRowId, ruRU
-} from "@material-ui/data-grid";
+
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from '@material-ui/icons/Search';
 import {ContactInterface} from "./types/contact.interface";
@@ -19,6 +13,7 @@ import SearchPage from "../pages/searchPage/SearchPage";
 import {PATH} from "../../routes/Routes";
 import {useStylesContactList} from "./styles/contactListStyles";
 import Menu from "../../shared/components/Menu";
+import {DataGrid, GridCellParams, GridColDef, GridRowId, ruRU} from "@material-ui/data-grid";
 
 const ContactList = () => {
 
@@ -165,12 +160,11 @@ const ContactList = () => {
         setItems(updatedData)
     }
 
-    const handlePaginationChange = ({page, pageSize}: GridPageChangeParams) => {
+    const handlePaginationChange = (page: number) => {
         setPage(page + 1)
-        setTake(pageSize)
+        setTake(take)
         getContacts()
     };
-
     const checkedCurrenContacts = (params: GridRowId[]) => {
         setSelectionModel(params)
     }

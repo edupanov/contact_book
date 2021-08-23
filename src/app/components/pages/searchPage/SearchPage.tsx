@@ -3,6 +3,7 @@ import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core
 import {useActions} from "../../../store/hooks/useActions";
 import {useStylesSearchPage} from "./styles/styles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
+import {KeyboardDatePicker} from "@material-ui/pickers";
 import {formatDate} from "../../../utils/utils";
 
 export type TargetType = {
@@ -15,13 +16,14 @@ type SearchPanelType = {
 }
 
 const SearchPanel = (props: SearchPanelType) => {
-
+    const savedDateFrom = sessionStorage.getItem('dateFrom')
+    const savedDateTo = sessionStorage.getItem('dateTo') || ''
     const classes = useStylesSearchPage()
-
     const {getContacts, setSearchParams, setPage} = useActions()
-
     const savedSearch = JSON.parse(sessionStorage.getItem('search') || '{}');
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
+    const [dateFrom, setDateFrom] = useState<Date | null>(new Date(savedDateFrom || '') || '');
+    const [dateTo, setDateTo] = useState<Date | null>(new Date(savedDateTo || '') || '');
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -35,6 +37,24 @@ const SearchPanel = (props: SearchPanelType) => {
             ...search,
             [target.name]: isDate ? replaceStr : target.value,
         })
+    }
+
+    const handleDateFromChange = (date: Date | null) => {
+        setDateFrom(date);
+        const newDate = formatDate(date, 'DD.MM.yyyy')
+        sessionStorage.setItem('dateFrom', JSON.stringify(newDate))
+    };
+    const handleDateToChange = (date: Date | null) => {
+        setDateTo(date);
+        const newDate = formatDate(date, 'DD.MM.yyyy')
+        sessionStorage.setItem('dateTo', JSON.stringify(newDate))
+
+    };
+
+    const submitSearch = {
+        ...search,
+        dateFrom: savedDateFrom,
+        dateTo: savedDateTo,
     }
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
@@ -121,7 +141,34 @@ const SearchPanel = (props: SearchPanelType) => {
                                             <h3 className={classes.title}>Возраст</h3>
                                         </div>
                                         <div className={classes.period}>
-                                            {/*<span className={classes.delInfoInput} onClick={onClickCleanInput}>x</span>*/}
+                                            <KeyboardDatePicker
+                                                name={"dateFrom"}
+                                                helperText="С"
+                                                className={classes.date}
+                                                margin="normal"
+                                                id="date-picker-dialog"
+                                                format="dd.MM.yyyy"
+                                                value={dateFrom}
+                                                onChange={handleDateFromChange}
+                                                KeyboardButtonProps={{
+                                                    'aria-label': 'change date',
+                                                }}
+                                                error={false}
+                                            />
+                                            <KeyboardDatePicker
+                                                name={"dateTo"}
+                                                helperText="По"
+                                                className={classes.date}
+                                                margin="normal"
+                                                id="date-picker-dialog"
+                                                format="dd.MM.yyyy"
+                                                value={dateTo}
+                                                onChange={handleDateToChange}
+                                                KeyboardButtonProps={{
+                                                    'aria-label': 'change date',
+                                                }}
+                                                error={false}
+                                            />
                                             <TextField className={classes.date}
                                                        helperText="С"
                                                        name={"dateFrom"}
@@ -129,7 +176,6 @@ const SearchPanel = (props: SearchPanelType) => {
                                                        onChange={changeContactInfoHandler}
                                                        defaultValue={search.dateFrom === '' ? '' : formatDate(savedSearch.dateFrom!, 'yyyy-MM-DD')}
                                             />
-                                            {/*<span className={classes.delInfoInput} onClick={onClickCleanInput}>x</span>*/}
                                             <TextField className={classes.date}
                                                        helperText="По"
                                                        name={"dateTo"}

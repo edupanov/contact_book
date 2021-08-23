@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-export const formatDate = (date: string, format: string) => {
+export const formatDate = (date: any, format: string) => {
     return moment(new Date(date)).format(format)
 }
 
