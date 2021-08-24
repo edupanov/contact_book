@@ -5,7 +5,6 @@ import {useStylesSearchPage} from "./styles/styles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
 import {KeyboardDatePicker} from "@material-ui/pickers";
 import {formatDate} from "../../../utils/utils";
-import {login} from "../mainPage/loginForm/store/requests/loginRequests";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 
 export type TargetType = {
@@ -39,21 +38,11 @@ const SearchPanel = (props: SearchPanelType) => {
         })
     }
 
-    useEffect(() => {
-        if (search.dateFrom) {
-            setDateFrom(new Date(search.dateFrom))
-        }
-        if (search.dateTo) {
-            setDateTo(new Date(search.dateTo))
-        }
-    }, [search])
-
     const handleDateFromChange = (date: Date | null) => {
         setDateFrom(date);
         const newDate = formatDate(date, 'DD.MM.yyyy')
         setSearch({...search, dateFrom: newDate})
     };
-
     const handleDateToChange = (date: Date | null) => {
         setDateTo(date);
         const newDate = formatDate(date, 'DD.MM.yyyy')
@@ -72,6 +61,15 @@ const SearchPanel = (props: SearchPanelType) => {
         sessionStorage.clear()
         setSearch({})
     }
+
+    useEffect(() => {
+        if (search.dateFrom) {
+            setDateFrom(new Date(search.dateFrom))
+        }
+        if (search.dateTo) {
+            setDateTo(new Date(search.dateTo))
+        }
+    }, [search])
 
     return (
         <div className={classes.searchPanel}>
@@ -153,7 +151,7 @@ const SearchPanel = (props: SearchPanelType) => {
                                                 margin="normal"
                                                 id="date-picker-dialog"
                                                 format="dd.MM.yyyy"
-                                                value={dateFrom}
+                                                value={formatDate(dateFrom, 'DD.MM.yyyy')}
                                                 onChange={handleDateFromChange}
                                                 onInput={changeContactInfoHandler}
                                                 KeyboardButtonProps={{
@@ -168,7 +166,7 @@ const SearchPanel = (props: SearchPanelType) => {
                                                 margin="normal"
                                                 id="date-picker-dialog"
                                                 format="dd.MM.yyyy"
-                                                value={dateTo}
+                                                value={formatDate(dateTo, 'DD.MM.yyyy')}
                                                 onChange={handleDateToChange}
                                                 onInput={changeContactInfoHandler}
                                                 KeyboardButtonProps={{

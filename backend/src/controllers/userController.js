@@ -82,10 +82,11 @@ module.exports = {
                 $lte  : dateTo
             }
         } else if (dateTo) {
-            searchParams.birthDate = {$lte: dateTo }
+            searchParams.birthDate = {$gte: '01.01.1970', $lte: dateTo}
         } else if (dateFrom) {
             searchParams.birthDate = {$gte: dateFrom}
         }
+        console.log(searchParams)
         if (gender) {
             searchParams.gender = gender
         }
@@ -101,8 +102,6 @@ module.exports = {
         if (email) {
             searchParams.email = email
         }
-        console.log(searchParams)
-
         if (city) {
             searchParams['addresses.city'] = city
         }
@@ -127,7 +126,6 @@ module.exports = {
             .skip(isPaging ? pageSize * (currentPage - 1) : 0)
             .limit(isPaging ? pageSize : 0)
             .then(async documents => {
-                console.log(documents)
                 const contactsCount = await User.find(searchParams).countDocuments()
                 const users = documents.map(user => {
                     let addr = {}
