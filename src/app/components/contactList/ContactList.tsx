@@ -6,7 +6,6 @@ import {
     DataGrid,
     GridCellParams,
     GridColDef,
-    GridPageChangeParams,
     GridRowId, ruRU
 } from "@material-ui/data-grid";
 import EditIcon from "@material-ui/icons/Edit";
@@ -165,9 +164,9 @@ const ContactList = () => {
         setItems(updatedData)
     }
 
-    const handlePaginationChange = ({page, pageSize}: GridPageChangeParams) => {
+    const handlePaginationChange = (page: number ) => {
         setPage(page + 1)
-        setTake(pageSize)
+        setTake(take)
         getContacts()
     };
 
