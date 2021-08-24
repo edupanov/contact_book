@@ -37,7 +37,7 @@ export const AddAttachmentForm = (props: AddAttachmentFormInterface) => {
         const newAttachment = {...attachment, [name]: value, id: String(attachId)}
         setAttachment(newAttachment)
     }
-
+    console.log(attachment)
     const onSubmit = () => {
         if (!contact.id) {
             let date: any = new Date();

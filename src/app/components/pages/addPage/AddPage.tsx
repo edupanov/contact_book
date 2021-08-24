@@ -94,7 +94,6 @@ const AddPage: FC = () => {
                 attachments: newAttachments
             }
         }
-        console.log(contact)
         addContact(contact)
         history.push(PATH.HOME)
     }
