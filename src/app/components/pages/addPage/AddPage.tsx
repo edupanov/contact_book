@@ -125,7 +125,7 @@ const AddPage: FC = () => {
         }
         return errors
     }
-    console.log(contactInfo)
+
     return (
         <div className={classes.addPageBG}>
             <Menu auth={'Выйти'} exitClickHandler={exitClickHandler}/>

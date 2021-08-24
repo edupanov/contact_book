@@ -81,9 +81,9 @@ module.exports = {
                 $lte: dateTo
             }
         } else if (dateTo) {
-            searchParams.birthDate = {$gte: dateFrom}
+            searchParams.birthDate = {$gte: dateTo}
         } else if (dateFrom) {
-            searchParams.birthDate = {$lte: dateTo}
+            searchParams.birthDate = {$lte: dateFrom}
         }
         if (gender) {
             searchParams.gender = gender

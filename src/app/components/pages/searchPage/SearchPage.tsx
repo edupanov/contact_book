@@ -1,10 +1,12 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import {Button, FormControl, FormGroup, Grid, TextField} from "@material-ui/core";
 import {useActions} from "../../../store/hooks/useActions";
 import {useStylesSearchPage} from "./styles/styles";
 import {SearchParamsInterface} from "./types/searcParams.interface";
 import {KeyboardDatePicker} from "@material-ui/pickers";
 import {formatDate} from "../../../utils/utils";
+import {login} from "../mainPage/loginForm/store/requests/loginRequests";
+import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 
 export type TargetType = {
     name: string
@@ -16,14 +18,12 @@ type SearchPanelType = {
 }
 
 const SearchPanel = (props: SearchPanelType) => {
-    const savedDateFrom = sessionStorage.getItem('dateFrom')
-    const savedDateTo = sessionStorage.getItem('dateTo') || ''
     const classes = useStylesSearchPage()
     const {getContacts, setSearchParams, setPage} = useActions()
     const savedSearch = JSON.parse(sessionStorage.getItem('search') || '{}');
     const [search, setSearch] = useState(savedSearch || {} as SearchParamsInterface)
-    const [dateFrom, setDateFrom] = useState<Date | null>(new Date(savedDateFrom || '') || '');
-    const [dateTo, setDateTo] = useState<Date | null>(new Date(savedDateTo || '') || '');
+    const [dateFrom, setDateFrom] = useState<MaterialUiPickersDate>(null);
+    const [dateTo, setDateTo] = useState<MaterialUiPickersDate>(null);
 
     const changeContactInfoHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const target: TargetType = (event.target)
@@ -39,23 +39,27 @@ const SearchPanel = (props: SearchPanelType) => {
         })
     }
 
+    useEffect(() => {
+        if (search.dateFrom) {
+            setDateFrom(new Date(search.dateFrom))
+        }
+        if (search.dateTo) {
+            setDateTo(new Date(search.dateTo))
+        }
+    }, [search])
+
     const handleDateFromChange = (date: Date | null) => {
         setDateFrom(date);
         const newDate = formatDate(date, 'DD.MM.yyyy')
-        sessionStorage.setItem('dateFrom', JSON.stringify(newDate))
+        setSearch({...search, dateFrom: newDate})
     };
+
     const handleDateToChange = (date: Date | null) => {
         setDateTo(date);
         const newDate = formatDate(date, 'DD.MM.yyyy')
-        sessionStorage.setItem('dateTo', JSON.stringify(newDate))
-
+        setSearch({...search, dateTo: newDate})
     };
 
-    const submitSearch = {
-        ...search,
-        dateFrom: savedDateFrom,
-        dateTo: savedDateTo,
-    }
     const onSubmit = (event: FormEvent) => {
         event.preventDefault()
         sessionStorage.setItem('search', JSON.stringify(search));
@@ -68,6 +72,7 @@ const SearchPanel = (props: SearchPanelType) => {
         sessionStorage.clear()
         setSearch({})
     }
+
     return (
         <div className={classes.searchPanel}>
             <Grid container justifyContent="center">
@@ -150,6 +155,7 @@ const SearchPanel = (props: SearchPanelType) => {
                                                 format="dd.MM.yyyy"
                                                 value={dateFrom}
                                                 onChange={handleDateFromChange}
+                                                onInput={changeContactInfoHandler}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change date',
                                                 }}
@@ -164,24 +170,11 @@ const SearchPanel = (props: SearchPanelType) => {
                                                 format="dd.MM.yyyy"
                                                 value={dateTo}
                                                 onChange={handleDateToChange}
+                                                onInput={changeContactInfoHandler}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change date',
                                                 }}
                                                 error={false}
-                                            />
-                                            <TextField className={classes.date}
-                                                       helperText="С"
-                                                       name={"dateFrom"}
-                                                       type="date"
-                                                       onChange={changeContactInfoHandler}
-                                                       defaultValue={search.dateFrom === '' ? '' : formatDate(savedSearch.dateFrom!, 'yyyy-MM-DD')}
-                                            />
-                                            <TextField className={classes.date}
-                                                       helperText="По"
-                                                       name={"dateTo"}
-                                                       type="date"
-                                                       onChange={changeContactInfoHandler}
-                                                       defaultValue={formatDate(savedSearch.dateTo!, 'yyyy-MM-DD')}
                                             />
                                         </div>
                                     </div>

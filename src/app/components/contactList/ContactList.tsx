@@ -14,6 +14,7 @@ import {PATH} from "../../routes/Routes";
 import {useStylesContactList} from "./styles/contactListStyles";
 import Menu from "../../shared/components/Menu";
 import {DataGrid, GridCellParams, GridColDef, GridRowId, ruRU} from "@material-ui/data-grid";
+import {formatDate} from "../../utils/utils";
 
 const ContactList = () => {
 
@@ -40,7 +41,10 @@ const ContactList = () => {
             filterable: false,
             headerClassName: 'column',
             sortable: false,
-            headerAlign: 'center'
+            headerAlign: 'center',
+            renderCell: (params: GridCellParams) => {
+                return <span>{`${formatDate(params.row.birthDate, 'DD.MM.yyyy')}`}</span>
+            },
         },
         {
             field: 'gender',
