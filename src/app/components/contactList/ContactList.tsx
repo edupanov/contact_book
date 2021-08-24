@@ -42,9 +42,7 @@ const ContactList = () => {
             headerClassName: 'column',
             sortable: false,
             headerAlign: 'center',
-            renderCell: (params: GridCellParams) => {
-                return <span>{`${formatDate(params.row.birthDate, 'DD.MM.yyyy')}`}</span>
-            },
+
         },
         {
             field: 'gender',

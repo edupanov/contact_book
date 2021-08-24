@@ -49,8 +49,8 @@ module.exports = {
         const name = req.body.name
         const surname = req.body.surname
         const patronymic = req.body.patronymic
-        const dateFrom = req.body.dateFrom
-        const dateTo = req.body.dateTo
+        let dateFrom = req.body.dateFrom
+        let dateTo = req.body.dateTo
         const gender = req.body.gender
         const maritalStatus = req.body.maritalStatus
         const nationality = req.body.nationality
@@ -75,15 +75,16 @@ module.exports = {
         if (patronymic) {
             searchParams.patronymic = patronymic
         }
+
         if (dateFrom && dateTo) {
             searchParams.birthDate = {
-                $gte: dateFrom,
-                $lte: dateTo
+                $gte : dateFrom,
+                $lte  : dateTo
             }
         } else if (dateTo) {
-            searchParams.birthDate = {$gte: dateTo}
+            searchParams.birthDate = {$lte: dateTo }
         } else if (dateFrom) {
-            searchParams.birthDate = {$lte: dateFrom}
+            searchParams.birthDate = {$gte: dateFrom}
         }
         if (gender) {
             searchParams.gender = gender
@@ -100,7 +101,7 @@ module.exports = {
         if (email) {
             searchParams.email = email
         }
-
+        console.log(searchParams)
 
         if (city) {
             searchParams['addresses.city'] = city

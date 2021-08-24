@@ -28,7 +28,7 @@ const EditPage = () => {
     const defaultContact = contacts?.find(el => el.id === contactId)!
     let [currentContact, setCurrentContact] = useState<ContactInterface>(defaultContact)
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-        new Date(currentContact.birthDate),
+        new Date(formatDate(currentContact.birthDate, 'DD.MM.yyyy')),
     );
 
     useEffect(() => {
